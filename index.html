@@ -1,11 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>QA Officer Teaching Tracker</title>
+<title>QA Officer Dashboard</title>
 
 <style>
 
@@ -13,6 +12,38 @@ body{
 font-family:Arial,Helvetica,sans-serif;
 background:#f5f7fb;
 margin:0;
+}
+
+header{
+background:#0f172a;
+color:white;
+padding:16px 24px;
+font-size:18px;
+font-weight:600;
+}
+
+nav{
+background:white;
+padding:10px;
+display:flex;
+gap:10px;
+border-bottom:1px solid #eee;
+}
+
+nav button{
+background:#e2e8f0;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+}
+
+nav button.active{
+background:#2563eb;
+color:white;
+}
+
+.container{
 padding:20px;
 }
 
@@ -25,7 +56,6 @@ margin-bottom:20px;
 }
 
 .card-title{
-font-size:18px;
 font-weight:600;
 margin-bottom:15px;
 }
@@ -46,48 +76,19 @@ border-radius:8px;
 text-align:center;
 }
 
-.week-badge.done{
-background:#dcfce7;
-}
-
-.week-badge.skipped{
-background:#fee2e2;
-}
-
-.week-badge.current{
-background:#e0f2fe;
-}
-
-.wk{
-font-size:12px;
-color:#666;
-}
+.week-badge.done{background:#dcfce7;}
+.week-badge.skipped{background:#fee2e2;}
+.week-badge.current{background:#e0f2fe;}
 
 .wn{
 font-size:18px;
 font-weight:600;
 }
 
-.topic-title{
-font-weight:600;
-margin-bottom:4px;
-}
-
-.topic-plan{
-color:#666;
-font-size:13px;
-}
-
-.topic-note{
-font-size:13px;
-margin-top:4px;
-}
-
 .chip{
 padding:6px 12px;
 border-radius:20px;
 font-size:12px;
-text-transform:capitalize;
 }
 
 .green{background:#dcfce7;}
@@ -97,55 +98,59 @@ text-transform:capitalize;
 
 input,select{
 padding:8px;
-margin:5px;
-border-radius:6px;
 border:1px solid #ddd;
+border-radius:6px;
+margin:5px;
 }
 
 button{
 padding:8px 14px;
 border:none;
-border-radius:6px;
 background:#2563eb;
 color:white;
+border-radius:6px;
 cursor:pointer;
 }
 
-button:hover{
-background:#1e40af;
+.course{
+padding:12px;
+border:1px solid #eee;
+border-radius:8px;
+margin-bottom:8px;
+cursor:pointer;
+}
+
+.course:hover{
+background:#f8fafc;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="card">
-<div class="card-title">Add Session Log</div>
+<header>QA Officer Dashboard</header>
 
-<input id="week" placeholder="Week" type="number">
-<input id="topic" placeholder="Topic">
-<select id="coverage">
-<option value="covered">Covered</option>
-<option value="partial">Partial</option>
-<option value="skipped">Skipped</option>
-</select>
+<nav>
+<button onclick="show('dashboard')" class="active">Dashboard</button>
+<button onclick="show('courses')">Courses</button>
+<button onclick="show('tracker')">Tracker</button>
+</nav>
 
-<input id="notes" placeholder="Notes">
-<button onclick="addLog()">Add</button>
+<div class="container">
+
+<div id="dashboard"></div>
+<div id="courses" style="display:none"></div>
+<div id="tracker" style="display:none"></div>
 
 </div>
 
-
-<div id="qa-topic-body"></div>
-
-
-
 <script>
 
-/* ========================
-Storage Helpers
-======================== */
+/* =========================
+Storage
+========================= */
 
 function load(key){
 return JSON.parse(localStorage.getItem(key)||"[]")
@@ -156,124 +161,193 @@ localStorage.setItem(key,JSON.stringify(val))
 }
 
 
-/* ========================
-Add Session Log
-======================== */
+/* =========================
+Navigation
+========================= */
 
-function addLog(){
+function show(id){
 
-const logs = load('qa_session_logs')
+document.querySelectorAll(".container > div")
+.forEach(d=>d.style.display="none")
 
-logs.push({
+document.getElementById(id).style.display="block"
 
-week:Number(document.getElementById('week').value),
-topic:document.getElementById('topic').value,
-coverage:document.getElementById('coverage').value,
-notes:document.getElementById('notes').value
+document.querySelectorAll("nav button")
+.forEach(b=>b.classList.remove("active"))
 
-})
-
-save('qa_session_logs',logs)
+event.target.classList.add("active")
 
 render()
 
 }
 
 
-/* ========================
-Sample Syllabus
-======================== */
+/* =========================
+Courses
+========================= */
 
-const syllabus = [
+function addCourse(){
 
-{week:1,topic:"Introduction",desc:"Course overview"},
-{week:2,topic:"Variables",desc:"Basics"},
-{week:3,topic:"Functions",desc:"JS functions"},
-{week:4,topic:"Arrays"},
-{week:5,topic:"Objects"},
-{week:6,topic:"DOM"},
-{week:7,topic:"Events"},
-{week:8,topic:"API"},
-{week:9,topic:"Project"},
-{week:10,topic:"Revision"},
-{week:11,topic:"Assessment"},
-{week:12,topic:"Advanced"},
-{week:13,topic:"Testing"},
-{week:14,topic:"Deployment"},
-{week:15,topic:"Review"},
-{week:16,topic:"Project"},
-{week:17,topic:"Final"}
+const courses = load("courses")
 
-]
+courses.push({
+id:Date.now(),
+name:document.getElementById("course-name").value
+})
 
+save("courses",courses)
 
-/* ========================
-Current Week
-======================== */
-
-function getCurrentWeek(){
-
-const start = new Date("2025-01-01")
-const now = new Date()
-
-const diff = now-start
-
-return Math.floor(diff/(1000*60*60*24*7))+1
+render()
 
 }
 
 
-/* ========================
+function renderCourses(){
+
+const courses = load("courses")
+
+document.getElementById("courses").innerHTML=
+
+`
+
+<div class="card">
+
+<div class="card-title">Add Course</div>
+
+<input id="course-name" placeholder="Course Name">
+<button onclick="addCourse()">Add</button>
+
+</div>
+
+<div class="card">
+
+<div class="card-title">Course List</div>
+
+${courses.map(c=>
+
+`<div class="course" onclick="selectCourse(${c.id})">
+${c.name}
+</div>`
+
+).join("")}
+
+</div>
+
+`
+
+}
+
+
+/* =========================
+Select Course
+========================= */
+
+let selectedCourse = null
+
+function selectCourse(id){
+
+selectedCourse=id
+show("tracker")
+
+}
+
+
+/* =========================
+Add Session Log
+========================= */
+
+function addLog(){
+
+const logs = load("logs")
+
+logs.push({
+course:selectedCourse,
+week:Number(document.getElementById("week").value),
+topic:document.getElementById("topic").value,
+coverage:document.getElementById("coverage").value,
+notes:document.getElementById("notes").value
+})
+
+save("logs",logs)
+
+render()
+
+}
+
+
+/* =========================
 Chip
-======================== */
+========================= */
 
 function chip(type){
 
 const map={
 covered:"chip green",
 skipped:"chip red",
-partial:"chip orange",
-"not-covered":"chip gray"
+partial:"chip orange"
 }
 
-return `<span class="${map[type]}">${type}</span>`
+return `<span class="${map[type]||"chip gray"}">${type}</span>`
 
 }
 
 
-/* ========================
-Render UI
-======================== */
+/* =========================
+Tracker
+========================= */
 
-function render(){
+function renderTracker(){
 
-const logs = load('qa_session_logs')
+if(!selectedCourse){
+document.getElementById("tracker").innerHTML=
+`<div class="card">Select Course First</div>`
+return
+}
+
+const logs = load("logs")
+.filter(l=>l.course===selectedCourse)
 
 const weeks = Array.from({length:17},(_,i)=>i+1)
 
-document.getElementById("qa-topic-body").innerHTML=
+document.getElementById("tracker").innerHTML=
 
 `
 
 <div class="card">
 
+<div class="card-title">Add Session</div>
+
+<input id="week" placeholder="Week">
+<input id="topic" placeholder="Topic">
+
+<select id="coverage">
+<option value="covered">Covered</option>
+<option value="partial">Partial</option>
+<option value="skipped">Skipped</option>
+</select>
+
+<input id="notes" placeholder="Notes">
+
+<button onclick="addLog()">Add</button>
+
+</div>
+
+
+<div class="card">
+
 <div class="card-title">
-Week-by-Week Syllabus vs Teaching Log
+Week Tracker
 </div>
 
 ${weeks.map(w=>{
 
-const plan = syllabus.find(p=>p.week===w)
-const lastLog = logs.filter(l=>l.week===w).pop()
+const last = logs.filter(l=>l.week===w).pop()
 
 let badge="week-badge"
 
-if(lastLog){
-
-if(lastLog.coverage==="covered") badge+=" done"
-else if(lastLog.coverage==="skipped") badge+=" skipped"
-else badge+=" current"
-
+if(last){
+if(last.coverage==="covered") badge+=" done"
+else if(last.coverage==="skipped") badge+=" skipped"
 }
 
 return `
@@ -281,47 +355,21 @@ return `
 <div class="week-row">
 
 <div class="${badge}">
-<div class="wk">Wk</div>
+<div>Wk</div>
 <div class="wn">${w}</div>
 </div>
 
 <div>
 
-<div class="topic-title">
-${plan?plan.topic:"Week "+w}
-</div>
-
-${plan?.desc?
-`<div class="topic-plan">📋 ${plan.desc}</div>`:""
-}
-
-${lastLog?
-
-`
-
-<div class="topic-note">
-
-${lastLog.coverage==="covered"?"✔ Covered":
-lastLog.coverage==="partial"?"⚡ Partial":
-"✗ Skipped"}
-
-${lastLog.notes?" • "+lastLog.notes:""}
-
-</div>
-
-`
-
-:
-
-`<div class="topic-note">No session log</div>`
-
-}
+${last?
+last.topic:
+"No Log Yet"}
 
 </div>
 
 <div>
 
-${lastLog?chip(lastLog.coverage):chip("not-covered")}
+${last?chip(last.coverage):chip("pending")}
 
 </div>
 
@@ -338,10 +386,50 @@ ${lastLog?chip(lastLog.coverage):chip("not-covered")}
 }
 
 
+/* =========================
+Dashboard
+========================= */
+
+function renderDashboard(){
+
+const courses = load("courses")
+const logs = load("logs")
+
+document.getElementById("dashboard").innerHTML=
+
+`
+
+<div class="card">
+
+<div class="card-title">
+Dashboard Overview
+</div>
+
+Total Courses: ${courses.length}<br>
+Total Sessions Logged: ${logs.length}
+
+</div>
+
+`
+
+}
+
+
+/* =========================
+Render
+========================= */
+
+function render(){
+
+renderDashboard()
+renderCourses()
+renderTracker()
+
+}
+
 render()
 
 </script>
 
 </body>
 </html>
-```
