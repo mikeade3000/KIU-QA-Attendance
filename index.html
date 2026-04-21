@@ -1,1134 +1,347 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-<meta name="theme-color" content="#0d2137"/>
-<title>QA Attendance System — KIU</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>QA Officer Teaching Tracker</title>
+
 <style>
-:root{
-  --navy:#0d2137;--navy-mid:#163352;--navy-light:#1e4470;--navy-pale:#e8edf4;
-  --gold:#c9973e;--gold-light:#e8b85a;--gold-pale:#fdf3e3;
-  --green:#1a6644;--green-light:#22885a;--green-pale:#e6f4ee;
-  --red:#b83232;--red-light:#e04444;--red-pale:#fceaea;
-  --amber:#b86c10;--amber-light:#d4880f;--amber-pale:#fef3e2;
-  --teal:#0e6b7a;--teal-light:#138799;--teal-pale:#e0f4f7;
-  --white:#fff;--cream:#f5f0e8;--cream-dark:#ece4d5;
-  --text:#1a2535;--muted:#5a6a7e;--border:#d4dce8;
-  --shadow:0 2px 14px rgba(13,33,55,.09);
-  --shadow-lg:0 10px 40px rgba(13,33,55,.18);
-  --r:12px;--rs:8px;
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7fb;
+margin:0;
+padding:20px;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:15px;line-height:1.5;}
-.screen{display:none;min-height:100vh;flex-direction:column;}
-.screen.active{display:flex;}
 
-/* ─── LOGIN / REGISTER ─── */
-#sc-login,#sc-register{background:var(--navy);align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden;}
-#sc-login::before,#sc-register::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,151,62,.18),transparent 70%);top:-200px;right:-200px;pointer-events:none;}
-.login-card{background:var(--white);border-radius:20px;width:100%;max-width:430px;box-shadow:var(--shadow-lg);overflow:hidden;animation:drop .4s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1;}
-@keyframes drop{from{opacity:0;transform:translateY(-28px) scale(.97);}to{opacity:1;transform:none;}}
-.login-head{background:linear-gradient(135deg,var(--navy) 60%,var(--navy-light));padding:26px 26px 20px;text-align:center;border-bottom:3px solid var(--gold);}
-.login-head .crest{font-size:42px;display:block;margin-bottom:6px;}
-.login-head h1{font-family:'Playfair Display',serif;font-size:19px;color:var(--white);}
-.login-head p{font-size:10.5px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
-.role-toggle{display:grid;grid-template-columns:1fr 1fr;margin:16px 20px 0;background:var(--cream);border-radius:10px;padding:4px;gap:4px;}
-.role-btn{padding:10px 6px;border:none;background:transparent;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:var(--muted);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px;}
-.role-btn .ri{font-size:20px;}
-.role-btn.active{background:var(--navy);color:var(--white);box-shadow:0 2px 8px rgba(13,33,55,.3);}
-.lf{padding:18px 20px 20px;}
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 14px rgba(0,0,0,.06);
+margin-bottom:20px;
+}
 
-/* inputs shared */
-.fg{margin-bottom:12px;}
-.fg label,.form-group label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
-.fg input,.fg select,input,select,textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);background:var(--white);transition:border .2s;}
-.fg input:focus,.fg select:focus,input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy-light);}
-textarea{resize:vertical;min-height:60px;}
-.form-group{margin-bottom:12px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:460px){.form-row{grid-template-columns:1fr;}}
+.card-title{
+font-size:18px;
+font-weight:600;
+margin-bottom:15px;
+}
 
-.lbtn{width:100%;padding:12px;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--white);}
-.lbtn.navy{background:var(--navy);}.lbtn.navy:hover{background:var(--navy-light);}
-.lbtn.teal{background:var(--teal);}.lbtn.teal:hover{background:var(--teal-light);}
-.lbtn.green{background:var(--green);}.lbtn.green:hover{background:var(--green-light);}
-.lbtn.outline{background:transparent;color:var(--muted);border:1.5px solid var(--border);}.lbtn.outline:hover{border-color:var(--navy);color:var(--navy);}
-.hint{text-align:center;font-size:11.5px;color:var(--muted);margin-top:11px;background:var(--cream);padding:8px;border-radius:8px;}
-.hint strong{color:var(--text);}
-.err{background:var(--red-pale);color:var(--red);border:1px solid rgba(184,50,50,.2);padding:9px 13px;border-radius:8px;font-size:13px;margin-bottom:11px;display:none;}
-.err.show{display:block;}
-.link-btn{background:none;border:none;color:var(--teal);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;text-decoration:underline;margin-top:10px;display:block;text-align:center;width:100%;}
-.link-btn:hover{color:var(--teal-light);}
-.divider{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--muted);font-size:12px;}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.week-row{
+display:grid;
+grid-template-columns:80px 1fr 140px;
+gap:20px;
+padding:12px 0;
+border-bottom:1px solid #eee;
+align-items:center;
+}
 
-/* ─── TOPBAR ─── */
-.topbar{color:var(--white);padding:0 17px;display:flex;align-items:center;justify-content:space-between;height:56px;flex-shrink:0;box-shadow:0 2px 16px rgba(0,0,0,.22);position:sticky;top:0;z-index:100;}
-.topbar.qa-bar{background:var(--navy);}
-.topbar.lec-bar{background:linear-gradient(90deg,var(--navy),var(--teal));}
-.tl{display:flex;align-items:center;gap:9px;}
-.logo-icon{width:33px;height:33px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-.logo-text{font-family:'Playfair Display',serif;font-size:15px;}
-.logo-sub{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:1.3px;text-transform:uppercase;display:block;margin-top:-2px;}
-.tr{display:flex;align-items:center;gap:7px;}
-.upill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 10px 3px 7px;display:flex;align-items:center;gap:5px;font-size:11.5px;}
-.av{width:21px;height:21px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;}
-.av.qa{background:var(--gold);}
-.av.lec{background:var(--teal);}
-.logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
-.logout-btn:hover{background:rgba(255,255,255,.22);color:var(--white);}
+.week-badge{
+background:#f1f5f9;
+padding:8px;
+border-radius:8px;
+text-align:center;
+}
 
-/* ─── QA NAV ─── */
-#qa-nav{background:var(--navy-mid);display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;}
-#qa-nav::-webkit-scrollbar{display:none;}
-.ntab{flex-shrink:0;padding:11px 14px;color:rgba(255,255,255,.5);cursor:pointer;font-size:11.5px;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.ntab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
-.ntab:hover:not(.active){color:rgba(255,255,255,.8);}
-.ndot{width:17px;height:17px;background:var(--red-light);color:var(--white);border-radius:50%;font-size:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
+.week-badge.done{
+background:#dcfce7;
+}
 
-/* ─── LECTURER NAV ─── */
-#lec-nav{background:var(--teal);display:flex;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.15);}
-.ltab{flex:1;padding:11px 8px;color:rgba(255,255,255,.55);cursor:pointer;font-size:12px;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;}
-.ltab .li{font-size:18px;}
-.ltab.active{color:var(--white);border-bottom-color:rgba(255,255,255,.9);}
-.ltab:hover:not(.active){color:rgba(255,255,255,.8);}
+.week-badge.skipped{
+background:#fee2e2;
+}
 
-/* ─── VIEWS ─── */
-.portal-body{flex:1;overflow-y:auto;}
-.view{display:none;padding:16px;max-width:880px;margin:0 auto;}
-.view.active{display:block;}
+.week-badge.current{
+background:#e0f2fe;
+}
 
-/* ─── CARDS ─── */
-.card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:13px;}
-.card-head{padding:12px 16px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--navy);}
-.card-body{padding:13px 16px;}
+.wk{
+font-size:12px;
+color:#666;
+}
 
-/* ─── STATS ─── */
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:13px;}
-@media(max-width:550px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
-.stat{background:var(--white);border-radius:var(--r);padding:13px;box-shadow:var(--shadow);border-top:4px solid var(--border);}
-.stat.green{border-top-color:var(--green);}.stat.red{border-top-color:var(--red);}.stat.amber{border-top-color:var(--amber);}.stat.teal{border-top-color:var(--teal);}
-.stat-n{font-family:'Playfair Display',serif;font-size:30px;color:var(--navy);}
-.stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;margin-top:1px;}
+.wn{
+font-size:18px;
+font-weight:600;
+}
 
-/* ─── SESSION ROWS ─── */
-.srow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--cream-dark);transition:background .15s;}
-.srow:last-child{border-bottom:none;}
-.srow:hover{background:var(--cream);}
-.sn{font-weight:600;font-size:13.5px;color:var(--navy);}
-.sm{font-size:11px;color:var(--muted);margin-top:2px;}
-.sc{font-size:11.5px;color:var(--navy-light);font-style:italic;margin-top:1px;}
-.row-ci{background:rgba(14,107,122,.05)!important;border-left:4px solid var(--teal);}
-.row-ci:hover{background:rgba(14,107,122,.09)!important;}
+.topic-title{
+font-weight:600;
+margin-bottom:4px;
+}
 
-/* ─── CHIPS ─── */
-.chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap;}
-.chip.present{background:var(--green-pale);color:var(--green);border:1px solid rgba(26,102,68,.2);}
-.chip.absent{background:var(--red-pale);color:var(--red);border:1px solid rgba(184,50,50,.2);}
-.chip.late{background:var(--amber-pale);color:var(--amber);border:1px solid rgba(184,108,16,.25);}
-.chip.pending{background:var(--cream-dark);color:var(--muted);border:1px solid var(--border);}
-.chip.checked_in{background:var(--teal-pale);color:var(--teal);border:1px solid rgba(14,107,122,.25);}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.55;}}
-.chip.checked_in{animation:pulse 2s ease-in-out infinite;}
-.chip.approved{background:var(--green-pale);color:var(--green);border:1px solid rgba(26,102,68,.2);}
-.chip.pending-approval{background:var(--amber-pale);color:var(--amber);border:1px solid rgba(184,108,16,.25);}
+.topic-plan{
+color:#666;
+font-size:13px;
+}
 
-/* ─── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif;}
-.btn-navy{background:var(--navy);color:var(--white);}.btn-navy:hover{background:var(--navy-light);}
-.btn-gold{background:var(--gold);color:var(--white);}.btn-gold:hover{background:var(--gold-light);}
-.btn-green{background:var(--green);color:var(--white);}.btn-green:hover{background:var(--green-light);}
-.btn-red{background:var(--red);color:var(--white);}.btn-red:hover{background:var(--red-light);}
-.btn-amber{background:var(--amber);color:var(--white);}.btn-amber:hover{background:var(--amber-light);}
-.btn-teal{background:var(--teal);color:var(--white);}.btn-teal:hover{background:var(--teal-light);}
-.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy);}.btn-outline:hover{background:var(--navy);color:var(--white);}
-.btn-danger{background:transparent;color:var(--red);border:1.5px solid var(--red);}.btn-danger:hover{background:var(--red);color:var(--white);}
-.btn-sm{padding:5px 10px;font-size:11.5px;}
-.btn-lg{padding:13px 20px;font-size:14px;border-radius:11px;}
-.btn:disabled{opacity:.4;cursor:not-allowed;}
+.topic-note{
+font-size:13px;
+margin-top:4px;
+}
 
-/* ─── MODAL ─── */
-.mo{display:none;position:fixed;inset:0;background:rgba(13,33,55,.6);z-index:200;align-items:center;justify-content:center;padding:16px;}
-.mo.open{display:flex;}
-.modal{background:var(--white);border-radius:var(--r);width:100%;max-width:450px;box-shadow:var(--shadow-lg);animation:sup .25s ease;}
-@keyframes sup{from{transform:translateY(26px);opacity:0;}to{transform:none;opacity:1;}}
-.mh{background:var(--navy);color:var(--white);padding:13px 16px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;justify-content:space-between;}
-.mt{font-family:'Playfair Display',serif;font-size:15px;}
-.mc{cursor:pointer;font-size:18px;color:rgba(255,255,255,.55);background:none;border:none;}
-.mb{padding:16px;}
-.mf{padding:11px 16px 14px;display:flex;gap:8px;justify-content:flex-end;border-top:1px solid var(--border);}
+.chip{
+padding:6px 12px;
+border-radius:20px;
+font-size:12px;
+text-transform:capitalize;
+}
 
-/* ─── TABLES ─── */
-.dt{width:100%;border-collapse:collapse;font-size:13px;}
-.dt th{background:var(--navy);color:var(--white);padding:8px 12px;text-align:left;font-size:10px;letter-spacing:.7px;text-transform:uppercase;}
-.dt td{padding:9px 12px;border-bottom:1px solid var(--cream-dark);vertical-align:middle;}
-.dt tr:last-child td{border-bottom:none;}
-.dt tr:hover td{background:var(--cream);}
+.green{background:#dcfce7;}
+.red{background:#fee2e2;}
+.orange{background:#fef3c7;}
+.gray{background:#e5e7eb;}
 
-/* ─── MISC ─── */
-.day-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
-.day-pill{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--white);transition:all .15s;}
-.day-pill.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
-.banner{border-radius:var(--rs);padding:12px 14px;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;}
-.banner.alert{background:var(--teal-pale);border:1px solid rgba(14,107,122,.3);}
-.banner.success{background:var(--green-pale);border:1px solid rgba(26,102,68,.25);}
-.banner.warning{background:var(--amber-pale);border:1px solid rgba(184,108,16,.3);}
-.bi{font-size:20px;flex-shrink:0;}
-.bt{font-size:13px;color:var(--text);}
-.bt strong{display:block;font-weight:600;margin-bottom:2px;}
-.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.st{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);}
-.ss{font-size:12px;color:var(--muted);margin-top:1px;}
-.tb{font-family:'DM Mono',monospace;font-size:11px;background:var(--cream-dark);padding:2px 7px;border-radius:4px;color:var(--muted);}
-.prog-wrap{height:6px;background:var(--cream-dark);border-radius:3px;margin-top:7px;}
-.prog{height:6px;border-radius:3px;transition:width .4s;}
-.sw{position:relative;}.sw input{padding-left:33px;}
-.si{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none;}
-.empty{text-align:center;padding:32px 20px;color:var(--muted);}
-.empty .ei{font-size:36px;margin-bottom:10px;}
-.empty .et{font-weight:600;font-size:14px;color:var(--text);margin-bottom:4px;}
-.filter-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:12px;}
-@media(max-width:480px){.filter-row{grid-template-columns:1fr;}}
-.mbg{display:flex;gap:6px;flex-wrap:wrap;}
+input,select{
+padding:8px;
+margin:5px;
+border-radius:6px;
+border:1px solid #ddd;
+}
 
-/* ─── TOAST ─── */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--navy);color:var(--white);padding:10px 20px;border-radius:28px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:500;transition:transform .3s;white-space:nowrap;}
-#toast.show{transform:translateX(-50%) translateY(0);}
-#toast.success{background:var(--green);}
-#toast.error{background:var(--red);}
+button{
+padding:8px 14px;
+border:none;
+border-radius:6px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+}
 
-/* ─── LECTURER PORTAL ─── */
-.lec-welcome{background:linear-gradient(135deg,var(--navy) 55%,var(--teal));border-radius:15px;padding:20px;color:var(--white);margin-bottom:14px;position:relative;overflow:hidden;}
-.lec-welcome::after{content:'🎓';position:absolute;right:16px;bottom:8px;font-size:48px;opacity:.15;}
-.lec-welcome h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:3px;}
-.lec-welcome p{font-size:12.5px;color:rgba(255,255,255,.7);}
-.dchip{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:3px 10px;border-radius:12px;font-size:11px;margin-bottom:9px;font-family:'DM Mono',monospace;}
-.ci-card{border-radius:var(--r);overflow:hidden;margin-bottom:11px;box-shadow:var(--shadow);border:2px solid var(--border);background:var(--white);transition:border-color .3s;}
-.ci-card.st-checked_in{border-color:var(--teal);}
-.ci-card.st-present{border-color:var(--green);}
-.ci-card.st-absent{border-color:var(--red);}
-.ci-card.st-late{border-color:var(--amber);}
-.ci-top{padding:13px 15px;border-bottom:1px solid var(--cream-dark);display:flex;justify-content:space-between;align-items:flex-start;}
-.ci-body{padding:13px 15px;}
-.rbanner{border-radius:9px;padding:11px 13px;display:flex;align-items:center;gap:11px;}
-.rbanner.vp{background:var(--green-pale);border:1.5px solid rgba(26,102,68,.3);}
-.rbanner.vl{background:var(--amber-pale);border:1.5px solid rgba(184,108,16,.3);}
-.rbanner.va{background:var(--red-pale);border:1.5px solid rgba(184,50,50,.3);}
-.rbanner.vw{background:var(--teal-pale);border:1.5px solid rgba(14,107,122,.25);}
-.ri2{font-size:22px;}
-.rbt strong{display:block;font-weight:700;font-size:13.5px;}
-.rbt span{font-size:11.5px;color:var(--muted);}
+button:hover{
+background:#1e40af;
+}
 
-/* schedule card */
-.sched-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:11px;border-left:4px solid var(--navy-pale);}
-.sched-card.approved{border-left-color:var(--green);}
-.sched-card.pending-approval{border-left-color:var(--amber);}
-.sched-card-body{padding:13px 15px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;}
 </style>
 </head>
+
 <body>
 
-<!-- ══════════ LOGIN ══════════ -->
-<div id="sc-login" class="screen active">
-  <div class="login-card">
-    <div class="login-head">
-      <span class="crest">🏛️</span>
-      <h1>QA Attendance System</h1>
-      <p>Kampala International University</p>
-    </div>
-    <div class="role-toggle">
-      <button class="role-btn active" id="rbtn-qa" onclick="switchRole('qa')"><span class="ri">🛡️</span>QA Officer</button>
-      <button class="role-btn" id="rbtn-lec" onclick="switchRole('lec')"><span class="ri">🎓</span>Lecturer</button>
-    </div>
-    <div class="lf">
-      <!-- QA LOGIN -->
-      <div id="form-qa">
-        <div id="err-qa" class="err"></div>
-        <div class="fg"><label>Username</label><input type="text" id="qa-user" placeholder="e.g. admin" autocomplete="username"/></div>
-        <div class="fg"><label>Password</label><input type="password" id="qa-pass" placeholder="Enter password" autocomplete="current-password"/></div>
-        <button class="lbtn navy" onclick="loginQA()">Sign In as QA Officer →</button>
-        <div class="hint">Default: <strong>admin</strong> / <strong>admin123</strong></div>
-      </div>
-      <!-- LECTURER LOGIN -->
-      <div id="form-lec" style="display:none;">
-        <div id="err-lec" class="err"></div>
-        <div class="fg"><label>Employee ID or Username</label><input type="text" id="lec-user" placeholder="e.g. KIU/CS/001" autocomplete="username"/></div>
-        <div class="fg"><label>PIN (4–6 digits)</label><input type="password" id="lec-pin" maxlength="6" placeholder="Your PIN" inputmode="numeric"/></div>
-        <button class="lbtn teal" onclick="loginLecturer()">Sign In as Lecturer →</button>
-        <div class="divider">or</div>
-        <button class="lbtn outline" onclick="goRegister()">📝 New Lecturer? Create Account</button>
-      </div>
-    </div>
-  </div>
+<div class="card">
+<div class="card-title">Add Session Log</div>
+
+<input id="week" placeholder="Week" type="number">
+<input id="topic" placeholder="Topic">
+<select id="coverage">
+<option value="covered">Covered</option>
+<option value="partial">Partial</option>
+<option value="skipped">Skipped</option>
+</select>
+
+<input id="notes" placeholder="Notes">
+<button onclick="addLog()">Add</button>
+
 </div>
 
-<!-- ══════════ REGISTER ══════════ -->
-<div id="sc-register" class="screen">
-  <div class="login-card" style="max-width:480px;">
-    <div class="login-head">
-      <span class="crest">📝</span>
-      <h1>Create Lecturer Account</h1>
-      <p>Kampala International University</p>
-    </div>
-    <div class="lf">
-      <div id="err-reg" class="err"></div>
-      <div class="form-row">
-        <div class="form-group"><label>First Name</label><input type="text" id="reg-fname" placeholder="e.g. John"/></div>
-        <div class="form-group"><label>Last Name</label><input type="text" id="reg-lname" placeholder="e.g. Ssemakula"/></div>
-      </div>
-      <div class="form-group"><label>Title</label>
-        <select id="reg-title"><option value="">No title</option><option>Mr.</option><option>Ms.</option><option>Mrs.</option><option>Dr.</option><option>Prof.</option></select>
-      </div>
-      <div class="form-group"><label>Department / Faculty</label><input type="text" id="reg-dept" placeholder="e.g. Computer Science"/></div>
-      <div class="form-row">
-        <div class="form-group"><label>Employee ID</label><input type="text" id="reg-empid" placeholder="KIU/CS/001"/></div>
-        <div class="form-group"><label>Phone</label><input type="tel" id="reg-phone" placeholder="+256 …"/></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Create PIN (4–6 digits)</label><input type="password" id="reg-pin" maxlength="6" placeholder="e.g. 1234" inputmode="numeric"/></div>
-        <div class="form-group"><label>Confirm PIN</label><input type="password" id="reg-pin2" maxlength="6" placeholder="Repeat PIN" inputmode="numeric"/></div>
-      </div>
-      <button class="lbtn green" onclick="registerLecturer()" style="margin-bottom:10px;">Create Account →</button>
-      <button class="lbtn outline" onclick="showScreen('sc-login')">← Back to Login</button>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════ QA PORTAL ══════════ -->
-<div id="sc-qa" class="screen">
-  <div class="topbar qa-bar">
-    <div class="tl"><div class="logo-icon" style="background:var(--gold);">🎓</div><div><div class="logo-text">QA Attendance</div><span class="logo-sub">Officer Portal</span></div></div>
-    <div class="tr"><div class="upill"><div class="av qa">🛡️</div><span id="qa-uname"></span></div><button class="logout-btn" onclick="logout()">Sign Out</button></div>
-  </div>
-  <div id="qa-nav">
-    <div class="ntab active" data-view="vq-dash">📊 Dashboard</div>
-    <div class="ntab" data-view="vq-verify">✅ Verify &amp; Mark <span class="ndot" id="ndot" style="display:none;"></span></div>
-    <div class="ntab" data-view="vq-lec">👤 Lecturers</div>
-    <div class="ntab" data-view="vq-sched">📅 All Schedules</div>
-    <div class="ntab" data-view="vq-rpt">📋 Reports</div>
-  </div>
-  <div class="portal-body">
+<div id="qa-topic-body"></div>
 
-    <!-- DASHBOARD -->
-    <div id="view-vq-dash" class="view active">
-      <div style="margin:4px 0 13px;"><div class="st">Today's Overview</div><div class="ss" id="q-date"></div></div>
-      <div id="q-alert"></div>
-      <div class="stat-grid" id="q-stats"></div>
-      <div class="card"><div class="card-head"><div class="card-title">Today's Sessions</div><span id="q-count" style="font-size:11.5px;color:var(--muted);"></span></div><div id="q-sessions"></div></div>
-      <div class="card"><div class="card-head"><div class="card-title">Weekly Rate</div></div><div class="card-body" id="q-weekly"></div></div>
-    </div>
 
-    <!-- VERIFY & MARK -->
-    <div id="view-vq-verify" class="view">
-      <div class="sh"><div><div class="st">Verify &amp; Mark</div><div class="ss">Go to classroom, then authenticate here</div></div></div>
-      <div class="day-pills" id="vmark-pills"></div>
-      <div id="vmark-sessions"></div>
-    </div>
-
-    <!-- LECTURERS -->
-    <div id="view-vq-lec" class="view">
-      <div class="sh"><div><div class="st">Lecturers</div><div class="ss" id="lec-count"></div></div><button class="btn btn-navy btn-sm" onclick="openLecModal()">+ Add</button></div>
-      <div class="card" style="margin-bottom:11px;"><div class="card-body" style="padding-bottom:10px;"><div class="sw"><span class="si">🔍</span><input type="text" id="lec-search" placeholder="Search…" oninput="renderLecturers()"/></div></div></div>
-      <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Name</th><th>Dept</th><th>Employee ID</th><th>Phone</th><th>Actions</th></tr></thead><tbody id="lec-tbody"></tbody></table></div></div>
-    </div>
-
-    <!-- ALL SCHEDULES -->
-    <div id="view-vq-sched" class="view">
-      <div class="sh"><div><div class="st">All Schedules</div><div class="ss">Timetable submitted by lecturers</div></div><button class="btn btn-navy btn-sm" onclick="openQASchedModal()">+ Add</button></div>
-      <div class="day-pills" id="sched-pills"></div>
-      <div id="sched-list"></div>
-    </div>
-
-    <!-- REPORTS -->
-    <div id="view-vq-rpt" class="view">
-      <div class="sh"><div><div class="st">Reports</div><div class="ss">Full attendance log</div></div></div>
-      <div class="filter-row">
-        <div><label>Date</label><input type="date" id="rpt-date" onchange="renderReports()"/></div>
-        <div><label>Lecturer</label><select id="rpt-lec" onchange="renderReports()"><option value="">All</option></select></div>
-        <div><label>Status</label><select id="rpt-status" onchange="renderReports()"><option value="">All</option><option value="checked_in">Checked In</option><option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option></select></div>
-      </div>
-      <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;">
-        <button class="btn btn-gold btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
-        <button class="btn btn-outline btn-sm" onclick="clearFilters()">✕ Clear</button>
-      </div>
-      <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Date</th><th>Time</th><th>Lecturer</th><th>Course</th><th>Room</th><th>Status</th><th>Verified By</th><th>Notes</th></tr></thead><tbody id="rpt-tbody"></tbody></table></div></div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════════ LECTURER PORTAL ══════════ -->
-<div id="sc-lec" class="screen">
-  <div class="topbar lec-bar">
-    <div class="tl"><div class="logo-icon" style="background:rgba(255,255,255,.2);">🎓</div><div><div class="logo-text">Lecturer Portal</div><span class="logo-sub">KIU Attendance</span></div></div>
-    <div class="tr"><div class="upill"><div class="av lec">👤</div><span id="lec-uname"></span></div><button class="logout-btn" onclick="logout()">Sign Out</button></div>
-  </div>
-  <div id="lec-nav">
-    <div class="ltab active" data-ltab="lv-today"><span class="li">📋</span>Today</div>
-    <div class="ltab" data-ltab="lv-schedule"><span class="li">📅</span>My Schedule</div>
-    <div class="ltab" data-ltab="lv-profile"><span class="li">👤</span>Profile</div>
-  </div>
-  <div class="portal-body">
-
-    <!-- TODAY -->
-    <div id="view-lv-today" class="view active" style="max-width:600px;margin:0 auto;">
-      <div class="lec-welcome">
-        <span class="dchip" id="lec-datechip"></span>
-        <h2 id="lec-wname">Welcome</h2>
-        <p>Tap <strong>"I'm In Class"</strong> when you arrive. QA will physically verify you.</p>
-      </div>
-      <div id="lec-no-sesh" class="empty" style="display:none;"><div class="ei">📭</div><div class="et">No sessions today</div><p style="font-size:13px;">Add your course units in the <strong>My Schedule</strong> tab.</p></div>
-      <div id="lec-sesh-list"></div>
-    </div>
-
-    <!-- MY SCHEDULE -->
-    <div id="view-lv-schedule" class="view" style="max-width:600px;margin:0 auto;">
-      <div class="sh"><div><div class="st">My Course Units</div><div class="ss">Register your approved teaching slots</div></div><button class="btn btn-teal btn-sm" onclick="openMySchedModal()">+ Add Unit</button></div>
-      <div id="my-sched-list"></div>
-    </div>
-
-    <!-- PROFILE -->
-    <div id="view-lv-profile" class="view" style="max-width:600px;margin:0 auto;">
-      <div class="card">
-        <div class="card-head"><div class="card-title">My Profile</div></div>
-        <div class="card-body" id="lec-profile-body"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title">Change PIN</div></div>
-        <div class="card-body">
-          <div class="form-group"><label>Current PIN</label><input type="password" id="pin-old" maxlength="6" inputmode="numeric" placeholder="Current PIN"/></div>
-          <div class="form-row">
-            <div class="form-group"><label>New PIN</label><input type="password" id="pin-new" maxlength="6" inputmode="numeric" placeholder="New PIN"/></div>
-            <div class="form-group"><label>Confirm</label><input type="password" id="pin-new2" maxlength="6" inputmode="numeric" placeholder="Confirm"/></div>
-          </div>
-          <button class="btn btn-teal" onclick="changePin()">Update PIN</button>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- VERIFY MODAL (QA) -->
-<div class="mo" id="mark-modal">
-  <div class="modal">
-    <div class="mh"><span class="mt">Physical Verification</span><button class="mc" onclick="closeMo('mark-modal')">✕</button></div>
-    <div class="mb">
-      <div style="background:var(--cream);border-radius:8px;padding:11px 13px;margin-bottom:13px;">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Lecturer</div>
-        <div style="font-weight:700;font-size:15px;color:var(--navy);margin-top:2px;" id="m-lname"></div>
-        <div style="font-size:11.5px;color:var(--muted);margin-top:2px;" id="m-sinfo"></div>
-        <div id="m-ci-note" style="margin-top:7px;display:none;"><span class="chip checked_in" style="animation:none;">📍 Lecturer self-checked in</span> <span id="m-ci-time" style="font-size:11px;color:var(--muted);"></span></div>
-      </div>
-      <div class="form-group"><label>Confirm Physical Status</label>
-        <div class="mbg">
-          <button class="btn btn-green btn-sm" onclick="selSt('present')">✔ Present</button>
-          <button class="btn btn-amber btn-sm" onclick="selSt('late')">⏱ Late</button>
-          <button class="btn btn-red btn-sm" onclick="selSt('absent')">✗ Absent</button>
-        </div>
-        <input type="hidden" id="m-status"/>
-      </div>
-      <div class="form-group"><label>QA Officer Name</label><input type="text" id="m-officer" placeholder="Your name…"/></div>
-      <div class="form-group"><label>Notes (optional)</label><textarea id="m-notes" placeholder="Any remarks…"></textarea></div>
-    </div>
-    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('mark-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveVerification()">Authenticate &amp; Save</button></div>
-  </div>
-</div>
-
-<!-- LECTURER MODAL (QA adds) -->
-<div class="mo" id="lec-modal">
-  <div class="modal">
-    <div class="mh"><span class="mt" id="lm-title">Add Lecturer</span><button class="mc" onclick="closeMo('lec-modal')">✕</button></div>
-    <div class="mb">
-      <input type="hidden" id="lm-id"/>
-      <div class="form-group"><label>Full Name</label><input type="text" id="lm-name" placeholder="e.g. Dr. Amara Osei"/></div>
-      <div class="form-row"><div class="form-group"><label>Department</label><input type="text" id="lm-dept" placeholder="Computer Science"/></div><div class="form-group"><label>Employee ID</label><input type="text" id="lm-empid" placeholder="KIU/CS/001"/></div></div>
-      <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" id="lm-phone" placeholder="+256 …"/></div><div class="form-group"><label>Login PIN</label><input type="password" id="lm-pin" maxlength="6" placeholder="1234" inputmode="numeric"/></div></div>
-    </div>
-    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('lec-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveLecturer()">Save</button></div>
-  </div>
-</div>
-
-<!-- SCHEDULE MODAL (QA) -->
-<div class="mo" id="qa-sched-modal">
-  <div class="modal">
-    <div class="mh"><span class="mt" id="qsm-title">Add Session</span><button class="mc" onclick="closeMo('qa-sched-modal')">✕</button></div>
-    <div class="mb">
-      <input type="hidden" id="qsm-id"/>
-      <div class="form-group"><label>Lecturer</label><select id="qsm-lec"></select></div>
-      <div class="form-group"><label>Course / Unit Name</label><input type="text" id="qsm-course" placeholder="e.g. Database Systems"/></div>
-      <div class="form-row"><div class="form-group"><label>Room / Venue</label><input type="text" id="qsm-room" placeholder="LT-3"/></div><div class="form-group"><label>Day</label><select id="qsm-day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Start</label><input type="time" id="qsm-start"/></div><div class="form-group"><label>End</label><input type="time" id="qsm-end"/></div></div>
-      <div class="form-group"><label>Status</label><select id="qsm-approval"><option value="approved">Approved</option><option value="pending-approval">Pending Approval</option></select></div>
-    </div>
-    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('qa-sched-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveQASched()">Save</button></div>
-  </div>
-</div>
-
-<!-- MY SCHEDULE MODAL (Lecturer) -->
-<div class="mo" id="my-sched-modal">
-  <div class="modal">
-    <div class="mh"><span class="mt" id="msm-title">Register Course Unit</span><button class="mc" onclick="closeMo('my-sched-modal')">✕</button></div>
-    <div class="mb">
-      <input type="hidden" id="msm-id"/>
-      <div class="form-group"><label>Course / Unit Name</label><input type="text" id="msm-course" placeholder="e.g. Database Systems"/></div>
-      <div class="form-row"><div class="form-group"><label>Room / Venue</label><input type="text" id="msm-room" placeholder="e.g. LT-3"/></div><div class="form-group"><label>Day of Week</label><select id="msm-day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></div></div>
-      <div class="form-row"><div class="form-group"><label>Start Time</label><input type="time" id="msm-start"/></div><div class="form-group"><label>End Time</label><input type="time" id="msm-end"/></div></div>
-      <div style="background:var(--amber-pale);border:1px solid rgba(184,108,16,.25);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--amber);margin-top:4px;">
-        ℹ️ Your course unit will appear as <strong>Pending Approval</strong> until a QA officer approves it.
-      </div>
-    </div>
-    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('my-sched-modal')">Cancel</button><button class="btn btn-teal btn-sm" onclick="saveMySchedule()">Submit Unit</button></div>
-  </div>
-</div>
-
-<div id="toast"></div>
 
 <script>
-/* ══════════════════════════════════
-   STORAGE & HELPERS
-══════════════════════════════════ */
-const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-function todayDay(){return['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];}
-function todayStr(){return new Date().toISOString().slice(0,10);}
-function nowTime(){return new Date().toTimeString().slice(0,5);}
-function fmtDate(d){try{return new Date(d+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});}catch{return d;}}
-function fmtTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;return`${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`;}
-function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):[];}catch{return[];}}
-function loadObj(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){console.error(e);}}
 
-/* ══════════════════════════════════
-   DATA INIT — always ensure defaults exist
-══════════════════════════════════ */
-let lecturers=load('qa_lecturers');
-let schedules=load('qa_schedules');
-let logs=load('qa_logs');
-let selfLogs=load('qa_self_logs');
-let qaUsers=load('qa_users');
+/* ========================
+Storage Helpers
+======================== */
 
-// Guarantee default QA accounts always exist (fixes login issue)
-const DEFAULT_QA=[
-  {id:'qa-admin-fixed',username:'admin',password:'admin123',name:'Admin QA Officer'},
-  {id:'qa-1-fixed',username:'qa1',password:'qa1234',name:'QA Officer Nalwanga'},
-  {id:'qa-2-fixed',username:'qa2',password:'qa1234',name:'QA Officer Kato'},
-];
-DEFAULT_QA.forEach(def=>{
-  if(!qaUsers.find(u=>u.username===def.username)) qaUsers.push(def);
-});
-save('qa_users',qaUsers);
-
-// Seed demo lecturers if none
-if(!lecturers.length){
-  lecturers=[
-    {id:uid(),name:'Dr. Amara Osei',dept:'Computer Science',phone:'+256 701 111 001',empId:'KIU/CS/001',pin:'1234'},
-    {id:uid(),name:'Prof. Fatima Nkosi',dept:'Business Administration',phone:'+256 701 111 002',empId:'KIU/BA/001',pin:'1234'},
-    {id:uid(),name:'Mr. John Ssemakula',dept:'Engineering',phone:'+256 701 111 003',empId:'KIU/EN/001',pin:'1234'},
-    {id:uid(),name:'Dr. Irene Mutesi',dept:'Nursing',phone:'+256 701 111 004',empId:'KIU/NU/001',pin:'1234'},
-    {id:uid(),name:'Ms. Lydia Chege',dept:'Law',phone:'+256 701 111 005',empId:'KIU/LW/001',pin:'1234'},
-    {id:uid(),name:'Dr. Emmanuel Bello',dept:'Pharmacy',phone:'+256 701 111 006',empId:'KIU/PH/001',pin:'1234'},
-  ];
-  save('qa_lecturers',lecturers);
-}
-if(!schedules.length){
-  const ids=lecturers.map(l=>l.id),td=todayDay();
-  function sc(l,c,r,d,s,e,ap='approved'){return{id:uid(),lecturerId:l,course:c,room:r,day:d,start:s,end:e,approval:ap};}
-  schedules=[
-    sc(ids[0],'Database Systems','LT-1',td,'08:00','10:00'),
-    sc(ids[1],'Business Ethics','LT-2',td,'08:00','10:00'),
-    sc(ids[2],'Thermodynamics','ENG-3',td,'10:00','12:00'),
-    sc(ids[3],'Clinical Nursing','NUR-1',td,'10:00','12:00'),
-    sc(ids[4],'Constitutional Law','LT-4',td,'13:00','15:00'),
-    sc(ids[5],'Pharmacology I','PHM-2',td,'13:00','15:00'),
-    sc(ids[0],'Software Engineering','LT-1','Tuesday','08:00','10:00'),
-    sc(ids[1],'Marketing Management','LT-2','Wednesday','10:00','12:00'),
-  ];
-  save('qa_schedules',schedules);
+function load(key){
+return JSON.parse(localStorage.getItem(key)||"[]")
 }
 
-function getLec(id){return lecturers.find(x=>x.id===id);}
-function getLecName(id){const l=getLec(id);return l?l.name:'Unknown';}
-function getSched(id){return schedules.find(x=>x.id===id);}
-function getLog(sid,date){return logs.find(l=>l.scheduleId===sid&&l.date===date);}
-function getSelfLog(sid,date){return selfLogs.find(l=>l.scheduleId===sid&&l.date===date);}
-
-/* ══════════════════════════════════
-   AUTH
-══════════════════════════════════ */
-let session=loadObj('qa_session',null);
-
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-
-/* Role toggle on login */
-let loginRole='qa';
-function switchRole(r){
-  loginRole=r;
-  document.getElementById('rbtn-qa').classList.toggle('active',r==='qa');
-  document.getElementById('rbtn-lec').classList.toggle('active',r==='lec');
-  document.getElementById('form-qa').style.display=r==='qa'?'block':'none';
-  document.getElementById('form-lec').style.display=r==='lec'?'block':'none';
+function save(key,val){
+localStorage.setItem(key,JSON.stringify(val))
 }
 
-function loginQA(){
-  // Always reload from storage so we get latest
-  qaUsers=load('qa_users');
-  DEFAULT_QA.forEach(def=>{if(!qaUsers.find(u=>u.username===def.username))qaUsers.push(def);});
-  save('qa_users',qaUsers);
 
-  const u=document.getElementById('qa-user').value.trim().toLowerCase();
-  const p=document.getElementById('qa-pass').value;
-  const err=document.getElementById('err-qa');
-  if(!u||!p){err.textContent='Please enter username and password.';err.classList.add('show');return;}
-  const user=qaUsers.find(x=>x.username.toLowerCase()===u&&x.password===p);
-  if(!user){err.textContent='Incorrect username or password. Try admin / admin123';err.classList.add('show');return;}
-  err.classList.remove('show');
-  session={role:'qa',userId:user.id,name:user.name};
-  save('qa_session',session);enterQA();
-}
+/* ========================
+Add Session Log
+======================== */
 
-function loginLecturer(){
-  lecturers=load('qa_lecturers');
-  const u=document.getElementById('lec-user').value.trim();
-  const pin=document.getElementById('lec-pin').value.trim();
-  const err=document.getElementById('err-lec');
-  if(!u||!pin){err.textContent='Please enter your Employee ID and PIN.';err.classList.add('show');return;}
-  // Match by empId (case-insensitive) or by name fragment
-  const lec=lecturers.find(l=>(l.empId||'').toLowerCase()===u.toLowerCase()||(l.loginUsername||'').toLowerCase()===u.toLowerCase());
-  if(!lec){err.textContent='Employee ID not found. Please register or check your ID.';err.classList.add('show');return;}
-  if((lec.pin||'1234')!==pin){err.textContent='Incorrect PIN. Please try again.';err.classList.add('show');return;}
-  err.classList.remove('show');
-  session={role:'lec',lecturerId:lec.id,name:lec.name};
-  save('qa_session',session);enterLec();
+function addLog(){
+
+const logs = load('qa_session_logs')
+
+logs.push({
+
+week:Number(document.getElementById('week').value),
+topic:document.getElementById('topic').value,
+coverage:document.getElementById('coverage').value,
+notes:document.getElementById('notes').value
+
+})
+
+save('qa_session_logs',logs)
+
+render()
+
 }
 
-function goRegister(){showScreen('sc-register');}
 
-function registerLecturer(){
-  const fname=document.getElementById('reg-fname').value.trim();
-  const lname=document.getElementById('reg-lname').value.trim();
-  const title=document.getElementById('reg-title').value;
-  const dept=document.getElementById('reg-dept').value.trim();
-  const empId=document.getElementById('reg-empid').value.trim();
-  const phone=document.getElementById('reg-phone').value.trim();
-  const pin=document.getElementById('reg-pin').value.trim();
-  const pin2=document.getElementById('reg-pin2').value.trim();
-  const err=document.getElementById('err-reg');
-  if(!fname||!lname){err.textContent='First and last name are required.';err.classList.add('show');return;}
-  if(!dept){err.textContent='Department is required.';err.classList.add('show');return;}
-  if(!empId){err.textContent='Employee ID is required.';err.classList.add('show');return;}
-  if(lecturers.find(l=>(l.empId||'').toLowerCase()===empId.toLowerCase())){err.textContent='An account with this Employee ID already exists.';err.classList.add('show');return;}
-  if(!pin||pin.length<4){err.textContent='PIN must be at least 4 digits.';err.classList.add('show');return;}
-  if(pin!==pin2){err.textContent='PINs do not match.';err.classList.add('show');return;}
-  const fullName=(title?title+' ':'')+fname+' '+lname;
-  const newLec={id:uid(),name:fullName,dept,phone,empId,pin,loginUsername:empId,createdAt:todayStr()};
-  lecturers.push(newLec);save('qa_lecturers',lecturers);
-  toast('Account created! You can now log in with your Employee ID and PIN.','success');
-  // Clear form
-  ['reg-fname','reg-lname','reg-dept','reg-empid','reg-phone','reg-pin','reg-pin2'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('reg-title').value='';
-  setTimeout(()=>showScreen('sc-login'),1800);
-}
+/* ========================
+Sample Syllabus
+======================== */
 
-function logout(){session=null;save('qa_session',null);showScreen('sc-login');document.getElementById('qa-user').value='';document.getElementById('qa-pass').value='';}
+const syllabus = [
 
-/* ══════════════════════════════════
-   ENTER PORTALS
-══════════════════════════════════ */
-function enterQA(){
-  document.getElementById('qa-uname').textContent=session.name;
-  showScreen('sc-qa');
-  setQAView('vq-dash');updateNdot();renderDashboard();renderLecturers();renderReports();
-}
-function enterLec(){
-  document.getElementById('lec-uname').textContent=session.name.split(' ').slice(0,2).join(' ');
-  showScreen('sc-lec');
-  const d=new Date();
-  document.getElementById('lec-datechip').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('lec-wname').textContent='Welcome, '+session.name.split(' ').slice(0,2).join(' ');
-  setLecTab('lv-today');
-  renderLecToday();renderMySchedule();renderProfile();
+{week:1,topic:"Introduction",desc:"Course overview"},
+{week:2,topic:"Variables",desc:"Basics"},
+{week:3,topic:"Functions",desc:"JS functions"},
+{week:4,topic:"Arrays"},
+{week:5,topic:"Objects"},
+{week:6,topic:"DOM"},
+{week:7,topic:"Events"},
+{week:8,topic:"API"},
+{week:9,topic:"Project"},
+{week:10,topic:"Revision"},
+{week:11,topic:"Assessment"},
+{week:12,topic:"Advanced"},
+{week:13,topic:"Testing"},
+{week:14,topic:"Deployment"},
+{week:15,topic:"Review"},
+{week:16,topic:"Project"},
+{week:17,topic:"Final"}
+
+]
+
+
+/* ========================
+Current Week
+======================== */
+
+function getCurrentWeek(){
+
+const start = new Date("2025-01-01")
+const now = new Date()
+
+const diff = now-start
+
+return Math.floor(diff/(1000*60*60*24*7))+1
+
 }
 
-// Resume session on load
-(function(){
-  if(session){if(session.role==='qa')enterQA();else if(session.role==='lec')enterLec();}
-  else showScreen('sc-login');
-})();
 
-/* ══════════════════════════════════
-   QA NAVIGATION
-══════════════════════════════════ */
-let qaView='vq-dash';
-let markDay=todayDay();
-let qaSchedDay=todayDay();
+/* ========================
+Chip
+======================== */
 
-document.querySelectorAll('.ntab').forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    setQAView(tab.dataset.view);
-  });
-});
-function setQAView(v){
-  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#sc-qa .view').forEach(vv=>vv.classList.remove('active'));
-  const tab=document.querySelector(`.ntab[data-view="${v}"]`);
-  if(tab)tab.classList.add('active');
-  const el=document.getElementById('view-'+v);
-  if(el)el.classList.add('active');
-  qaView=v;
-  if(v==='vq-dash')renderDashboard();
-  if(v==='vq-verify'){markDay=todayDay();renderVerifyView();}
-  if(v==='vq-sched'){qaSchedDay=todayDay();renderQASchedView();}
-  if(v==='vq-rpt')renderReports();
+function chip(type){
+
+const map={
+covered:"chip green",
+skipped:"chip red",
+partial:"chip orange",
+"not-covered":"chip gray"
 }
 
-/* ══════════════════════════════════
-   LECTURER NAVIGATION
-══════════════════════════════════ */
-document.querySelectorAll('.ltab').forEach(tab=>{
-  tab.addEventListener('click',()=>setLecTab(tab.dataset.ltab));
-});
-function setLecTab(v){
-  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('#sc-lec .view').forEach(vv=>vv.classList.remove('active'));
-  const tab=document.querySelector(`.ltab[data-ltab="${v}"]`);
-  if(tab)tab.classList.add('active');
-  const el=document.getElementById('view-'+v);
-  if(el)el.classList.add('active');
-  if(v==='lv-today')renderLecToday();
-  if(v==='lv-schedule')renderMySchedule();
-  if(v==='lv-profile')renderProfile();
+return `<span class="${map[type]}">${type}</span>`
+
 }
 
-/* ══════════════════════════════════
-   QA DASHBOARD
-══════════════════════════════════ */
-function renderDashboard(){
-  const td=todayDay(),ds=todayStr();
-  document.getElementById('q-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  const ts=schedules.filter(s=>s.day===td&&(s.approval||'approved')==='approved');
-  const present=ts.filter(s=>getLog(s.id,ds)?.status==='present').length;
-  const absent=ts.filter(s=>getLog(s.id,ds)?.status==='absent').length;
-  const late=ts.filter(s=>getLog(s.id,ds)?.status==='late').length;
-  const ci=ts.filter(s=>!getLog(s.id,ds)&&getSelfLog(s.id,ds)).length;
-  document.getElementById('q-stats').innerHTML=`
-    <div class="stat green"><div class="stat-n">${present}</div><div class="stat-l">Verified Present</div></div>
-    <div class="stat teal"><div class="stat-n">${ci}</div><div class="stat-l">Checked In ⚡</div></div>
-    <div class="stat red"><div class="stat-n">${absent}</div><div class="stat-l">Absent</div></div>
-    <div class="stat amber"><div class="stat-n">${ts.length-present-absent-late-ci}</div><div class="stat-l">Pending</div></div>`;
-  document.getElementById('q-alert').innerHTML=ci>0?`<div class="banner alert"><div class="bi">🔔</div><div class="bt"><strong>${ci} lecturer${ci>1?'s have':' has'} self-checked in — awaiting your physical visit</strong>Go to <em>Verify &amp; Mark</em> to authenticate on-site.</div></div>`:'';
-  document.getElementById('q-count').textContent=`${ts.length} sessions today`;
-  if(!ts.length){document.getElementById('q-sessions').innerHTML=`<div class="empty"><div class="ei">📭</div><div class="et">No sessions today</div></div>`;return;}
-  document.getElementById('q-sessions').innerHTML=ts.map(s=>{
-    const lg=getLog(s.id,ds),sl=getSelfLog(s.id,ds),isCI=!lg&&sl;
-    const status=lg?lg.status:sl?'checked_in':'pending';
-    return `<div class="srow${isCI?' row-ci':''}">
-      <div><div class="sn">${getLecName(s.lecturerId)}</div><div class="sm">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div><div class="sc">${s.course}</div>
-      ${isCI?`<div style="font-size:11px;color:var(--teal);margin-top:2px;font-weight:600;">📍 Checked in at ${fmtTime(sl.time)} — needs verification</div>`:''}
-      ${lg?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">Verified by ${lg.officer}</div>`:''}
-      </div><div>${chip(status)}</div></div>`;
-  }).join('');
-  const wl=logs.filter(l=>{const d=new Date(l.date+'T12:00'),n=new Date(),ws=new Date(n);ws.setDate(n.getDate()-n.getDay()+1);return d>=ws;});
-  const wP=wl.filter(l=>l.status==='present').length,wT=wl.length,rate=wT?Math.round(wP/wT*100):0;
-  document.getElementById('q-weekly').innerHTML=`
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:9px;">
-      <div style="font-family:'Playfair Display',serif;font-size:32px;color:var(--navy);">${rate}%</div>
-      <div><div style="font-weight:600;font-size:13px;">Verified Rate This Week</div>
-      <div style="font-size:11.5px;color:var(--muted);">${wT} verified · ${wP} present · ${wl.filter(l=>l.status==='late').length} late · ${wl.filter(l=>l.status==='absent').length} absent</div></div>
-    </div>
-    <div class="prog-wrap"><div class="prog" style="width:${rate}%;background:${rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)'}"></div></div>`;
+
+/* ========================
+Render UI
+======================== */
+
+function render(){
+
+const logs = load('qa_session_logs')
+
+const weeks = Array.from({length:17},(_,i)=>i+1)
+
+document.getElementById("qa-topic-body").innerHTML=
+
+`
+
+<div class="card">
+
+<div class="card-title">
+Week-by-Week Syllabus vs Teaching Log
+</div>
+
+${weeks.map(w=>{
+
+const plan = syllabus.find(p=>p.week===w)
+const lastLog = logs.filter(l=>l.week===w).pop()
+
+let badge="week-badge"
+
+if(lastLog){
+
+if(lastLog.coverage==="covered") badge+=" done"
+else if(lastLog.coverage==="skipped") badge+=" skipped"
+else badge+=" current"
+
 }
 
-/* ══════════════════════════════════
-   VERIFY & MARK
-══════════════════════════════════ */
-function renderVerifyView(){
-  document.getElementById('vmark-pills').innerHTML=DAYS.map(d=>`<div class="day-pill ${d===markDay?'active':''}" onclick="setMarkDay('${d}')">${d.slice(0,3)}</div>`).join('');
-  renderVerifySessions();
-}
-function setMarkDay(d){markDay=d;renderVerifyView();}
+return `
 
-function renderVerifySessions(){
-  const ds=markDay===todayDay()?todayStr():null;
-  const daySched=schedules.filter(s=>s.day===markDay&&(s.approval||'approved')==='approved');
-  const cont=document.getElementById('vmark-sessions');
-  if(!daySched.length){cont.innerHTML=`<div class="empty"><div class="ei">🗓️</div><div class="et">No approved sessions on ${markDay}</div></div>`;return;}
-  const sorted=[...daySched].sort((a,b)=>{
-    function p(s){if(ds){const sl=getSelfLog(s.id,todayStr()),lg=getLog(s.id,todayStr());if(sl&&!lg)return 0;if(!lg)return 1;}return 2;}
-    return p(a)-p(b);
-  });
-  cont.innerHTML=sorted.map(s=>{
-    const lg=ds?getLog(s.id,todayStr()):null;
-    const sl=ds?getSelfLog(s.id,todayStr()):null;
-    const isCI=sl&&!lg;const status=lg?lg.status:sl?'checked_in':'pending';
-    return `<div class="card" style="margin-bottom:9px;${isCI?'border:2px solid var(--teal);':''}">
-      <div class="srow" style="padding:12px 15px;">
-        <div><div class="sn">${getLecName(s.lecturerId)}</div><div class="sm">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div><div class="sc">${s.course}</div>
-        ${isCI?`<div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:3px;">📍 Self check-in at ${fmtTime(sl.time)} — visit classroom, then mark here</div>`:''}
-        ${lg?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">Verified by ${lg.officer}${lg.notes?' · '+lg.notes:''}</div>`:''}
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">${chip(status)}
-        ${markDay===todayDay()?`<button class="btn ${isCI?'btn-teal':'btn-outline'} btn-sm" onclick="openMarkModal('${s.id}')">${isCI?'🔍 Verify':lg?'Edit':'Mark'}</button>`:''}
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+<div class="week-row">
+
+<div class="${badge}">
+<div class="wk">Wk</div>
+<div class="wn">${w}</div>
+</div>
+
+<div>
+
+<div class="topic-title">
+${plan?plan.topic:"Week "+w}
+</div>
+
+${plan?.desc?
+`<div class="topic-plan">📋 ${plan.desc}</div>`:""
 }
 
-function updateNdot(){
-  const n=schedules.filter(s=>s.day===todayDay()&&(s.approval||'approved')==='approved'&&getSelfLog(s.id,todayStr())&&!getLog(s.id,todayStr())).length;
-  const dot=document.getElementById('ndot');
-  if(n>0){dot.textContent=n;dot.style.display='inline-flex';}else dot.style.display='none';
+${lastLog?
+
+`
+
+<div class="topic-note">
+
+${lastLog.coverage==="covered"?"✔ Covered":
+lastLog.coverage==="partial"?"⚡ Partial":
+"✗ Skipped"}
+
+${lastLog.notes?" • "+lastLog.notes:""}
+
+</div>
+
+`
+
+:
+
+`<div class="topic-note">No session log</div>`
+
 }
 
-let activeSchedId=null;
-function openMarkModal(sid){
-  const s=getSched(sid);if(!s)return;
-  activeSchedId=sid;
-  const ds=todayStr(),ex=getLog(sid,ds),sl=getSelfLog(sid,ds);
-  document.getElementById('m-lname').textContent=getLecName(s.lecturerId);
-  document.getElementById('m-sinfo').textContent=`${s.course} · ${s.room} · ${fmtTime(s.start)}–${fmtTime(s.end)}`;
-  const cin=document.getElementById('m-ci-note');
-  if(sl){cin.style.display='block';document.getElementById('m-ci-time').textContent=`at ${fmtTime(sl.time)}`;}else cin.style.display='none';
-  document.getElementById('m-status').value=ex?ex.status:'';
-  document.getElementById('m-officer').value=ex?ex.officer:(session?.name||'');
-  document.getElementById('m-notes').value=ex?ex.notes||'':'';
-  hlSt(ex?ex.status:'');openMo('mark-modal');
-}
-function selSt(s){document.getElementById('m-status').value=s;hlSt(s);}
-function hlSt(s){
-  document.querySelectorAll('#mark-modal .mbg .btn').forEach(b=>b.style.opacity='.4');
-  const i={present:0,late:1,absent:2}[s];
-  if(i!==undefined)document.querySelectorAll('#mark-modal .mbg .btn')[i].style.opacity='1';
-}
-function saveVerification(){
-  const status=document.getElementById('m-status').value;
-  const officer=document.getElementById('m-officer').value.trim();
-  const notes=document.getElementById('m-notes').value.trim();
-  if(!status){toast('Please select a status','error');return;}
-  if(!officer){toast('Enter your QA officer name','error');return;}
-  const s=getSched(activeSchedId),ds=todayStr();
-  const entry={id:uid(),scheduleId:activeSchedId,lecturerId:s.lecturerId,course:s.course,room:s.room,date:ds,time:nowTime(),status,officer,notes};
-  const ei=logs.findIndex(l=>l.scheduleId===activeSchedId&&l.date===ds);
-  if(ei>=0)logs[ei]={...logs[ei],...entry};else logs.push(entry);
-  save('qa_logs',logs);closeMo('mark-modal');
-  toast(`✔ ${getLecName(s.lecturerId)} verified as ${status}`,'success');
-  updateNdot();renderVerifySessions();if(qaView==='vq-dash')renderDashboard();
+</div>
+
+<div>
+
+${lastLog?chip(lastLog.coverage):chip("not-covered")}
+
+</div>
+
+</div>
+
+`
+
+}).join("")}
+
+</div>
+
+`
+
 }
 
-/* ══════════════════════════════════
-   QA — ALL SCHEDULES
-══════════════════════════════════ */
-function renderQASchedView(){
-  document.getElementById('sched-pills').innerHTML=DAYS.map(d=>`<div class="day-pill ${d===qaSchedDay?'active':''}" onclick="setQASchedDay('${d}')">${d.slice(0,3)}</div>`).join('');
-  const ds=schedules.filter(s=>s.day===qaSchedDay);
-  const cont=document.getElementById('sched-list');
-  if(!ds.length){cont.innerHTML=`<div class="empty"><div class="ei">🗓️</div><div class="et">No sessions on ${qaSchedDay}</div></div>`;return;}
-  cont.innerHTML=ds.map(s=>{
-    const ap=s.approval||'approved';
-    return `<div class="sched-card ${ap}" style="margin-bottom:9px;">
-      <div class="sched-card-body">
-        <div>
-          <div style="font-weight:700;font-size:13.5px;color:var(--navy);">${getLecName(s.lecturerId)}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:1px;">${s.course}</div>
-          <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-          ${chip(ap==='approved'?'approved':'pending-approval')}
-          <div style="display:flex;gap:5px;">
-            ${ap==='pending-approval'?`<button class="btn btn-green btn-sm" onclick="approveSchedule('${s.id}')">✔ Approve</button>`:''}
-            <button class="btn btn-outline btn-sm" onclick="openQASchedModal('${s.id}')">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="delSched('${s.id}')">✕</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function setQASchedDay(d){qaSchedDay=d;renderQASchedView();}
-function approveSchedule(id){
-  const i=schedules.findIndex(x=>x.id===id);if(i<0)return;
-  schedules[i].approval='approved';save('qa_schedules',schedules);
-  toast('Session approved!','success');renderQASchedView();
-}
-function openQASchedModal(id){
-  const s=id?getSched(id):null;
-  document.getElementById('qsm-title').textContent=s?'Edit Session':'Add Session';
-  document.getElementById('qsm-id').value=s?s.id:'';
-  document.getElementById('qsm-lec').innerHTML=lecturers.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');
-  if(s){
-    document.getElementById('qsm-lec').value=s.lecturerId;
-    document.getElementById('qsm-course').value=s.course;
-    document.getElementById('qsm-room').value=s.room;
-    document.getElementById('qsm-day').value=s.day;
-    document.getElementById('qsm-start').value=s.start;
-    document.getElementById('qsm-end').value=s.end;
-    document.getElementById('qsm-approval').value=s.approval||'approved';
-  }else{
-    document.getElementById('qsm-course').value='';
-    document.getElementById('qsm-room').value='';
-    document.getElementById('qsm-day').value=qaSchedDay;
-    document.getElementById('qsm-start').value='';
-    document.getElementById('qsm-end').value='';
-    document.getElementById('qsm-approval').value='approved';
-  }
-  openMo('qa-sched-modal');
-}
-function saveQASched(){
-  const id=document.getElementById('qsm-id').value;
-  const lecId=document.getElementById('qsm-lec').value;
-  const course=document.getElementById('qsm-course').value.trim();
-  const room=document.getElementById('qsm-room').value.trim();
-  const day=document.getElementById('qsm-day').value;
-  const start=document.getElementById('qsm-start').value;
-  const end=document.getElementById('qsm-end').value;
-  const approval=document.getElementById('qsm-approval').value;
-  if(!course||!room||!start||!end){toast('Fill all fields','error');return;}
-  const entry={id:id||uid(),lecturerId:lecId,course,room,day,start,end,approval};
-  if(id){const i=schedules.findIndex(x=>x.id===id);schedules[i]=entry;}else schedules.push(entry);
-  save('qa_schedules',schedules);closeMo('qa-sched-modal');toast(id?'Updated':'Added','success');renderQASchedView();
-}
-function delSched(id){
-  if(!confirm('Delete this session?'))return;
-  schedules=schedules.filter(s=>s.id!==id);save('qa_schedules',schedules);renderQASchedView();toast('Deleted');
-}
 
-/* ══════════════════════════════════
-   LECTURERS CRUD (QA)
-══════════════════════════════════ */
-function renderLecturers(){
-  const q=(document.getElementById('lec-search')?.value||'').toLowerCase();
-  const f=lecturers.filter(l=>l.name.toLowerCase().includes(q)||l.dept.toLowerCase().includes(q)||(l.empId||'').toLowerCase().includes(q));
-  document.getElementById('lec-count').textContent=`${lecturers.length} registered`;
-  const tbody=document.getElementById('lec-tbody');
-  if(!f.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--muted);">No lecturers found</td></tr>`;return;}
-  tbody.innerHTML=f.map(l=>`<tr>
-    <td><strong>${l.name}</strong></td>
-    <td>${l.dept}</td>
-    <td><code style="font-size:11.5px;">${l.empId||'—'}</code></td>
-    <td>${l.phone||'—'}</td>
-    <td><div style="display:flex;gap:5px;">
-      <button class="btn btn-outline btn-sm" onclick="openLecModal('${l.id}')">Edit</button>
-      <button class="btn btn-danger btn-sm" onclick="delLec('${l.id}')">Del</button>
-    </div></td>
-  </tr>`).join('');
-}
-function openLecModal(id){
-  const l=id?getLec(id):null;
-  document.getElementById('lm-title').textContent=l?'Edit Lecturer':'Add Lecturer';
-  document.getElementById('lm-id').value=l?l.id:'';
-  document.getElementById('lm-name').value=l?l.name:'';
-  document.getElementById('lm-dept').value=l?l.dept:'';
-  document.getElementById('lm-empid').value=l?l.empId||'':'';
-  document.getElementById('lm-phone').value=l?l.phone||'':'';
-  document.getElementById('lm-pin').value=l?l.pin||'1234':'1234';
-  openMo('lec-modal');
-}
-function saveLecturer(){
-  const id=document.getElementById('lm-id').value;
-  const name=document.getElementById('lm-name').value.trim();
-  const dept=document.getElementById('lm-dept').value.trim();
-  if(!name||!dept){toast('Name and department required','error');return;}
-  const entry={id:id||uid(),name,dept,phone:document.getElementById('lm-phone').value.trim(),empId:document.getElementById('lm-empid').value.trim(),pin:document.getElementById('lm-pin').value.trim()||'1234'};
-  if(id){const i=lecturers.findIndex(x=>x.id===id);lecturers[i]=entry;}else lecturers.push(entry);
-  save('qa_lecturers',lecturers);closeMo('lec-modal');toast(id?'Updated':'Added','success');renderLecturers();
-}
-function delLec(id){
-  if(!confirm('Delete this lecturer?'))return;
-  lecturers=lecturers.filter(l=>l.id!==id);save('qa_lecturers',lecturers);renderLecturers();toast('Deleted');
-}
+render()
 
-/* ══════════════════════════════════
-   LECTURER PORTAL
-══════════════════════════════════ */
-function renderLecToday(){
-  if(!session||session.role!=='lec')return;
-  const lid=session.lecturerId,td=todayDay(),ds=todayStr();
-  const mySched=schedules.filter(s=>s.lecturerId===lid&&s.day===td&&(s.approval||'approved')==='approved');
-  const list=document.getElementById('lec-sesh-list'),noEl=document.getElementById('lec-no-sesh');
-  if(!mySched.length){noEl.style.display='block';list.innerHTML='';return;}
-  noEl.style.display='none';
-  list.innerHTML=mySched.map(s=>{
-    const lg=getLog(s.id,ds),sl=getSelfLog(s.id,ds);
-    const status=lg?lg.status:sl?'checked_in':'pending';
-    let cls='ci-card st-'+status;
-    let rb='';
-    if(lg){
-      if(lg.status==='present')rb=`<div class="rbanner vp"><div class="ri2">✅</div><div class="rbt"><strong>QA Confirmed: You are Present</strong><span>By ${lg.officer} at ${fmtTime(lg.time)}${lg.notes?' · '+lg.notes:''}</span></div></div>`;
-      if(lg.status==='late')   rb=`<div class="rbanner vl"><div class="ri2">⏱️</div><div class="rbt"><strong>Marked Late by QA</strong><span>By ${lg.officer} at ${fmtTime(lg.time)}${lg.notes?' · '+lg.notes:''}</span></div></div>`;
-      if(lg.status==='absent') rb=`<div class="rbanner va"><div class="ri2">❌</div><div class="rbt"><strong>Marked Absent by QA</strong><span>Contact your QA officer if this is incorrect.</span></div></div>`;
-    }else if(sl){
-      rb=`<div class="rbanner vw"><div class="ri2">⏳</div><div class="rbt"><strong>Checked in at ${fmtTime(sl.time)}</strong><span>Awaiting QA physical verification. A QA officer will visit soon.</span></div></div>`;
-    }
-    let btn='';
-    if(!sl&&!lg) btn=`<button class="btn btn-teal btn-lg" onclick="lecCheckin('${s.id}')" style="width:100%;justify-content:center;margin-top:11px;">📍 I'm In Class — Check In</button>`;
-    else if(sl&&!lg) btn=`<button class="btn" disabled style="width:100%;justify-content:center;margin-top:11px;background:var(--cream-dark);color:var(--muted);cursor:not-allowed;border-radius:11px;padding:13px;">⏳ Awaiting QA Physical Verification…</button>`;
-    else btn=`<p style="text-align:center;font-size:12px;color:var(--muted);margin-top:10px;">Session closed</p>`;
-    return `<div class="${cls}"><div class="ci-top"><div><div style="font-weight:700;font-size:14.5px;color:var(--navy);">${s.course}</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div></div>${chip(status)}</div><div class="ci-body">${rb}${btn}</div></div>`;
-  }).join('');
-}
-
-function lecCheckin(sid){
-  const s=getSched(sid);if(!s)return;
-  const ds=todayStr();
-  if(getSelfLog(sid,ds)){toast('Already checked in!','error');return;}
-  selfLogs.push({id:uid(),scheduleId:sid,lecturerId:s.lecturerId,date:ds,time:nowTime()});
-  save('qa_self_logs',selfLogs);
-  toast('✔ Checked in! A QA officer will visit your classroom to verify.','success');
-  renderLecToday();updateNdot();
-}
-
-/* ── MY SCHEDULE (Lecturer) ── */
-function renderMySchedule(){
-  if(!session||session.role!=='lec')return;
-  const lid=session.lecturerId;
-  const mySched=schedules.filter(s=>s.lecturerId===lid).sort((a,b)=>DAYS.indexOf(a.day)-DAYS.indexOf(b.day)||a.start.localeCompare(b.start));
-  const cont=document.getElementById('my-sched-list');
-  if(!mySched.length){
-    cont.innerHTML=`<div class="empty"><div class="ei">📅</div><div class="et">No course units registered yet</div><p style="font-size:13px;">Tap <strong>+ Add Unit</strong> to register your approved teaching time.</p></div>`;return;
-  }
-  cont.innerHTML=mySched.map(s=>{
-    const ap=s.approval||'approved';
-    return `<div class="sched-card ${ap}">
-      <div class="sched-card-body">
-        <div>
-          <div style="font-weight:700;font-size:13.5px;color:var(--navy);">${s.course}</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px;">${s.day} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div>
-          <div style="font-size:11.5px;color:var(--muted);margin-top:1px;">Venue: ${s.room}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
-          ${chip(ap==='approved'?'approved':'pending-approval')}
-          <div style="display:flex;gap:5px;">
-            <button class="btn btn-outline btn-sm" onclick="openMySchedModal('${s.id}')">Edit</button>
-            <button class="btn btn-danger btn-sm" onclick="delMyUnit('${s.id}')">✕</button>
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function openMySchedModal(id){
-  const s=id?getSched(id):null;
-  document.getElementById('msm-title').textContent=s?'Edit Course Unit':'Register Course Unit';
-  document.getElementById('msm-id').value=s?s.id:'';
-  document.getElementById('msm-course').value=s?s.course:'';
-  document.getElementById('msm-room').value=s?s.room:'';
-  document.getElementById('msm-day').value=s?s.day:'Monday';
-  document.getElementById('msm-start').value=s?s.start:'';
-  document.getElementById('msm-end').value=s?s.end:'';
-  openMo('my-sched-modal');
-}
-function saveMySchedule(){
-  const id=document.getElementById('msm-id').value;
-  const course=document.getElementById('msm-course').value.trim();
-  const room=document.getElementById('msm-room').value.trim();
-  const day=document.getElementById('msm-day').value;
-  const start=document.getElementById('msm-start').value;
-  const end=document.getElementById('msm-end').value;
-  if(!course||!room||!start||!end){toast('Please fill all fields','error');return;}
-  if(start>=end){toast('End time must be after start time','error');return;}
-  const entry={id:id||uid(),lecturerId:session.lecturerId,course,room,day,start,end,approval:'pending-approval'};
-  if(id){const i=schedules.findIndex(x=>x.id===id);schedules[i]={...schedules[i],...entry,approval:schedules[i].approval};}
-  else schedules.push(entry);
-  save('qa_schedules',schedules);closeMo('my-sched-modal');
-  toast('Course unit submitted! Awaiting QA approval.','success');
-  renderMySchedule();
-}
-function delMyUnit(id){
-  if(!confirm('Remove this course unit?'))return;
-  schedules=schedules.filter(s=>s.id!==id);save('qa_schedules',schedules);renderMySchedule();toast('Removed');
-}
-
-/* ── PROFILE (Lecturer) ── */
-function renderProfile(){
-  if(!session||session.role!=='lec')return;
-  const lec=getLec(session.lecturerId);if(!lec)return;
-  document.getElementById('lec-profile-body').innerHTML=`
-    <div style="display:grid;gap:10px;">
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Full Name</div><div style="font-weight:600;margin-top:2px;">${lec.name}</div></div>
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Department</div><div style="font-weight:600;margin-top:2px;">${lec.dept}</div></div>
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Employee ID / Username</div><div style="font-weight:600;margin-top:2px;font-family:'DM Mono',monospace;">${lec.empId||'—'}</div></div>
-      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Phone</div><div style="font-weight:600;margin-top:2px;">${lec.phone||'—'}</div></div>
-    </div>`;
-}
-function changePin(){
-  const old=document.getElementById('pin-old').value.trim();
-  const n=document.getElementById('pin-new').value.trim();
-  const n2=document.getElementById('pin-new2').value.trim();
-  const lec=getLec(session.lecturerId);if(!lec)return;
-  if(old!==(lec.pin||'1234')){toast('Current PIN is incorrect','error');return;}
-  if(!n||n.length<4){toast('New PIN must be at least 4 digits','error');return;}
-  if(n!==n2){toast('New PINs do not match','error');return;}
-  const i=lecturers.findIndex(x=>x.id===lec.id);lecturers[i].pin=n;save('qa_lecturers',lecturers);
-  ['pin-old','pin-new','pin-new2'].forEach(id=>document.getElementById(id).value='');
-  toast('PIN updated successfully!','success');
-}
-
-/* ══════════════════════════════════
-   REPORTS
-══════════════════════════════════ */
-function renderReports(){
-  const sel=document.getElementById('rpt-lec');const cur=sel.value;
-  sel.innerHTML='<option value="">All Lecturers</option>'+lecturers.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');
-  sel.value=cur;
-  const df=document.getElementById('rpt-date').value,lf=document.getElementById('rpt-lec').value,sf=document.getElementById('rpt-status').value;
-  let all=[...logs.map(l=>({...l}))];
-  selfLogs.forEach(sl=>{if(!getLog(sl.scheduleId,sl.date)){const s=getSched(sl.scheduleId)||{};all.push({id:sl.id,scheduleId:sl.scheduleId,lecturerId:sl.lecturerId,course:s.course,room:s.room,date:sl.date,time:sl.time,status:'checked_in',officer:'—',notes:'Lecturer self check-in'});}});
-  all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
-  if(df)all=all.filter(r=>r.date===df);if(lf)all=all.filter(r=>r.lecturerId===lf);if(sf)all=all.filter(r=>r.status===sf);
-  const tbody=document.getElementById('rpt-tbody');
-  if(!all.length){tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted);">No records found</td></tr>`;return;}
-  tbody.innerHTML=all.map(r=>`<tr>
-    <td><span class="tb">${fmtDate(r.date)}</span></td>
-    <td><span class="tb">${fmtTime(r.time)||r.time}</span></td>
-    <td>${getLecName(r.lecturerId)}</td>
-    <td>${r.course||'—'}</td><td>${r.room||'—'}</td>
-    <td>${chip(r.status)}</td>
-    <td style="font-size:12px;">${r.officer||'—'}</td>
-    <td style="font-size:12px;color:var(--muted);">${r.notes||'—'}</td>
-  </tr>`).join('');
-}
-function clearFilters(){document.getElementById('rpt-date').value='';document.getElementById('rpt-lec').value='';document.getElementById('rpt-status').value='';renderReports();}
-function exportCSV(){
-  const all=[...logs];selfLogs.forEach(sl=>{if(!getLog(sl.scheduleId,sl.date)){const s=getSched(sl.scheduleId)||{};all.push({...sl,course:s.course,room:s.room,status:'checked_in',officer:'—',notes:'Lecturer self check-in'});}});
-  if(!all.length){toast('No records to export','error');return;}
-  const hdr=['Date','Time','Lecturer','Department','Course','Room','Status','Verified By','Notes'];
-  const rows=all.map(r=>{const l=getLec(r.lecturerId)||{};return[r.date,r.time||'',l.name||'',l.dept||'',r.course||'',r.room||'',r.status,r.officer||'',r.notes||''];});
-  const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`QA_Attendance_${todayStr()}.csv`;a.click();
-  toast('CSV exported!','success');
-}
-
-/* ══════════════════════════════════
-   SHARED UTILS
-══════════════════════════════════ */
-function chip(s){
-  const m={present:'✔ Present',absent:'✗ Absent',late:'⏱ Late',pending:'⬜ Pending',checked_in:'📍 Checked In',approved:'✔ Approved','pending-approval':'⏳ Pending Approval'};
-  return `<span class="chip ${s}">${m[s]||s}</span>`;
-}
-function openMo(id){document.getElementById(id).classList.add('open');}
-function closeMo(id){document.getElementById(id).classList.remove('open');}
-document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
-
-let toastT;
-function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className=type?`show ${type}`:'show';clearTimeout(toastT);toastT=setTimeout(()=>t.className='',2800);}
-
-// Keyboard shortcuts
-document.getElementById('qa-pass').addEventListener('keydown',e=>{if(e.key==='Enter')loginQA();});
-document.getElementById('lec-pin').addEventListener('keydown',e=>{if(e.key==='Enter')loginLecturer();});
-
-// Auto-refresh every 20s
-setInterval(()=>{
-  lecturers=load('qa_lecturers');schedules=load('qa_schedules');logs=load('qa_logs');selfLogs=load('qa_self_logs');
-  if(session?.role==='lec'){renderLecToday();}
-  if(session?.role==='qa'){updateNdot();if(qaView==='vq-dash')renderDashboard();if(qaView==='vq-verify')renderVerifySessions();}
-},20000);
 </script>
+
 </body>
 </html>
+```
