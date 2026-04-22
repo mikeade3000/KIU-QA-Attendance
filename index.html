@@ -226,6 +226,54 @@ textarea{resize:vertical;min-height:58px;}
 .sched-card.approved{border-left-color:var(--green);}
 .sched-card.pending-approval{border-left-color:var(--amber);}
 
+/* ── ANALYTICS ── */
+.an-bar-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--cream-dark);}
+.an-bar-row:last-child{border-bottom:none;}
+.an-bar-label{font-size:12px;color:var(--text);min-width:110px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.an-bar-wrap{flex:1;height:16px;background:var(--cream-dark);border-radius:8px;overflow:hidden;}
+.an-bar{height:16px;border-radius:8px;transition:width .5s;}
+.an-bar-val{font-size:11.5px;font-weight:600;color:var(--muted);min-width:36px;text-align:right;}
+.alert-row{display:flex;align-items:center;gap:10px;padding:10px 15px;border-bottom:1px solid var(--cream-dark);}
+.alert-row:last-child{border-bottom:none;}
+.alert-icon{font-size:18px;flex-shrink:0;}
+.alert-text{font-size:12.5px;color:var(--text);}
+.alert-text strong{display:block;font-weight:600;}
+/* ── GEOLOCATION UI ── */
+.geo-bar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:20px;padding:4px 12px 4px 8px;font-size:11px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.geo-bar:hover{background:rgba(255,255,255,.16);}
+.geo-dot{width:9px;height:9px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+.geo-dot.active{background:#4ade80;}
+.geo-dot.active{animation:gpsPulse 1.6s ease-in-out infinite;}
+@keyframes gpsPulse{0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.6);}50%{box-shadow:0 0 0 5px rgba(74,222,128,0);}}
+.geo-dot.error{background:var(--red-light);}
+.proximity-panel{border-radius:var(--r);overflow:hidden;margin-bottom:12px;border:1.5px solid var(--border);background:var(--white);box-shadow:var(--shadow);}
+.proximity-head{background:linear-gradient(90deg,var(--navy),#1a4870);color:var(--white);padding:11px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.proximity-head .ph-left{display:flex;align-items:center;gap:8px;}
+.proximity-head .ph-title{font-weight:600;font-size:13px;}
+.proximity-head .ph-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:1px;}
+.radar-wrap{display:flex;align-items:center;justify-content:center;padding:18px;background:linear-gradient(180deg,rgba(13,33,55,.03),transparent);}
+.radar{width:140px;height:140px;border-radius:50%;border:2px solid rgba(14,107,122,.25);position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.radar-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(14,107,122,.15);}
+.radar-ring:nth-child(1){width:50%;height:50%;}
+.radar-ring:nth-child(2){width:75%;height:75%;}
+.radar-sweep{position:absolute;width:100%;height:100%;border-radius:50%;background:conic-gradient(rgba(14,107,122,.35) 0deg,transparent 90deg);animation:radarSpin 3s linear infinite;display:none;}
+.radar-sweep.active{display:block;}
+@keyframes radarSpin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+.radar-center{width:12px;height:12px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px rgba(14,107,122,.25);}
+.radar-blip{position:absolute;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);}
+.radar-blip.in-range{background:var(--green);box-shadow:0 0 0 4px rgba(26,102,68,.25);animation:blipPulse 1.2s ease-in-out infinite;}
+.radar-blip.out-range{background:var(--amber);}
+@keyframes blipPulse{0%,100%{transform:translate(-50%,-50%) scale(1);}50%{transform:translate(-50%,-50%) scale(1.5);}}
+.prox-row{display:flex;align-items:center;gap:12px;padding:11px 15px;border-bottom:1px solid var(--cream-dark);}
+.prox-row:last-child{border-bottom:none;}
+.dist-ring{width:48px;height:48px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'DM Mono',monospace;border:2.5px solid var(--border);color:var(--muted);transition:all .4s;}
+.dist-ring.in-range{border-color:var(--green);color:var(--green);background:var(--green-pale);}
+.dist-ring.near{border-color:var(--amber);color:var(--amber);background:var(--amber-pale);}
+.dist-ring.far{border-color:var(--border);color:var(--muted);}
+.auto-mark-badge{background:linear-gradient(90deg,var(--green),var(--green-light));color:var(--white);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:4px;animation:autoIn .4s ease;}
+@keyframes autoIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+.no-geo-note{background:var(--amber-pale);border:1px solid rgba(184,108,16,.3);border-radius:8px;padding:10px 13px;font-size:12.5px;color:var(--amber);margin-bottom:11px;}
+
 /* ── TOPIC / CURRICULUM SPECIFICS ── */
 .week-row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--cream-dark);transition:background .15s;}
 .week-row:last-child{border-bottom:none;}
@@ -314,15 +362,25 @@ textarea{resize:vertical;min-height:58px;}
 <div id="sc-qa" class="screen">
   <div class="topbar qa-bar">
     <div class="tl"><div class="logo-icon" style="background:var(--gold);">🎓</div><div><div class="logo-text">QA Monitor</div><span class="logo-sub">Officer Portal</span></div></div>
-    <div class="tr"><div class="upill"><div class="av qa">🛡️</div><span id="qa-uname"></span></div><button class="logout-btn" onclick="logout()">Sign Out</button></div>
+    <div class="tr">
+      <div class="geo-bar" id="qa-geo-bar" onclick="toggleGeoTracking()" title="Click to toggle GPS tracking">
+        <div class="geo-dot" id="qa-geo-dot"></div>
+        <span id="qa-geo-label">GPS Off</span>
+      </div>
+      <div class="upill"><div class="av qa">🛡️</div><span id="qa-uname"></span></div>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>
   </div>
   <div id="qa-nav">
     <div class="ntab active" data-view="vq-dash">📊 Dashboard</div>
     <div class="ntab" data-view="vq-verify">✅ Verify &amp; Mark <span class="ndot" id="ndot" style="display:none;"></span></div>
     <div class="ntab" data-view="vq-coverage">📚 Coverage</div>
+    <div class="ntab" data-view="vq-analytics">📈 Analytics</div>
     <div class="ntab" data-view="vq-lec">👤 Lecturers</div>
     <div class="ntab" data-view="vq-sched">📅 Schedules</div>
     <div class="ntab" data-view="vq-rpt">📋 Reports</div>
+    <div class="ntab" data-view="vq-staff">🛡️ QA Staff</div>
+    <div class="ntab" data-view="vq-settings">⚙️ Settings</div>
   </div>
   <div class="portal-body">
 
@@ -337,7 +395,28 @@ textarea{resize:vertical;min-height:58px;}
 
     <!-- VERIFY & MARK -->
     <div id="view-vq-verify" class="view">
-      <div class="sh"><div><div class="st">Verify &amp; Mark</div><div class="ss">Physically verify then authenticate</div></div></div>
+      <div class="sh"><div><div class="st">Verify &amp; Mark</div><div class="ss">GPS auto-marks within 50 m · or verify manually</div></div></div>
+
+      <!-- PROXIMITY PANEL -->
+      <div class="proximity-panel" id="prox-panel">
+        <div class="proximity-head">
+          <div class="ph-left">
+            <div class="geo-dot" id="prox-dot"></div>
+            <div>
+              <div class="ph-title" id="prox-title">GPS Location Tracking</div>
+              <div class="ph-sub" id="prox-sub">Enable GPS to auto-verify checked-in lecturers within 50 m</div>
+            </div>
+          </div>
+          <button class="btn btn-sm" id="prox-toggle-btn" onclick="toggleGeoTracking()" style="background:rgba(255,255,255,.15);color:var(--white);border:1px solid rgba(255,255,255,.25);">Start GPS</button>
+        </div>
+        <div id="prox-body">
+          <div style="padding:14px 15px;font-size:12.5px;color:var(--muted);text-align:center;">
+            📡 Tap <strong>Start GPS</strong> to begin auto-proximity verification.<br/>
+            Lecturers within <strong>50 metres</strong> will be marked <strong>Present</strong> automatically.
+          </div>
+        </div>
+      </div>
+
       <div class="day-pills" id="vmark-pills"></div>
       <div id="vmark-sessions"></div>
     </div>
@@ -378,10 +457,103 @@ textarea{resize:vertical;min-height:58px;}
       <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Date</th><th>Time</th><th>Lecturer</th><th>Course</th><th>Room</th><th>Status</th><th>Verified By</th><th>Notes</th></tr></thead><tbody id="rpt-tbody"></tbody></table></div></div>
     </div>
 
+    <!-- ANALYTICS -->
+    <div id="view-vq-analytics" class="view">
+      <div class="sh"><div><div class="st">Analytics</div><div class="ss">Attendance trends &amp; performance insights</div></div>
+        <select id="analytics-range" onchange="renderAnalytics()" style="padding:6px 10px;border-radius:var(--rs);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);">
+          <option value="7">Last 7 days</option>
+          <option value="14">Last 14 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+      </div>
+      <div class="stat-grid" id="an-stats"></div>
+      <div class="card"><div class="card-head"><div class="card-title">Daily Attendance Rate</div></div><div class="card-body"><canvas id="an-chart-daily" height="160"></canvas></div></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="card"><div class="card-head"><div class="card-title">By Lecturer</div></div><div id="an-by-lec"></div></div>
+        <div class="card"><div class="card-head"><div class="card-title">By Day of Week</div></div><div id="an-by-day"></div></div>
+      </div>
+      <div class="card" style="margin-top:12px;"><div class="card-head"><div class="card-title">⚠ Absenteeism Alerts</div></div><div id="an-alerts"></div></div>
+    </div>
+
+    <!-- QA STAFF -->
+    <div id="view-vq-staff" class="view">
+      <div class="sh"><div><div class="st">QA Staff Accounts</div><div class="ss" id="staff-count"></div></div><button class="btn btn-navy btn-sm" onclick="openStaffModal()">+ Add Officer</button></div>
+      <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Actions</th></tr></thead><tbody id="staff-tbody"></tbody></table></div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="view-vq-settings" class="view" style="max-width:600px;">
+      <div class="sh"><div><div class="st">Settings</div><div class="ss">System configuration</div></div></div>
+
+      <div class="card"><div class="card-head"><div class="card-title">🏛️ Institution</div></div><div class="card-body">
+        <div class="form-group"><label>Institution Name</label><input type="text" id="set-inst" placeholder="Kampala International University"/></div>
+        <div class="form-group"><label>QA Department Name</label><input type="text" id="set-dept" placeholder="Quality Assurance Office"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Current Semester</label><input type="text" id="set-sem" placeholder="Sem 1 2025"/></div>
+          <div class="form-group"><label>Semester Weeks</label><input type="number" id="set-weeks" min="1" max="52" placeholder="17"/></div>
+        </div>
+        <button class="btn btn-navy btn-sm" onclick="saveSettings()">Save Institution Info</button>
+      </div></div>
+
+      <div class="card"><div class="card-head"><div class="card-title">📡 GPS &amp; Proximity</div></div><div class="card-body">
+        <div class="form-group"><label>Auto-mark Distance (metres)</label>
+          <input type="range" id="set-geo-dist" min="10" max="200" step="5" oninput="document.getElementById('set-geo-dist-val').textContent=this.value+'m'"/>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:3px;"><span>10 m</span><strong id="set-geo-dist-val" style="color:var(--teal);"></strong><span>200 m</span></div>
+        </div>
+        <div class="form-group"><label>GPS Accuracy Warning Threshold (metres)</label>
+          <input type="number" id="set-geo-acc" min="5" max="100" placeholder="30"/>
+        </div>
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="set-geo-notify" style="width:auto;margin:0;" />
+          <label style="margin:0;text-transform:none;font-size:13.5px;letter-spacing:0;">Show auto-mark popup notifications</label>
+        </div>
+        <button class="btn btn-teal btn-sm" onclick="saveSettings()">Save GPS Settings</button>
+      </div></div>
+
+      <div class="card"><div class="card-head"><div class="card-title">⏰ Absent Auto-Marking</div></div><div class="card-body">
+        <div class="form-group" style="display:flex;align-items:center;gap:10px;">
+          <input type="checkbox" id="set-auto-absent" style="width:auto;margin:0;" />
+          <label style="margin:0;text-transform:none;font-size:13.5px;letter-spacing:0;">Auto-mark sessions as Absent when class ends without check-in</label>
+        </div>
+        <div class="form-group"><label>Grace period after class end (minutes)</label>
+          <input type="number" id="set-grace" min="0" max="60" placeholder="15"/>
+        </div>
+        <button class="btn btn-amber btn-sm" onclick="saveSettings()">Save Absent Settings</button>
+        <button class="btn btn-outline btn-sm" onclick="runAutoAbsent(true)" style="margin-left:8px;">Run Now</button>
+      </div></div>
+
+      <div class="card"><div class="card-head"><div class="card-title">🗑️ Data Management</div></div><div class="card-body">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="exportFullBackup()">⬇ Export Full Backup</button>
+          <button class="btn btn-danger btn-sm" onclick="clearAllLogs()">⚠ Clear All Logs</button>
+        </div>
+      </div></div>
+    </div>
+
+  </div><!-- end portal-body -->
+</div><!-- end sc-qa -->
+
+<!-- QA STAFF MODAL -->
+<div class="mo" id="staff-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="sm2-title">Add QA Officer</span><button class="mc" onclick="closeMo('staff-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="sm2-id"/>
+      <div class="form-group"><label>Full Name</label><input type="text" id="sm2-name" placeholder="e.g. Nalwanga Sarah"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Username</label><input type="text" id="sm2-user" placeholder="e.g. qa3" autocomplete="off"/></div>
+        <div class="form-group"><label>Role</label><select id="sm2-role"><option value="officer">QA Officer</option><option value="admin">Admin</option></select></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Password</label><input type="password" id="sm2-pass" placeholder="Min 6 characters" autocomplete="new-password"/></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="sm2-pass2" placeholder="Repeat" autocomplete="new-password"/></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('staff-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveStaff()">Save</button></div>
   </div>
 </div>
 
-<!-- ══ QA TOPIC DETAIL OVERLAY ══ -->
 <div id="sc-qa-topic" class="screen" style="background:var(--cream);">
   <div class="topbar qa-bar">
     <div class="tl"><div class="logo-icon" style="background:var(--purple);">📚</div><div><div class="logo-text">Topic Coverage</div><span class="logo-sub" id="qa-topic-sub">Course Details</span></div></div>
@@ -698,12 +870,16 @@ function registerLecturer(){
   setTimeout(()=>showScreen('sc-login'),1800);
 }
 
-function logout(){session=null;save('qa_session',null);showScreen('sc-login');document.getElementById('qa-user').value='';document.getElementById('qa-pass').value='';}
+function logout(){
+  if(geoActive)stopGeo();
+  session=null;save('qa_session',null);showScreen('sc-login');document.getElementById('qa-user').value='';document.getElementById('qa-pass').value='';
+}
 
 /* ══ ENTER PORTALS ══ */
 function enterQA(){
   document.getElementById('qa-uname').textContent=session.name;
   showScreen('sc-qa');setQAView('vq-dash');updateNdot();renderDashboard();renderLecturers();renderReports();
+  setTimeout(()=>runAutoAbsent(false),2000); // check for overdue absent sessions
 }
 function enterLec(){
   document.getElementById('lec-uname').textContent=session.name.split(' ').slice(0,2).join(' ');
@@ -727,8 +903,11 @@ function setQAView(v){
   if(v==='vq-dash')renderDashboard();
   if(v==='vq-verify'){markDay=todayDay();renderVerifyView();}
   if(v==='vq-coverage')renderQACoverage();
+  if(v==='vq-analytics')renderAnalytics();
   if(v==='vq-sched'){qaSchedDay=todayDay();renderQASchedView();}
   if(v==='vq-rpt')renderReports();
+  if(v==='vq-staff')renderStaff();
+  if(v==='vq-settings')loadSettings();
 }
 
 /* ══ LEC NAV ══ */
@@ -797,14 +976,25 @@ function renderVerifySessions(){
   cont.innerHTML=sorted.map(s=>{
     const lg=isToday?getLog(s.id,ds):null,sl=isToday?getSelfLog(s.id,ds):null,isCI=sl&&!lg;
     const status=lg?lg.status:sl?'checked_in':'pending';
-    return `<div class="card" style="margin-bottom:8px;${isCI?'border:2px solid var(--teal);':''}">
+    const isAutoMarked=autoMarkedSet.has(s.id);
+    // Distance label when GPS active
+    let distBadge='';
+    if(isCI&&geoActive&&qaPosition&&sl?.lat!=null){
+      const d=Math.round(haversine(qaPosition.lat,qaPosition.lng,sl.lat,sl.lng));
+      const col=d<=GEO_THRESHOLD?'var(--green)':d<150?'var(--amber)':'var(--muted)';
+      distBadge=`<div style="font-size:11px;color:${col};font-weight:600;margin-top:3px;">📡 ${d} m away${d<=GEO_THRESHOLD?' — auto-verifying':''}</div>`;
+    }
+    return `<div class="card" style="margin-bottom:8px;${isCI?'border:2px solid var(--teal);':''}${isAutoMarked?'border-color:var(--green);':''}">
       <div class="srow" style="padding:11px 14px;">
         <div><div class="sn">${getLecName(s.lecturerId)}</div><div class="sm">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div><div class="sc">${s.course}</div>
-        ${isCI?`<div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:3px;">📍 Self check-in at ${fmtTime(sl.time)} — go verify physically</div>`:''}
-        ${lg?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">Verified by ${lg.officer}${lg.notes?' · '+lg.notes:''}</div>`:''}
+        ${isCI&&!isAutoMarked?`<div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:3px;">📍 Self check-in at ${fmtTime(sl.time)} — ${sl?.lat?'GPS captured':'no GPS from lecturer'}</div>`:''}
+        ${distBadge}
+        ${isAutoMarked?`<div style="font-size:11px;color:var(--green);font-weight:600;margin-top:3px;">✅ Auto-verified by GPS proximity</div>`:''}
+        ${lg&&!isAutoMarked?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">Verified by ${lg.officer}${lg.notes?' · '+lg.notes:''}</div>`:''}
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">${chip(status)}
-        ${isToday?`<button class="btn ${isCI?'btn-teal':'btn-outline'} btn-sm" onclick="openMarkModal('${s.id}')">${isCI?'🔍 Verify':lg?'Edit':'Mark'}</button>`:''}
+        ${isAutoMarked?`<span class="auto-mark-badge" style="font-size:10px;">✅ Auto GPS</span>`:''}
+        ${isToday&&!isAutoMarked?`<button class="btn ${isCI?'btn-teal':'btn-outline'} btn-sm" onclick="openMarkModal('${s.id}')">${isCI?'🔍 Verify':lg?'Edit':'Mark'}</button>`:''}
         </div>
       </div>
     </div>`;
@@ -1042,7 +1232,7 @@ function renderLecToday(){
       if(lg.status==='late')   rb=`<div class="rbanner vl"><div class="ri2">⏱️</div><div class="rbt"><strong>Marked Late by QA</strong><span>By ${lg.officer}${lg.notes?' · '+lg.notes:''}</span></div></div>`;
       if(lg.status==='absent') rb=`<div class="rbanner va"><div class="ri2">❌</div><div class="rbt"><strong>Marked Absent by QA</strong><span>Contact your QA officer if incorrect.</span></div></div>`;
     }else if(sl){
-      rb=`<div class="rbanner vw"><div class="ri2">⏳</div><div class="rbt"><strong>Checked in at ${fmtTime(sl.time)}</strong><span>Awaiting QA physical verification.</span></div></div>`;
+      rb=`<div class="rbanner vw"><div class="ri2">⏳</div><div class="rbt"><strong>Checked in at ${fmtTime(sl.time)}</strong><span>${sl.lat?'📡 GPS location captured — QA will auto-verify when nearby.':'Awaiting QA physical verification.'}</span></div></div>`;
     }
     let btn=!sl&&!lg?`<button class="btn btn-teal btn-lg" onclick="lecCheckin('${s.id}')" style="width:100%;justify-content:center;margin-top:10px;">📍 I'm In Class — Check In</button>`:
       sl&&!lg?`<button class="btn" disabled style="width:100%;justify-content:center;margin-top:10px;background:var(--cream-dark);color:var(--muted);cursor:not-allowed;border-radius:11px;padding:12px;">⏳ Awaiting QA Verification…</button>`:
@@ -1054,8 +1244,24 @@ function renderLecToday(){
 function lecCheckin(sid){
   const s=getSched(sid);if(!s)return;const ds=todayStr();
   if(getSelfLog(sid,ds)){toast('Already checked in!','error');return;}
-  selfLogs.push({id:uid(),scheduleId:sid,lecturerId:s.lecturerId,date:ds,time:nowTime()});
-  save('qa_self_logs',selfLogs);toast('✔ Checked in! QA will visit to verify.','success');renderLecToday();updateNdot();
+
+  function doCheckin(lat,lng){
+    selfLogs.push({id:uid(),scheduleId:sid,lecturerId:s.lecturerId,date:ds,time:nowTime(),lat:lat||null,lng:lng||null});
+    save('qa_self_logs',selfLogs);
+    toast(lat?'✔ Checked in with GPS! QA will be auto-notified when nearby.':'✔ Checked in (no GPS). QA will visit to verify.','success');
+    renderLecToday();updateNdot();
+  }
+
+  if(navigator.geolocation){
+    toast('📡 Getting your location…');
+    navigator.geolocation.getCurrentPosition(
+      pos=>doCheckin(pos.coords.latitude,pos.coords.longitude),
+      ()=>doCheckin(null,null),
+      {enableHighAccuracy:true,timeout:8000,maximumAge:0}
+    );
+  } else {
+    doCheckin(null,null);
+  }
 }
 
 /* ══ MY SCHEDULE ══ */
@@ -1391,14 +1597,505 @@ document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e
 let toastT;
 function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className=type?`show ${type}`:'show';clearTimeout(toastT);toastT=setTimeout(()=>t.className='',2800);}
 
-document.getElementById('qa-pass').addEventListener('keydown',e=>{if(e.key==='Enter')loginQA();});
+/* ══════════════════════════════════
+   GEOLOCATION ENGINE — QA AUTO-PROXIMITY
+══════════════════════════════════ */
+let qaPosition=null;      // {lat, lng, accuracy}
+let geoWatchId=null;      // watchPosition ID
+let geoActive=false;
+let autoMarkedSet=new Set(); // scheduleIds auto-marked this session (avoid re-triggering)
+
+const GEO_THRESHOLD=50; // metres
+
+// Haversine formula — returns distance in metres
+function haversine(lat1,lon1,lat2,lon2){
+  const R=6371000;
+  const toRad=x=>x*Math.PI/180;
+  const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);
+  const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function toggleGeoTracking(){
+  if(geoActive) stopGeo(); else startGeo();
+}
+
+function startGeo(){
+  if(!navigator.geolocation){
+    toast('Geolocation not supported on this device','error');return;
+  }
+  setGeoUI('requesting');
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      geoActive=true;
+      onGeoSuccess(pos);
+      geoWatchId=navigator.geolocation.watchPosition(onGeoSuccess,onGeoError,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
+      setGeoUI('active');
+      toast('📡 GPS tracking started — auto-verifying nearby lecturers','success');
+    },
+    err=>{setGeoUI('error');toast('GPS error: '+err.message,'error');},
+    {enableHighAccuracy:true,timeout:10000,maximumAge:0}
+  );
+}
+
+function stopGeo(){
+  if(geoWatchId!==null){navigator.geolocation.clearWatch(geoWatchId);geoWatchId=null;}
+  geoActive=false;qaPosition=null;
+  setGeoUI('off');
+  updateProxPanel([]);
+  toast('GPS tracking stopped');
+}
+
+function setGeoUI(state){
+  const dot=document.getElementById('qa-geo-dot');
+  const label=document.getElementById('qa-geo-label');
+  const pdot=document.getElementById('prox-dot');
+  const ptitle=document.getElementById('prox-title');
+  const psub=document.getElementById('prox-sub');
+  const pbtn=document.getElementById('prox-toggle-btn');
+  const sweep=document.querySelector('.radar-sweep');
+  if(!dot)return;
+  if(state==='active'){
+    dot.className='geo-dot active';pdot&&(pdot.className='geo-dot active');
+    label&&(label.textContent='GPS On');
+    ptitle&&(ptitle.textContent='GPS Active — Scanning for Lecturers');
+    pbtn&&(pbtn.textContent='Stop GPS');
+    sweep&&sweep.classList.add('active');
+  } else if(state==='requesting'){
+    dot.className='geo-dot';pdot&&(pdot.className='geo-dot');
+    label&&(label.textContent='Getting GPS…');
+    ptitle&&(ptitle.textContent='Getting Location…');
+  } else if(state==='error'){
+    dot.className='geo-dot error';pdot&&(pdot.className='geo-dot error');
+    label&&(label.textContent='GPS Error');
+    ptitle&&(ptitle.textContent='GPS Error');
+    pbtn&&(pbtn.textContent='Retry GPS');
+    sweep&&sweep.classList.remove('active');
+  } else {
+    dot.className='geo-dot';pdot&&(pdot.className='geo-dot');
+    label&&(label.textContent='GPS Off');
+    ptitle&&(ptitle.textContent='GPS Location Tracking');
+    psub&&(psub.textContent='Enable GPS to auto-verify checked-in lecturers within 50 m');
+    pbtn&&(pbtn.textContent='Start GPS');
+    sweep&&sweep.classList.remove('active');
+  }
+}
+
+function onGeoSuccess(pos){
+  qaPosition={lat:pos.coords.latitude,lng:pos.coords.longitude,accuracy:Math.round(pos.coords.accuracy)};
+  checkProximity();
+}
+function onGeoError(err){
+  console.warn('Geo error:',err);
+  setGeoUI('error');
+}
+
+function checkProximity(){
+  if(!qaPosition)return;
+  selfLogs=load('qa_self_logs');logs=load('qa_logs');schedules=load('qa_schedules');
+  const ds=todayStr(),td=todayDay();
+  // Only today's approved sessions that have a self-checkin but no QA log yet
+  const pending=schedules.filter(s=>{
+    if(s.day!==td||(s.approval||'approved')!=='approved')return false;
+    const sl=getSelfLog(s.id,ds);
+    const lg=getLog(s.id,ds);
+    return sl&&!lg&&sl.lat!=null&&sl.lng!=null;
+  });
+
+  const proximityData=pending.map(s=>{
+    const sl=getSelfLog(s.id,ds);
+    const dist=haversine(qaPosition.lat,qaPosition.lng,sl.lat,sl.lng);
+    return {s,sl,dist};
+  });
+
+  // Auto-mark those within threshold
+  let anyAutoMarked=false;
+  proximityData.forEach(({s,dist})=>{
+    if(dist<=GEO_THRESHOLD&&!autoMarkedSet.has(s.id)){
+      autoMarkedSet.add(s.id);
+      autoMarkPresent(s,dist);
+      anyAutoMarked=true;
+    }
+  });
+
+  updateProxPanel(proximityData);
+  if(anyAutoMarked){
+    updateNdot();
+    if(qaView==='vq-dash')renderDashboard();
+    if(qaView==='vq-verify')renderVerifySessions();
+  }
+}
+
+function autoMarkPresent(s,dist){
+  const ds=todayStr();
+  const entry={
+    id:uid(),scheduleId:s.id,lecturerId:s.lecturerId,
+    course:s.course,room:s.room,date:ds,time:nowTime(),
+    status:'present',
+    officer:session?.name||'QA (Auto-GPS)',
+    notes:`Auto-verified by GPS proximity (${Math.round(dist)} m away)`
+  };
+  const ei=logs.findIndex(l=>l.scheduleId===s.id&&l.date===ds);
+  if(ei>=0)logs[ei]={...logs[ei],...entry};else logs.push(entry);
+  save('qa_logs',logs);
+
+  // Flash notification
+  showGeoAlert(getLecName(s.lecturerId),s.course,Math.round(dist));
+}
+
+function showGeoAlert(lecName,course,dist){
+  // Create a prominent auto-mark notification overlay
+  const old=document.getElementById('geo-alert-overlay');
+  if(old)old.remove();
+  const div=document.createElement('div');
+  div.id='geo-alert-overlay';
+  div.style.cssText='position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#1a6644,#22885a);color:#fff;padding:14px 20px;border-radius:14px;box-shadow:0 8px 32px rgba(26,102,68,.4);z-index:600;min-width:280px;max-width:340px;animation:autoIn .4s ease;text-align:center;';
+  div.innerHTML=`<div style="font-size:20px;margin-bottom:6px;">✅</div>
+    <div style="font-weight:700;font-size:14px;margin-bottom:3px;">${lecName}</div>
+    <div style="font-size:12px;opacity:.85;">${course}</div>
+    <div style="font-size:11px;margin-top:6px;background:rgba(255,255,255,.2);border-radius:20px;padding:3px 10px;display:inline-block;">
+      Auto-verified · ${dist} m away
+    </div>`;
+  document.body.appendChild(div);
+  setTimeout(()=>div.remove(),5000);
+}
+
+function updateProxPanel(proximityData){
+  const body=document.getElementById('prox-body');
+  if(!body)return;
+
+  if(!geoActive){
+    body.innerHTML=`<div style="padding:14px 15px;font-size:12.5px;color:var(--muted);text-align:center;">
+      📡 Tap <strong>Start GPS</strong> to begin auto-proximity verification.<br/>
+      Lecturers within <strong>50 metres</strong> will be marked <strong>Present</strong> automatically.
+    </div>`;
+    return;
+  }
+
+  const allCI=schedules.filter(s=>{
+    if(s.day!==todayDay()||(s.approval||'approved')!=='approved')return false;
+    return getSelfLog(s.id,todayStr())&&!getLog(s.id,todayStr());
+  });
+
+  if(!allCI.length){
+    body.innerHTML=`
+      <div class="radar-wrap">
+        <div class="radar"><div class="radar-ring"></div><div class="radar-ring"></div><div class="radar-sweep active"></div><div class="radar-center"></div></div>
+      </div>
+      <div style="padding:0 15px 14px;font-size:12.5px;color:var(--muted);text-align:center;">No lecturers currently checked in awaiting verification.</div>`;
+    return;
+  }
+
+  // Build radar blips
+  const maxDist=Math.max(200,...proximityData.map(p=>p.dist));
+  const blips=proximityData.map(({s,dist},i)=>{
+    const angle=(i/proximityData.length)*2*Math.PI-(Math.PI/2);
+    const r=Math.min(0.9,(dist/maxDist));
+    const x=50+r*40*Math.cos(angle);const y=50+r*40*Math.sin(angle);
+    const cls=dist<=GEO_THRESHOLD?'in-range':'out-range';
+    return `<div class="radar-blip ${cls}" style="left:${x}%;top:${y}%;"></div>`;
+  }).join('');
+
+  // Build proximity rows
+  const rows=allCI.map(s=>{
+    const pd=proximityData.find(p=>p.s.id===s.id);
+    const sl=getSelfLog(s.id,todayStr());
+    const hasCoords=sl&&sl.lat!=null;
+    const dist=pd?Math.round(pd.dist):null;
+    const isInRange=dist!==null&&dist<=GEO_THRESHOLD;
+    const isAutoMarked=autoMarkedSet.has(s.id);
+    let ringCls='dist-ring far';let distLabel='No GPS';
+    if(dist!==null){distLabel=dist+'m';ringCls=isInRange?'dist-ring in-range':dist<150?'dist-ring near':'dist-ring far';}
+
+    return `<div class="prox-row">
+      <div class="${ringCls}">${distLabel}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:600;font-size:13px;color:var(--navy);">${getLecName(s.lecturerId)}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;">${s.course} · ${s.room} · checked in ${fmtTime(sl?.time)}</div>
+        ${!hasCoords?'<div style="font-size:10.5px;color:var(--amber);margin-top:2px;">⚠ No GPS coords from lecturer — verify manually</div>':''}
+      </div>
+      <div>
+        ${isAutoMarked?`<span class="auto-mark-badge">✅ Auto-marked</span>`:''}
+        ${isInRange&&!isAutoMarked?`<span class="chip present" style="animation:none;">📍 In Range</span>`:''}
+        ${!isInRange&&dist!==null&&dist<150?`<span class="chip late">Getting closer…</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const accNote=qaPosition?`<div style="font-size:10.5px;color:rgba(255,255,255,.5);margin-top:2px;">Accuracy: ±${qaPosition.accuracy} m</div>`:'';
+
+  body.innerHTML=`
+    <div style="padding:10px 15px;background:rgba(14,107,122,.06);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <div class="radar" style="width:90px;height:90px;flex-shrink:0;">
+        <div class="radar-ring"></div><div class="radar-ring"></div>
+        <div class="radar-sweep active"></div>
+        <div class="radar-center"></div>${blips}
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:12.5px;color:var(--navy);">${allCI.length} lecturer${allCI.length!==1?'s':''} awaiting verification</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${proximityData.filter(p=>p.dist<=GEO_THRESHOLD).length} within 50 m · auto-marking active</div>
+        ${accNote}
+      </div>
+    </div>
+    ${rows}`;
+}
+
+
 document.getElementById('lec-pin').addEventListener('keydown',e=>{if(e.key==='Enter')loginLecturer();});
 
+document.getElementById('lec-pin').addEventListener('keydown',e=>{if(e.key==='Enter')loginLecturer();});
+
+/* ══════════════════════════════════
+   SETTINGS
+══════════════════════════════════ */
+let appSettings=loadObj('qa_settings',{
+  institution:'Kampala International University',
+  dept:'Quality Assurance Office',
+  semester:'Sem 1 2025',
+  weeks:17,
+  geoThreshold:50,
+  geoAccWarning:30,
+  geoNotify:true,
+  autoAbsent:true,
+  graceMins:15
+});
+function loadSettings(){
+  document.getElementById('set-inst').value=appSettings.institution||'';
+  document.getElementById('set-dept').value=appSettings.dept||'';
+  document.getElementById('set-sem').value=appSettings.semester||'';
+  document.getElementById('set-weeks').value=appSettings.weeks||17;
+  const sl=document.getElementById('set-geo-dist');
+  sl.value=appSettings.geoThreshold||50;
+  document.getElementById('set-geo-dist-val').textContent=(appSettings.geoThreshold||50)+'m';
+  document.getElementById('set-geo-acc').value=appSettings.geoAccWarning||30;
+  document.getElementById('set-geo-notify').checked=appSettings.geoNotify!==false;
+  document.getElementById('set-auto-absent').checked=appSettings.autoAbsent!==false;
+  document.getElementById('set-grace').value=appSettings.graceMins||15;
+}
+function saveSettings(){
+  appSettings={
+    institution:document.getElementById('set-inst').value.trim()||'Kampala International University',
+    dept:document.getElementById('set-dept').value.trim()||'Quality Assurance Office',
+    semester:document.getElementById('set-sem').value.trim()||'Sem 1 2025',
+    weeks:parseInt(document.getElementById('set-weeks').value)||17,
+    geoThreshold:parseInt(document.getElementById('set-geo-dist').value)||50,
+    geoAccWarning:parseInt(document.getElementById('set-geo-acc').value)||30,
+    geoNotify:document.getElementById('set-geo-notify').checked,
+    autoAbsent:document.getElementById('set-auto-absent').checked,
+    graceMins:parseInt(document.getElementById('set-grace').value)||15
+  };
+  save('qa_settings',appSettings);
+  toast('Settings saved ✔','success');
+}
+function exportFullBackup(){
+  const backup={lecturers,schedules,logs,selfLogs,syllabus,sessionLogs,qaUsers,appSettings,exportedAt:new Date().toISOString()};
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}));
+  a.download=`KIU_QA_Backup_${todayStr()}.json`;a.click();
+  toast('Full backup exported','success');
+}
+function clearAllLogs(){
+  if(!confirm('DELETE ALL attendance logs? This cannot be undone.'))return;
+  logs=[];selfLogs=[];save('qa_logs',logs);save('qa_self_logs',selfLogs);
+  toast('All logs cleared','success');renderDashboard();renderReports();
+}
+
+/* ══════════════════════════════════
+   AUTO-ABSENT MARKING
+══════════════════════════════════ */
+function runAutoAbsent(manual=false){
+  if(!appSettings.autoAbsent&&!manual)return;
+  const ds=todayStr(),now=new Date();
+  let count=0;
+  schedules.forEach(s=>{
+    if(s.day!==todayDay()||(s.approval||'approved')!=='approved')return;
+    if(getLog(s.id,ds)||getSelfLog(s.id,ds))return;
+    const[eh,em]=s.end.split(':').map(Number);
+    const endMs=new Date();endMs.setHours(eh,em,0,0);
+    if(now.getTime()>endMs.getTime()+(appSettings.graceMins||15)*60000){
+      logs.push({id:uid(),scheduleId:s.id,lecturerId:s.lecturerId,course:s.course,room:s.room,
+        date:ds,time:s.end,status:'absent',officer:'System (Auto)',
+        notes:`Auto-marked absent — no check-in by ${s.end} + ${appSettings.graceMins||15} min grace`});
+      count++;
+    }
+  });
+  if(count){save('qa_logs',logs);updateNdot();if(qaView==='vq-dash')renderDashboard();if(qaView==='vq-verify')renderVerifySessions();}
+  if(manual)toast(count?`${count} session${count>1?'s':''} auto-marked absent`:'No overdue sessions found',count?'success':'');
+}
+
+/* ══════════════════════════════════
+   QA STAFF MANAGEMENT
+══════════════════════════════════ */
+function renderStaff(){
+  const tbody=document.getElementById('staff-tbody');
+  if(!tbody)return;
+  document.getElementById('staff-count').textContent=`${qaUsers.length} officers`;
+  tbody.innerHTML=qaUsers.map(u=>{
+    const isDefault=DEFAULT_QA.find(d=>d.id===u.id);
+    return `<tr>
+      <td><strong>${u.name}</strong></td>
+      <td><code style="font-size:11px;">${u.username}</code></td>
+      <td><span class="chip ${u.role==='admin'?'approved':'pending-approval'}">${u.role==='admin'?'Admin':'Officer'}</span></td>
+      <td><div style="display:flex;gap:5px;">
+        <button class="btn btn-outline btn-sm" onclick="openStaffModal('${u.id}')">Edit</button>
+        ${!isDefault?`<button class="btn btn-danger btn-sm" onclick="delStaff('${u.id}')">Del</button>`:'<span style="font-size:10px;color:var(--muted);padding:4px 6px;">Built-in</span>'}
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+function openStaffModal(id){
+  const u=id?qaUsers.find(x=>x.id===id):null;
+  document.getElementById('sm2-title').textContent=u?'Edit QA Officer':'Add QA Officer';
+  document.getElementById('sm2-id').value=u?u.id:'';
+  document.getElementById('sm2-name').value=u?u.name:'';
+  document.getElementById('sm2-user').value=u?u.username:'';
+  document.getElementById('sm2-role').value=u?u.role||'officer':'officer';
+  document.getElementById('sm2-pass').value='';document.getElementById('sm2-pass2').value='';
+  openMo('staff-modal');
+}
+function saveStaff(){
+  const id=document.getElementById('sm2-id').value;
+  const name=document.getElementById('sm2-name').value.trim();
+  const username=document.getElementById('sm2-user').value.trim().toLowerCase();
+  const role=document.getElementById('sm2-role').value;
+  const pass=document.getElementById('sm2-pass').value;
+  const pass2=document.getElementById('sm2-pass2').value;
+  if(!name||!username){toast('Name and username required','error');return;}
+  if(!id&&qaUsers.find(u=>u.username===username)){toast('Username already exists','error');return;}
+  if(!id&&(!pass||pass.length<6)){toast('Password must be at least 6 characters','error');return;}
+  if(pass&&pass!==pass2){toast('Passwords do not match','error');return;}
+  const existing=id?qaUsers.find(u=>u.id===id):null;
+  const entry={id:id||uid(),name,username,password:pass||existing?.password||'changeme',role};
+  if(id){const i=qaUsers.findIndex(u=>u.id===id);qaUsers[i]=entry;}else qaUsers.push(entry);
+  save('qa_users',qaUsers);closeMo('staff-modal');toast(id?'Officer updated':'Officer added','success');renderStaff();
+}
+function delStaff(id){
+  if(!confirm('Delete this QA officer?'))return;
+  qaUsers=qaUsers.filter(u=>u.id!==id);save('qa_users',qaUsers);renderStaff();toast('Deleted');
+}
+
+/* ══════════════════════════════════
+   ANALYTICS
+══════════════════════════════════ */
+function renderAnalytics(){
+  const days=parseInt(document.getElementById('analytics-range')?.value||30);
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);
+  const inRange=logs.filter(l=>new Date(l.date+'T12:00')>=cutoff);
+  const total=inRange.length,present=inRange.filter(l=>l.status==='present').length;
+  const absent=inRange.filter(l=>l.status==='absent').length,late=inRange.filter(l=>l.status==='late').length;
+  const rate=total?Math.round(present/total*100):0;
+
+  document.getElementById('an-stats').innerHTML=`
+    <div class="stat green"><div class="stat-n">${rate}%</div><div class="stat-l">Attendance Rate</div></div>
+    <div class="stat navy"><div class="stat-n">${total}</div><div class="stat-l">Total Sessions</div></div>
+    <div class="stat red"><div class="stat-n">${absent}</div><div class="stat-l">Absences</div></div>
+    <div class="stat amber"><div class="stat-n">${late}</div><div class="stat-l">Late Arrivals</div></div>`;
+
+  drawDailyChart(days,cutoff);
+
+  // Per-lecturer bars
+  const byLec={};
+  inRange.forEach(l=>{if(!byLec[l.lecturerId])byLec[l.lecturerId]={t:0,p:0};byLec[l.lecturerId].t++;if(l.status==='present')byLec[l.lecturerId].p++;});
+  const lecRows=Object.entries(byLec).sort((a,b)=>(b[1].p/Math.max(1,b[1].t))-(a[1].p/Math.max(1,a[1].t)));
+  document.getElementById('an-by-lec').innerHTML='<div style="padding:10px 14px;">'+(lecRows.length?lecRows.map(([lid,d])=>{
+    const pct=Math.round(d.p/d.t*100);
+    const col=pct>=80?'var(--green)':pct>=60?'var(--amber)':'var(--red)';
+    return `<div class="an-bar-row"><div class="an-bar-label" title="${getLecName(lid)}">${getLecName(lid).split(' ').slice(0,2).join(' ')}</div><div class="an-bar-wrap"><div class="an-bar" style="width:${pct}%;background:${col};"></div></div><div class="an-bar-val">${pct}%</div></div>`;
+  }).join(''):'<div class="empty" style="padding:20px;"><div class="ei">📊</div><div class="et">No data yet</div></div>')+'</div>';
+
+  // Per-day bars
+  const byDay={};DAYS.forEach(d=>byDay[d]={t:0,p:0});
+  inRange.forEach(l=>{const s=getSched(l.scheduleId);if(s&&byDay[s.day]){byDay[s.day].t++;if(l.status==='present')byDay[s.day].p++;}});
+  document.getElementById('an-by-day').innerHTML='<div style="padding:10px 14px;">'+DAYS.map(d=>{
+    const r=byDay[d];const pct=r.t?Math.round(r.p/r.t*100):0;
+    const col=pct>=80?'var(--green)':pct>=60?'var(--amber)':r.t?'var(--red)':'var(--muted)';
+    return `<div class="an-bar-row"><div class="an-bar-label">${d.slice(0,3)}</div><div class="an-bar-wrap"><div class="an-bar" style="width:${pct}%;background:${col};"></div></div><div class="an-bar-val">${r.t?pct+'%':'—'}</div></div>`;
+  }).join('')+'</div>';
+
+  // Absenteeism alerts
+  const alerts=lecRows.filter(([,d])=>d.t>=3&&d.p/d.t<0.7).map(([lid,d])=>{
+    const pct=Math.round(d.p/d.t*100);
+    return `<div class="alert-row"><div class="alert-icon">🔴</div><div class="alert-text"><strong>${getLecName(lid)}</strong>${pct}% attendance (${d.p}/${d.t} sessions) — below 70% threshold</div></div>`;
+  });
+  document.getElementById('an-alerts').innerHTML=alerts.length?alerts.join(''):`<div class="empty" style="padding:20px;"><div class="ei">✅</div><div class="et">No absenteeism alerts</div><p style="font-size:12px;">All lecturers above 70%.</p></div>`;
+}
+
+function drawDailyChart(days){
+  const canvas=document.getElementById('an-chart-daily');
+  if(!canvas)return;
+  const ctx=canvas.getContext('2d');
+  canvas.width=canvas.parentElement?.offsetWidth||580;
+  canvas.height=160;
+  const W=canvas.width,H=canvas.height;
+  const pad={t:12,r:10,b:30,l:36};
+  ctx.clearRect(0,0,W,H);
+  const labels=[],rates=[];
+  for(let i=days-1;i>=0;i--){
+    const d=new Date();d.setDate(d.getDate()-i);
+    const ds=d.toISOString().slice(0,10);
+    const dl=logs.filter(l=>l.date===ds);
+    const pct=dl.length?Math.round(dl.filter(l=>l.status==='present').length/dl.length*100):null;
+    labels.push(d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}));rates.push(pct);
+  }
+  const cW=W-pad.l-pad.r,cH=H-pad.t-pad.b;
+  const bW=Math.max(2,cW/labels.length-2);
+  ctx.strokeStyle='#ece4d5';ctx.lineWidth=1;
+  [0,25,50,75,100].forEach(v=>{
+    const y=pad.t+cH*(1-v/100);ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='#5a6a7e';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='right';ctx.fillText(v+'%',pad.l-4,y+3);
+  });
+  labels.forEach((lbl,i)=>{
+    const x=pad.l+i*(cW/labels.length);const v=rates[i];
+    if(v!==null){const bH=cH*(v/100);const col=v>=80?'#1a6644':v>=60?'#b86c10':'#b83232';
+      ctx.fillStyle=col+'33';ctx.fillRect(x+1,pad.t+cH-bH,bW,bH);
+      ctx.fillStyle=col;ctx.fillRect(x+1,pad.t+cH-bH,bW,2);}
+    if(i%Math.ceil(labels.length/10)===0){
+      ctx.fillStyle='#5a6a7e';ctx.font='9px DM Sans,sans-serif';ctx.textAlign='center';ctx.fillText(lbl,x+bW/2,H-pad.b+12);}
+  });
+  ctx.beginPath();ctx.strokeStyle='#0e6b7a';ctx.lineWidth=2;let first=true;
+  labels.forEach((lbl,i)=>{const v=rates[i];if(v===null)return;
+    const x=pad.l+i*(cW/labels.length)+bW/2,y=pad.t+cH*(1-v/100);
+    if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);});
+  ctx.stroke();
+  labels.forEach((lbl,i)=>{const v=rates[i];if(v===null)return;
+    const x=pad.l+i*(cW/labels.length)+bW/2,y=pad.t+cH*(1-v/100);
+    ctx.beginPath();ctx.arc(x,y,3,0,2*Math.PI);ctx.fillStyle='#0e6b7a';ctx.fill();});
+}
+
+
+// ── 20-second refresh: sync data, auto-absent, refresh current view ──
 setInterval(()=>{
-  lecturers=load('qa_lecturers');schedules=load('qa_schedules');logs=load('qa_logs');selfLogs=load('qa_self_logs');syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
+  lecturers=load('qa_lecturers');schedules=load('qa_schedules');
+  logs=load('qa_logs');selfLogs=load('qa_self_logs');
+  syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
   if(session?.role==='lec'){renderLecToday();}
-  if(session?.role==='qa'){updateNdot();if(qaView==='vq-dash')renderDashboard();if(qaView==='vq-verify')renderVerifySessions();if(qaView==='vq-coverage')renderQACoverage();}
+  if(session?.role==='qa'){
+    updateNdot();
+    runAutoAbsent(false);
+    if(qaView==='vq-dash')renderDashboard();
+    if(qaView==='vq-verify'){renderVerifySessions();if(geoActive)checkProximity();}
+    if(qaView==='vq-coverage')renderQACoverage();
+    if(qaView==='vq-analytics')renderAnalytics();
+  }
 },20000);
+
+// ── 5-second proximity scan when GPS active ──
+setInterval(()=>{
+  if(!geoActive||session?.role!=='qa')return;
+  selfLogs=load('qa_self_logs');logs=load('qa_logs');
+  checkProximity();
+  if(qaView==='vq-verify'){
+    const pending=schedules.filter(s=>
+      s.day===todayDay()&&(s.approval||'approved')==='approved'&&
+      getSelfLog(s.id,todayStr())&&!getLog(s.id,todayStr())
+    );
+    updateProxPanel(pending.map(s=>{
+      const sl=getSelfLog(s.id,todayStr());
+      const dist=(sl?.lat&&qaPosition)?haversine(qaPosition.lat,qaPosition.lng,sl.lat,sl.lng):9999;
+      return{s,sl,dist};
+    }));
+  }
+},5000);
 </script>
 </body>
 </html>
