@@ -713,10 +713,10 @@ function enterLec(){
   document.getElementById('lec-wname').textContent='Welcome, '+session.name.split(' ').slice(0,2).join(' ');
   setLecTab('lv-today');renderLecToday();renderMySchedule();renderProfile();renderLecTopicUnits();
 }
-(function(){if(session){if(session.role==='qa')enterQA();else if(session.role==='lec')enterLec();}else showScreen('sc-login');})();
-
-/* ══ QA NAV ══ */
+/* ══ QA NAV STATE — declared before session-resume IIFE to avoid temporal dead zone ══ */
 let qaView='vq-dash',markDay=todayDay(),qaSchedDay=todayDay();
+
+(function(){if(session){if(session.role==='qa')enterQA();else if(session.role==='lec')enterLec();}else showScreen('sc-login');})();
 document.querySelectorAll('.ntab').forEach(t=>t.addEventListener('click',()=>setQAView(t.dataset.view)));
 function setQAView(v){
   document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
