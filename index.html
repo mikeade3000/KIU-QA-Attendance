@@ -1,376 +1,1404 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>QA Officer Dashboard</title>
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="theme-color" content="#0d2137"/>
+<title>QA Attendance & Curriculum Monitor — KIU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-
-body{
-font-family:Arial,Helvetica,sans-serif;
-background:#f5f7fb;
-margin:0;
+:root{
+  --navy:#0d2137;--navy-mid:#163352;--navy-light:#1e4470;--navy-pale:#e8edf4;
+  --gold:#c9973e;--gold-light:#e8b85a;--gold-pale:#fdf3e3;
+  --green:#1a6644;--green-light:#22885a;--green-pale:#e6f4ee;
+  --red:#b83232;--red-light:#e04444;--red-pale:#fceaea;
+  --amber:#b86c10;--amber-light:#d4880f;--amber-pale:#fef3e2;
+  --teal:#0e6b7a;--teal-light:#138799;--teal-pale:#e0f4f7;
+  --purple:#5b3fa0;--purple-light:#7254c0;--purple-pale:#ede9fb;
+  --white:#fff;--cream:#f5f0e8;--cream-dark:#ece4d5;
+  --text:#1a2535;--muted:#5a6a7e;--border:#d4dce8;
+  --shadow:0 2px 14px rgba(13,33,55,.09);
+  --shadow-lg:0 10px 40px rgba(13,33,55,.18);
+  --r:12px;--rs:8px;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:15px;line-height:1.5;}
+.screen{display:none;min-height:100vh;flex-direction:column;}
+.screen.active{display:flex;}
 
-header{
-background:#0f172a;
-color:white;
-padding:16px 24px;
-font-size:18px;
-font-weight:600;
-}
+/* ── LOGIN / REGISTER ── */
+#sc-login,#sc-register{background:var(--navy);align-items:center;justify-content:center;padding:24px;position:relative;overflow:hidden;}
+#sc-login::before,#sc-register::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(201,151,62,.18),transparent 70%);top:-200px;right:-200px;pointer-events:none;}
+.login-card{background:var(--white);border-radius:20px;width:100%;max-width:430px;box-shadow:var(--shadow-lg);overflow:hidden;animation:drop .4s cubic-bezier(.34,1.56,.64,1);position:relative;z-index:1;}
+@keyframes drop{from{opacity:0;transform:translateY(-28px) scale(.97);}to{opacity:1;transform:none;}}
+.login-head{background:linear-gradient(135deg,var(--navy) 60%,var(--navy-light));padding:24px 24px 18px;text-align:center;border-bottom:3px solid var(--gold);}
+.login-head .crest{font-size:40px;display:block;margin-bottom:6px;}
+.login-head h1{font-family:'Playfair Display',serif;font-size:18px;color:var(--white);}
+.login-head p{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.role-toggle{display:grid;grid-template-columns:1fr 1fr;margin:14px 18px 0;background:var(--cream);border-radius:10px;padding:4px;gap:4px;}
+.role-btn{padding:10px 6px;border:none;background:transparent;border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--muted);transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.role-btn .ri{font-size:20px;}
+.role-btn.active{background:var(--navy);color:var(--white);box-shadow:0 2px 8px rgba(13,33,55,.3);}
+.lf{padding:16px 18px 18px;}
+.fg{margin-bottom:11px;}
+.fg label,label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.fg input,.fg select,input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:var(--rs);font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text);background:var(--white);transition:border .2s;}
+.fg input:focus,.fg select:focus,input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy-light);}
+textarea{resize:vertical;min-height:58px;}
+.form-group{margin-bottom:11px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+@media(max-width:460px){.form-row{grid-template-columns:1fr;}}
+.lbtn{width:100%;padding:12px;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--white);}
+.lbtn.navy{background:var(--navy);}.lbtn.navy:hover{background:var(--navy-light);}
+.lbtn.teal{background:var(--teal);}.lbtn.teal:hover{background:var(--teal-light);}
+.lbtn.green{background:var(--green);}.lbtn.green:hover{background:var(--green-light);}
+.lbtn.outline{background:transparent;color:var(--muted);border:1.5px solid var(--border);}.lbtn.outline:hover{border-color:var(--navy);color:var(--navy);}
+.hint{text-align:center;font-size:11px;color:var(--muted);margin-top:10px;background:var(--cream);padding:8px;border-radius:8px;}
+.hint strong{color:var(--text);}
+.err{background:var(--red-pale);color:var(--red);border:1px solid rgba(184,50,50,.2);padding:8px 12px;border-radius:8px;font-size:13px;margin-bottom:10px;display:none;}
+.err.show{display:block;}
+.divider{display:flex;align-items:center;gap:8px;margin:10px 0;color:var(--muted);font-size:12px;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
 
-nav{
-background:white;
-padding:10px;
-display:flex;
-gap:10px;
-border-bottom:1px solid #eee;
-}
+/* ── TOPBAR ── */
+.topbar{color:var(--white);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:54px;flex-shrink:0;box-shadow:0 2px 14px rgba(0,0,0,.2);position:sticky;top:0;z-index:100;}
+.topbar.qa-bar{background:var(--navy);}
+.topbar.lec-bar{background:linear-gradient(90deg,var(--navy),var(--teal));}
+.tl{display:flex;align-items:center;gap:9px;}
+.logo-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;}
+.logo-text{font-family:'Playfair Display',serif;font-size:15px;}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:1.3px;text-transform:uppercase;display:block;margin-top:-2px;}
+.tr{display:flex;align-items:center;gap:7px;}
+.upill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:3px 9px 3px 6px;display:flex;align-items:center;gap:5px;font-size:11px;}
+.av{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;}
+.av.qa{background:var(--gold);}
+.av.lec{background:var(--teal);}
+.logout-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.7);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.logout-btn:hover{background:rgba(255,255,255,.22);color:var(--white);}
 
-nav button{
-background:#e2e8f0;
-border:none;
-padding:8px 14px;
-border-radius:6px;
-cursor:pointer;
-}
+/* ── QA NAV ── */
+#qa-nav{background:var(--navy-mid);display:flex;overflow-x:auto;border-bottom:1px solid rgba(255,255,255,.08);flex-shrink:0;}
+#qa-nav::-webkit-scrollbar{display:none;}
+.ntab{flex-shrink:0;padding:10px 13px;color:rgba(255,255,255,.5);cursor:pointer;font-size:11.5px;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.ntab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+.ntab:hover:not(.active){color:rgba(255,255,255,.8);}
+.ndot{width:16px;height:16px;background:var(--red-light);color:var(--white);border-radius:50%;font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;}
 
-nav button.active{
-background:#2563eb;
-color:white;
-}
+/* ── LECTURER NAV ── */
+#lec-nav{background:var(--teal);display:flex;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.15);}
+.ltab{flex:1;padding:10px 6px;color:rgba(255,255,255,.55);cursor:pointer;font-size:11px;font-weight:500;border-bottom:3px solid transparent;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.ltab .li{font-size:17px;}
+.ltab.active{color:var(--white);border-bottom-color:rgba(255,255,255,.9);}
 
-.container{
-padding:20px;
-}
+/* ── VIEWS ── */
+.portal-body{flex:1;overflow-y:auto;}
+.view{display:none;padding:15px;max-width:900px;margin:0 auto;}
+.view.active{display:block;}
 
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 4px 14px rgba(0,0,0,.06);
-margin-bottom:20px;
-}
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px;}
+.card-head{padding:11px 15px 9px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-family:'Playfair Display',serif;font-size:14.5px;color:var(--navy);}
+.card-body{padding:12px 15px;}
 
-.week-row{
-display:grid;
-grid-template-columns:80px 1fr 120px;
-gap:20px;
-padding:12px 0;
-border-bottom:1px solid #eee;
-align-items:center;
-}
+/* ── STATS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px;}
+@media(max-width:540px){.stat-grid{grid-template-columns:repeat(2,1fr);}}
+.stat{background:var(--white);border-radius:var(--r);padding:12px;box-shadow:var(--shadow);border-top:4px solid var(--border);}
+.stat.green{border-top-color:var(--green);}.stat.red{border-top-color:var(--red);}.stat.amber{border-top-color:var(--amber);}.stat.teal{border-top-color:var(--teal);}.stat.purple{border-top-color:var(--purple);}
+.stat-n{font-family:'Playfair Display',serif;font-size:28px;color:var(--navy);}
+.stat-l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.9px;margin-top:1px;}
 
-.week-badge{
-background:#f1f5f9;
-padding:8px;
-border-radius:8px;
-text-align:center;
-}
+/* ── ROWS ── */
+.srow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:11px 15px;border-bottom:1px solid var(--cream-dark);transition:background .15s;}
+.srow:last-child{border-bottom:none;}
+.srow:hover{background:var(--cream);}
+.sn{font-weight:600;font-size:13px;color:var(--navy);}
+.sm{font-size:11px;color:var(--muted);margin-top:1px;}
+.sc{font-size:11.5px;color:var(--navy-light);font-style:italic;margin-top:1px;}
+.row-ci{background:rgba(14,107,122,.05)!important;border-left:4px solid var(--teal);}
 
-.week-badge.done{background:#dcfce7;}
-.week-badge.skipped{background:#fee2e2;}
+/* ── CHIPS ── */
+.chip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600;white-space:nowrap;}
+.chip.present{background:var(--green-pale);color:var(--green);border:1px solid rgba(26,102,68,.2);}
+.chip.absent{background:var(--red-pale);color:var(--red);border:1px solid rgba(184,50,50,.2);}
+.chip.late{background:var(--amber-pale);color:var(--amber);border:1px solid rgba(184,108,16,.25);}
+.chip.pending{background:var(--cream-dark);color:var(--muted);border:1px solid var(--border);}
+.chip.checked_in{background:var(--teal-pale);color:var(--teal);border:1px solid rgba(14,107,122,.25);}
+.chip.approved{background:var(--green-pale);color:var(--green);border:1px solid rgba(26,102,68,.2);}
+.chip.pending-approval{background:var(--amber-pale);color:var(--amber);border:1px solid rgba(184,108,16,.25);}
+.chip.covered{background:var(--green-pale);color:var(--green);border:1px solid rgba(26,102,68,.2);}
+.chip.not-covered{background:var(--cream-dark);color:var(--muted);border:1px solid var(--border);}
+.chip.skipped{background:var(--red-pale);color:var(--red);border:1px solid rgba(184,50,50,.2);}
+.chip.purple{background:var(--purple-pale);color:var(--purple);border:1px solid rgba(91,63,160,.2);}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.55;}}
+.chip.checked_in{animation:pulse 2s ease-in-out infinite;}
 
-.chip{
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif;}
+.btn-navy{background:var(--navy);color:var(--white);}.btn-navy:hover{background:var(--navy-light);}
+.btn-gold{background:var(--gold);color:var(--white);}.btn-gold:hover{background:var(--gold-light);}
+.btn-green{background:var(--green);color:var(--white);}.btn-green:hover{background:var(--green-light);}
+.btn-red{background:var(--red);color:var(--white);}.btn-red:hover{background:var(--red-light);}
+.btn-amber{background:var(--amber);color:var(--white);}.btn-amber:hover{background:var(--amber-light);}
+.btn-teal{background:var(--teal);color:var(--white);}.btn-teal:hover{background:var(--teal-light);}
+.btn-purple{background:var(--purple);color:var(--white);}.btn-purple:hover{background:var(--purple-light);}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--navy);}.btn-outline:hover{background:var(--navy);color:var(--white);}
+.btn-outline-teal{background:transparent;color:var(--teal);border:1.5px solid var(--teal);}.btn-outline-teal:hover{background:var(--teal);color:var(--white);}
+.btn-danger{background:transparent;color:var(--red);border:1.5px solid var(--red);}.btn-danger:hover{background:var(--red);color:var(--white);}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.btn-lg{padding:12px 20px;font-size:14px;border-radius:11px;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
 
-.green{background:#dcfce7;}
-.red{background:#fee2e2;}
-.orange{background:#fef3c7;}
-.gray{background:#e5e7eb;}
+/* ── MODAL ── */
+.mo{display:none;position:fixed;inset:0;background:rgba(13,33,55,.6);z-index:200;align-items:center;justify-content:center;padding:15px;}
+.mo.open{display:flex;}
+.modal{background:var(--white);border-radius:var(--r);width:100%;max-width:480px;box-shadow:var(--shadow-lg);animation:sup .25s ease;max-height:92vh;display:flex;flex-direction:column;}
+@keyframes sup{from{transform:translateY(24px);opacity:0;}to{transform:none;opacity:1;}}
+.mh{background:var(--navy);color:var(--white);padding:12px 15px;border-radius:var(--r) var(--r) 0 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.mt{font-family:'Playfair Display',serif;font-size:15px;}
+.mc{cursor:pointer;font-size:17px;color:rgba(255,255,255,.55);background:none;border:none;}
+.mb{padding:15px;overflow-y:auto;flex:1;}
+.mf{padding:10px 15px 13px;display:flex;gap:7px;justify-content:flex-end;border-top:1px solid var(--border);flex-shrink:0;}
 
-input,select{
-padding:8px;
-border:1px solid #ddd;
-border-radius:6px;
-margin:5px;
-}
+/* ── TABLES ── */
+.dt{width:100%;border-collapse:collapse;font-size:13px;}
+.dt th{background:var(--navy);color:var(--white);padding:8px 11px;text-align:left;font-size:10px;letter-spacing:.7px;text-transform:uppercase;}
+.dt td{padding:9px 11px;border-bottom:1px solid var(--cream-dark);vertical-align:middle;}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:hover td{background:var(--cream);}
 
-button{
-padding:8px 14px;
-border:none;
-background:#2563eb;
-color:white;
-border-radius:6px;
-cursor:pointer;
-}
+/* ── MISC ── */
+.day-pills{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:11px;}
+.day-pill{padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);color:var(--muted);background:var(--white);transition:all .15s;}
+.day-pill.active{background:var(--navy);color:var(--white);border-color:var(--navy);}
+.banner{border-radius:var(--rs);padding:11px 13px;margin-bottom:11px;display:flex;align-items:flex-start;gap:10px;}
+.banner.alert{background:var(--teal-pale);border:1px solid rgba(14,107,122,.3);}
+.banner.warn{background:var(--amber-pale);border:1px solid rgba(184,108,16,.3);}
+.banner.success{background:var(--green-pale);border:1px solid rgba(26,102,68,.25);}
+.banner.info{background:var(--purple-pale);border:1px solid rgba(91,63,160,.2);}
+.bi{font-size:19px;flex-shrink:0;}
+.bt{font-size:12.5px;color:var(--text);}
+.bt strong{display:block;font-weight:600;margin-bottom:1px;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.st{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);}
+.ss{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.tb{font-family:'DM Mono',monospace;font-size:10.5px;background:var(--cream-dark);padding:2px 6px;border-radius:4px;color:var(--muted);}
+.prog-wrap{height:7px;background:var(--cream-dark);border-radius:4px;overflow:hidden;}
+.prog{height:7px;border-radius:4px;transition:width .5s;}
+.sw{position:relative;}.sw input{padding-left:32px;}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--muted);pointer-events:none;}
+.empty{text-align:center;padding:30px 20px;color:var(--muted);}
+.empty .ei{font-size:34px;margin-bottom:9px;}
+.empty .et{font-weight:600;font-size:13.5px;color:var(--text);margin-bottom:3px;}
+.filter-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:11px;}
+@media(max-width:480px){.filter-row{grid-template-columns:1fr;}}
+.mbg{display:flex;gap:5px;flex-wrap:wrap;}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--navy);color:var(--white);padding:10px 20px;border-radius:28px;font-size:13px;font-weight:500;box-shadow:var(--shadow-lg);z-index:500;transition:transform .3s;white-space:nowrap;}
+#toast.show{transform:translateX(-50%) translateY(0);}
+#toast.success{background:var(--green);}
+#toast.error{background:var(--red);}
 
-.course{
-padding:12px;
-border:1px solid #eee;
-border-radius:8px;
-margin-bottom:8px;
-cursor:pointer;
-}
+/* ── LECTURER PORTAL SPECIFICS ── */
+.lec-welcome{background:linear-gradient(135deg,var(--navy) 55%,var(--teal));border-radius:14px;padding:18px;color:var(--white);margin-bottom:13px;position:relative;overflow:hidden;}
+.lec-welcome::after{content:'🎓';position:absolute;right:14px;bottom:6px;font-size:46px;opacity:.15;}
+.lec-welcome h2{font-family:'Playfair Display',serif;font-size:19px;margin-bottom:3px;}
+.lec-welcome p{font-size:12px;color:rgba(255,255,255,.7);}
+.dchip{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:2px 9px;border-radius:12px;font-size:11px;margin-bottom:8px;font-family:'DM Mono',monospace;}
+.ci-card{border-radius:var(--r);overflow:hidden;margin-bottom:10px;box-shadow:var(--shadow);border:2px solid var(--border);background:var(--white);transition:border-color .3s;}
+.ci-card.st-checked_in{border-color:var(--teal);}
+.ci-card.st-present{border-color:var(--green);}
+.ci-card.st-absent{border-color:var(--red);}
+.ci-card.st-late{border-color:var(--amber);}
+.ci-top{padding:12px 14px;border-bottom:1px solid var(--cream-dark);display:flex;justify-content:space-between;align-items:flex-start;}
+.ci-body{padding:12px 14px;}
+.rbanner{border-radius:9px;padding:10px 12px;display:flex;align-items:center;gap:10px;}
+.rbanner.vp{background:var(--green-pale);border:1.5px solid rgba(26,102,68,.3);}
+.rbanner.vl{background:var(--amber-pale);border:1.5px solid rgba(184,108,16,.3);}
+.rbanner.va{background:var(--red-pale);border:1.5px solid rgba(184,50,50,.3);}
+.rbanner.vw{background:var(--teal-pale);border:1.5px solid rgba(14,107,122,.25);}
+.ri2{font-size:21px;}
+.rbt strong{display:block;font-weight:700;font-size:13px;}
+.rbt span{font-size:11px;color:var(--muted);}
+.sched-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px;border-left:4px solid var(--navy-pale);}
+.sched-card.approved{border-left-color:var(--green);}
+.sched-card.pending-approval{border-left-color:var(--amber);}
 
-.course:hover{
-background:#f8fafc;
-}
+/* ── TOPIC / CURRICULUM SPECIFICS ── */
+.week-row{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:11px 14px;border-bottom:1px solid var(--cream-dark);transition:background .15s;}
+.week-row:last-child{border-bottom:none;}
+.week-row:hover{background:var(--cream);}
+.week-badge{width:44px;height:44px;border-radius:10px;background:var(--navy-pale);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.week-badge .wk{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.week-badge .wn{font-family:'Playfair Display',serif;font-size:18px;color:var(--navy);line-height:1;}
+.week-badge.done{background:var(--green-pale);}
+.week-badge.done .wn{color:var(--green);}
+.week-badge.skipped{background:var(--red-pale);}
+.week-badge.skipped .wn{color:var(--red);}
+.week-badge.current{background:var(--teal-pale);}
+.week-badge.current .wn{color:var(--teal);}
+.topic-title{font-weight:600;font-size:13px;color:var(--navy);}
+.topic-plan{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.topic-taught{font-size:11.5px;color:var(--green);margin-top:2px;font-style:italic;}
+.topic-note{font-size:11px;color:var(--muted);margin-top:1px;}
 
+/* coverage card */
+.cov-card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:14px 16px;margin-bottom:11px;border-left:4px solid var(--purple);}
+.cov-title{font-weight:700;font-size:13.5px;color:var(--navy);}
+.cov-sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.cov-stats{display:flex;gap:14px;margin:9px 0 6px;flex-wrap:wrap;}
+.cov-stat{text-align:center;}
+.cov-stat .val{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);}
+.cov-stat .lbl{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;}
+.cov-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+
+/* sub-tab strip inside topic view */
+.subtab-strip{display:flex;background:var(--cream);border-radius:9px;padding:3px;gap:3px;margin-bottom:13px;}
+.subtab{flex:1;padding:8px;border:none;background:transparent;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;text-align:center;}
+.subtab.active{background:var(--white);color:var(--navy);box-shadow:var(--shadow);}
+
+/* back button */
+.back-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--navy);cursor:pointer;margin-bottom:12px;background:none;border:none;font-family:'DM Sans',sans-serif;}
+.back-btn:hover{color:var(--navy-light);}
 </style>
-
 </head>
-
 <body>
 
-<header>QA Officer Dashboard</header>
-
-<nav>
-<button onclick="showTab('dashboard',this)" class="active">Dashboard</button>
-<button onclick="showTab('courses',this)">Courses</button>
-<button onclick="showTab('tracker',this)">Tracker</button>
-</nav>
-
-<div class="container">
-
-<div id="dashboard"></div>
-<div id="courses" style="display:none"></div>
-<div id="tracker" style="display:none"></div>
-
+<!-- ══ LOGIN ══ -->
+<div id="sc-login" class="screen active">
+  <div class="login-card">
+    <div class="login-head"><span class="crest">🏛️</span><h1>QA Attendance &amp; Curriculum Monitor</h1><p>Kampala International University</p></div>
+    <div class="role-toggle">
+      <button class="role-btn active" id="rbtn-qa" onclick="switchRole('qa')"><span class="ri">🛡️</span>QA Officer</button>
+      <button class="role-btn" id="rbtn-lec" onclick="switchRole('lec')"><span class="ri">🎓</span>Lecturer</button>
+    </div>
+    <div class="lf">
+      <div id="form-qa">
+        <div id="err-qa" class="err"></div>
+        <div class="fg"><label>Username</label><input type="text" id="qa-user" placeholder="e.g. admin" autocomplete="username"/></div>
+        <div class="fg"><label>Password</label><input type="password" id="qa-pass" placeholder="Enter password" autocomplete="current-password"/></div>
+        <button class="lbtn navy" onclick="loginQA()">Sign In as QA Officer →</button>
+        <div class="hint">Default: <strong>admin</strong> / <strong>admin123</strong></div>
+      </div>
+      <div id="form-lec" style="display:none;">
+        <div id="err-lec" class="err"></div>
+        <div class="fg"><label>Employee ID</label><input type="text" id="lec-user" placeholder="e.g. KIU/CS/001" autocomplete="username"/></div>
+        <div class="fg"><label>PIN</label><input type="password" id="lec-pin" maxlength="6" placeholder="Your PIN" inputmode="numeric"/></div>
+        <button class="lbtn teal" onclick="loginLecturer()">Sign In →</button>
+        <div class="divider">or</div>
+        <button class="lbtn outline" onclick="showScreen('sc-register')">📝 New Lecturer? Create Account</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- ══ REGISTER ══ -->
+<div id="sc-register" class="screen">
+  <div class="login-card" style="max-width:470px;">
+    <div class="login-head"><span class="crest">📝</span><h1>Create Lecturer Account</h1><p>Kampala International University</p></div>
+    <div class="lf">
+      <div id="err-reg" class="err"></div>
+      <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" id="reg-fname" placeholder="John"/></div><div class="form-group"><label>Last Name</label><input type="text" id="reg-lname" placeholder="Ssemakula"/></div></div>
+      <div class="form-row"><div class="form-group"><label>Title</label><select id="reg-title"><option value="">None</option><option>Mr.</option><option>Ms.</option><option>Mrs.</option><option>Dr.</option><option>Prof.</option></select></div><div class="form-group"><label>Employee ID</label><input type="text" id="reg-empid" placeholder="KIU/CS/001"/></div></div>
+      <div class="form-group"><label>Department / Faculty</label><input type="text" id="reg-dept" placeholder="e.g. Computer Science"/></div>
+      <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" id="reg-phone" placeholder="+256…"/></div><div class="form-group"><label>PIN (4–6 digits)</label><input type="password" id="reg-pin" maxlength="6" placeholder="1234" inputmode="numeric"/></div></div>
+      <button class="lbtn green" onclick="registerLecturer()" style="margin-bottom:9px;">Create Account →</button>
+      <button class="lbtn outline" onclick="showScreen('sc-login')">← Back to Login</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ QA PORTAL ══ -->
+<div id="sc-qa" class="screen">
+  <div class="topbar qa-bar">
+    <div class="tl"><div class="logo-icon" style="background:var(--gold);">🎓</div><div><div class="logo-text">QA Monitor</div><span class="logo-sub">Officer Portal</span></div></div>
+    <div class="tr"><div class="upill"><div class="av qa">🛡️</div><span id="qa-uname"></span></div><button class="logout-btn" onclick="logout()">Sign Out</button></div>
+  </div>
+  <div id="qa-nav">
+    <div class="ntab active" data-view="vq-dash">📊 Dashboard</div>
+    <div class="ntab" data-view="vq-verify">✅ Verify &amp; Mark <span class="ndot" id="ndot" style="display:none;"></span></div>
+    <div class="ntab" data-view="vq-coverage">📚 Coverage</div>
+    <div class="ntab" data-view="vq-lec">👤 Lecturers</div>
+    <div class="ntab" data-view="vq-sched">📅 Schedules</div>
+    <div class="ntab" data-view="vq-rpt">📋 Reports</div>
+  </div>
+  <div class="portal-body">
+
+    <!-- DASHBOARD -->
+    <div id="view-vq-dash" class="view active">
+      <div style="margin:3px 0 12px;"><div class="st">Today's Overview</div><div class="ss" id="q-date"></div></div>
+      <div id="q-alert"></div>
+      <div class="stat-grid" id="q-stats"></div>
+      <div class="card"><div class="card-head"><div class="card-title">Today's Sessions</div><span id="q-count" style="font-size:11px;color:var(--muted);"></span></div><div id="q-sessions"></div></div>
+      <div class="card"><div class="card-head"><div class="card-title">Weekly Rate</div></div><div class="card-body" id="q-weekly"></div></div>
+    </div>
+
+    <!-- VERIFY & MARK -->
+    <div id="view-vq-verify" class="view">
+      <div class="sh"><div><div class="st">Verify &amp; Mark</div><div class="ss">Physically verify then authenticate</div></div></div>
+      <div class="day-pills" id="vmark-pills"></div>
+      <div id="vmark-sessions"></div>
+    </div>
+
+    <!-- CURRICULUM COVERAGE -->
+    <div id="view-vq-coverage" class="view">
+      <div class="sh"><div><div class="st">Curriculum Coverage</div><div class="ss">Topic-by-topic teaching progress per unit</div></div></div>
+      <div id="qa-coverage-alerts"></div>
+      <div id="qa-coverage-list"></div>
+    </div>
+
+    <!-- LECTURERS -->
+    <div id="view-vq-lec" class="view">
+      <div class="sh"><div><div class="st">Lecturers</div><div class="ss" id="lec-count"></div></div><button class="btn btn-navy btn-sm" onclick="openLecModal()">+ Add</button></div>
+      <div class="card" style="margin-bottom:11px;"><div class="card-body" style="padding-bottom:9px;"><div class="sw"><span class="si">🔍</span><input type="text" id="lec-search" placeholder="Search…" oninput="renderLecturers()"/></div></div></div>
+      <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Name</th><th>Dept</th><th>Employee ID</th><th>Phone</th><th>Actions</th></tr></thead><tbody id="lec-tbody"></tbody></table></div></div>
+    </div>
+
+    <!-- ALL SCHEDULES -->
+    <div id="view-vq-sched" class="view">
+      <div class="sh"><div><div class="st">All Schedules</div><div class="ss">Timetable &amp; approval management</div></div><button class="btn btn-navy btn-sm" onclick="openQASchedModal()">+ Add</button></div>
+      <div class="day-pills" id="sched-pills"></div>
+      <div id="sched-list"></div>
+    </div>
+
+    <!-- REPORTS -->
+    <div id="view-vq-rpt" class="view">
+      <div class="sh"><div><div class="st">Reports</div><div class="ss">Full attendance log</div></div></div>
+      <div class="filter-row">
+        <div><label>Date</label><input type="date" id="rpt-date" onchange="renderReports()"/></div>
+        <div><label>Lecturer</label><select id="rpt-lec" onchange="renderReports()"><option value="">All</option></select></div>
+        <div><label>Status</label><select id="rpt-status" onchange="renderReports()"><option value="">All</option><option value="checked_in">Checked In</option><option value="present">Present</option><option value="late">Late</option><option value="absent">Absent</option></select></div>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:11px;flex-wrap:wrap;">
+        <button class="btn btn-gold btn-sm" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="btn btn-outline btn-sm" onclick="clearFilters()">✕ Clear</button>
+      </div>
+      <div class="card"><div style="overflow-x:auto;"><table class="dt"><thead><tr><th>Date</th><th>Time</th><th>Lecturer</th><th>Course</th><th>Room</th><th>Status</th><th>Verified By</th><th>Notes</th></tr></thead><tbody id="rpt-tbody"></tbody></table></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ QA TOPIC DETAIL OVERLAY ══ -->
+<div id="sc-qa-topic" class="screen" style="background:var(--cream);">
+  <div class="topbar qa-bar">
+    <div class="tl"><div class="logo-icon" style="background:var(--purple);">📚</div><div><div class="logo-text">Topic Coverage</div><span class="logo-sub" id="qa-topic-sub">Course Details</span></div></div>
+    <div class="tr"><button class="logout-btn" onclick="exitQATopic()">← Back</button></div>
+  </div>
+  <div class="portal-body">
+    <div class="view active" style="max-width:800px;margin:0 auto;" id="qa-topic-body"></div>
+  </div>
+</div>
+
+<!-- ══ LECTURER PORTAL ══ -->
+<div id="sc-lec" class="screen">
+  <div class="topbar lec-bar">
+    <div class="tl"><div class="logo-icon" style="background:rgba(255,255,255,.2);">🎓</div><div><div class="logo-text">Lecturer Portal</div><span class="logo-sub">KIU</span></div></div>
+    <div class="tr"><div class="upill"><div class="av lec">👤</div><span id="lec-uname"></span></div><button class="logout-btn" onclick="logout()">Sign Out</button></div>
+  </div>
+  <div id="lec-nav">
+    <div class="ltab active" data-ltab="lv-today"><span class="li">📋</span>Today</div>
+    <div class="ltab" data-ltab="lv-schedule"><span class="li">📅</span>Schedule</div>
+    <div class="ltab" data-ltab="lv-topics"><span class="li">📚</span>Topics</div>
+    <div class="ltab" data-ltab="lv-profile"><span class="li">👤</span>Profile</div>
+  </div>
+  <div class="portal-body">
+
+    <!-- TODAY -->
+    <div id="view-lv-today" class="view active" style="max-width:600px;margin:0 auto;">
+      <div class="lec-welcome"><span class="dchip" id="lec-datechip"></span><h2 id="lec-wname">Welcome</h2><p>Tap <strong>"I'm In Class"</strong> when you arrive. QA will physically verify you.</p></div>
+      <div id="lec-no-sesh" class="empty" style="display:none;"><div class="ei">📭</div><div class="et">No sessions today</div><p style="font-size:12.5px;">Register course units in <strong>Schedule</strong> tab.</p></div>
+      <div id="lec-sesh-list"></div>
+    </div>
+
+    <!-- MY SCHEDULE -->
+    <div id="view-lv-schedule" class="view" style="max-width:600px;margin:0 auto;">
+      <div class="sh"><div><div class="st">My Course Units</div><div class="ss">Register your teaching slots</div></div><button class="btn btn-teal btn-sm" onclick="openMySchedModal()">+ Add Unit</button></div>
+      <div id="my-sched-list"></div>
+    </div>
+
+    <!-- TOPICS -->
+    <div id="view-lv-topics" class="view" style="max-width:700px;margin:0 auto;">
+      <div class="sh"><div><div class="st">Topic Tracker</div><div class="ss">Manage weekly syllabus &amp; log what you taught</div></div></div>
+      <div id="lec-topic-units"></div>
+    </div>
+
+  <!-- PROFILE -->
+    <div id="view-lv-profile" class="view" style="max-width:600px;margin:0 auto;">
+      <div class="card"><div class="card-head"><div class="card-title">My Profile</div></div><div class="card-body" id="lec-profile-body"></div></div>
+      <div class="card"><div class="card-head"><div class="card-title">Change PIN</div></div><div class="card-body">
+        <div class="form-group"><label>Current PIN</label><input type="password" id="pin-old" maxlength="6" inputmode="numeric" placeholder="Current PIN"/></div>
+        <div class="form-row"><div class="form-group"><label>New PIN</label><input type="password" id="pin-new" maxlength="6" inputmode="numeric" placeholder="New PIN"/></div><div class="form-group"><label>Confirm</label><input type="password" id="pin-new2" maxlength="6" inputmode="numeric" placeholder="Confirm"/></div></div>
+        <button class="btn btn-teal" onclick="changePin()">Update PIN</button>
+      </div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ TOPIC UNIT DETAIL (Lecturer) ══ -->
+<div id="sc-lec-topic" class="screen" style="background:var(--cream);">
+  <div class="topbar lec-bar">
+    <div class="tl"><div class="logo-icon" style="background:rgba(255,255,255,.2);">📚</div><div><div class="logo-text" id="ltu-title">Topics</div><span class="logo-sub" id="ltu-sub">Weekly Syllabus</span></div></div>
+    <div class="tr"><button class="logout-btn" onclick="exitLecTopic()">← Back</button></div>
+  </div>
+  <div class="portal-body">
+    <div class="view active" style="max-width:700px;margin:0 auto;">
+      <div class="subtab-strip">
+        <button class="subtab active" id="stab-plan" onclick="switchSubtab('plan')">📋 Syllabus Plan</button>
+        <button class="subtab" id="stab-log" onclick="switchSubtab('log')">✍️ Session Logs</button>
+        <button class="subtab" id="stab-progress" onclick="switchSubtab('progress')">📊 Progress</button>
+      </div>
+      <div id="subtab-plan-content"></div>
+      <div id="subtab-log-content" style="display:none;"></div>
+      <div id="subtab-progress-content" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MARK MODAL -->
+<div class="mo" id="mark-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt">Physical Verification</span><button class="mc" onclick="closeMo('mark-modal')">✕</button></div>
+    <div class="mb">
+      <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin-bottom:12px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Lecturer</div>
+        <div style="font-weight:700;font-size:14px;color:var(--navy);margin-top:1px;" id="m-lname"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;" id="m-sinfo"></div>
+        <div id="m-ci-note" style="margin-top:6px;display:none;"><span class="chip checked_in" style="animation:none;">📍 Lecturer self-checked in</span> <span id="m-ci-time" style="font-size:10.5px;color:var(--muted);"></span></div>
+      </div>
+      <div class="form-group"><label>Confirm Physical Status</label>
+        <div class="mbg"><button class="btn btn-green btn-sm" onclick="selSt('present')">✔ Present</button><button class="btn btn-amber btn-sm" onclick="selSt('late')">⏱ Late</button><button class="btn btn-red btn-sm" onclick="selSt('absent')">✗ Absent</button></div>
+        <input type="hidden" id="m-status"/>
+      </div>
+      <div class="form-group"><label>QA Officer Name</label><input type="text" id="m-officer" placeholder="Your name…"/></div>
+      <div class="form-group"><label>Notes (optional)</label><textarea id="m-notes" placeholder="Any remarks…"></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('mark-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveVerification()">Authenticate &amp; Save</button></div>
+  </div>
+</div>
+
+<!-- LECTURER MODAL (QA) -->
+<div class="mo" id="lec-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="lm-title">Add Lecturer</span><button class="mc" onclick="closeMo('lec-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="lm-id"/>
+      <div class="form-group"><label>Full Name</label><input type="text" id="lm-name" placeholder="e.g. Dr. Amara Osei"/></div>
+      <div class="form-row"><div class="form-group"><label>Department</label><input type="text" id="lm-dept"/></div><div class="form-group"><label>Employee ID</label><input type="text" id="lm-empid" placeholder="KIU/CS/001"/></div></div>
+      <div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" id="lm-phone"/></div><div class="form-group"><label>Login PIN</label><input type="password" id="lm-pin" maxlength="6" placeholder="1234" inputmode="numeric"/></div></div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('lec-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveLecturer()">Save</button></div>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL (QA) -->
+<div class="mo" id="qa-sched-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="qsm-title">Add Session</span><button class="mc" onclick="closeMo('qa-sched-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="qsm-id"/>
+      <div class="form-group"><label>Lecturer</label><select id="qsm-lec"></select></div>
+      <div class="form-group"><label>Course / Unit</label><input type="text" id="qsm-course" placeholder="e.g. Database Systems"/></div>
+      <div class="form-row"><div class="form-group"><label>Room</label><input type="text" id="qsm-room" placeholder="LT-3"/></div><div class="form-group"><label>Day</label><select id="qsm-day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></div></div>
+      <div class="form-row"><div class="form-group"><label>Start</label><input type="time" id="qsm-start"/></div><div class="form-group"><label>End</label><input type="time" id="qsm-end"/></div></div>
+      <div class="form-group"><label>Status</label><select id="qsm-approval"><option value="approved">Approved</option><option value="pending-approval">Pending</option></select></div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('qa-sched-modal')">Cancel</button><button class="btn btn-navy btn-sm" onclick="saveQASched()">Save</button></div>
+  </div>
+</div>
+
+<!-- MY SCHEDULE MODAL (Lecturer) -->
+<div class="mo" id="my-sched-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="msm-title">Register Course Unit</span><button class="mc" onclick="closeMo('my-sched-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="msm-id"/>
+      <div class="form-group"><label>Course / Unit Name</label><input type="text" id="msm-course" placeholder="e.g. Database Systems"/></div>
+      <div class="form-row"><div class="form-group"><label>Room / Venue</label><input type="text" id="msm-room" placeholder="LT-3"/></div><div class="form-group"><label>Day</label><select id="msm-day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></div></div>
+      <div class="form-row"><div class="form-group"><label>Start</label><input type="time" id="msm-start"/></div><div class="form-group"><label>End</label><input type="time" id="msm-end"/></div></div>
+      <div class="form-row"><div class="form-group"><label>Total Weeks</label><input type="number" id="msm-weeks" value="17" min="1" max="30"/></div><div class="form-group"><label>Semester / Year</label><input type="text" id="msm-semester" placeholder="e.g. Sem 1 2025"/></div></div>
+      <div style="background:var(--amber-pale);border:1px solid rgba(184,108,16,.25);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--amber);margin-top:3px;">ℹ️ Submitted as <strong>Pending Approval</strong> until QA approves it.</div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('my-sched-modal')">Cancel</button><button class="btn btn-teal btn-sm" onclick="saveMySchedule()">Submit Unit</button></div>
+  </div>
+</div>
+
+<!-- PLAN TOPIC MODAL (Lecturer adds syllabus week) -->
+<div class="mo" id="plan-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="pm-title">Add Planned Topic</span><button class="mc" onclick="closeMo('plan-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="pm-id"/>
+      <div class="form-group"><label>Week Number</label><input type="number" id="pm-week" min="1" max="30" placeholder="e.g. 1"/></div>
+      <div class="form-group"><label>Topic Title</label><input type="text" id="pm-topic" placeholder="e.g. Introduction to Databases"/></div>
+      <div class="form-group"><label>Learning Objectives / Description</label><textarea id="pm-desc" placeholder="What students should learn this week…"></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('plan-modal')">Cancel</button><button class="btn btn-teal btn-sm" onclick="savePlanTopic()">Save Topic</button></div>
+  </div>
+</div>
+
+<!-- LOG SESSION MODAL (Lecturer logs what was taught) -->
+<div class="mo" id="log-modal">
+  <div class="modal">
+    <div class="mh"><span class="mt" id="lm2-title">Log Teaching Session</span><button class="mc" onclick="closeMo('log-modal')">✕</button></div>
+    <div class="mb">
+      <input type="hidden" id="log-id"/>
+      <div class="form-row"><div class="form-group"><label>Week Number</label><input type="number" id="log-week" min="1" max="30" placeholder="e.g. 3"/></div><div class="form-group"><label>Date Taught</label><input type="date" id="log-date"/></div></div>
+      <div class="form-group"><label>Topic Taught</label><input type="text" id="log-topic" placeholder="What you actually covered…"/></div>
+      <div class="form-group"><label>Coverage Status</label>
+        <select id="log-coverage">
+          <option value="covered">✔ Fully Covered</option>
+          <option value="partial">⚡ Partially Covered</option>
+          <option value="skipped">✗ Not Covered / Skipped</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Notes / Reason</label><textarea id="log-notes" placeholder="Any notes, reasons for skip, next steps…"></textarea></div>
+    </div>
+    <div class="mf"><button class="btn btn-outline btn-sm" onclick="closeMo('log-modal')">Cancel</button><button class="btn btn-purple btn-sm" onclick="saveSessionLog()">Save Log</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
+/* ══════════════════════════════════
+   STORAGE & HELPERS
+══════════════════════════════════ */
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function todayDay(){return['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];}
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function nowTime(){return new Date().toTimeString().slice(0,5);}
+function fmtDate(d){try{return new Date(d+'T12:00').toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});}catch{return d;}}
+function fmtTime(t){if(!t)return'';const[h,m]=t.split(':');const hr=+h;return`${hr%12||12}:${m} ${hr>=12?'PM':'AM'}`;}
+function load(k){try{const v=localStorage.getItem(k);return v?JSON.parse(v):[];}catch{return[];}}
+function loadObj(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){console.error(e);}}
 
-/* Storage */
+/* ══ DATA INIT ══ */
+let lecturers=load('qa_lecturers');
+let schedules=load('qa_schedules');
+let logs=load('qa_logs');
+let selfLogs=load('qa_self_logs');
+let qaUsers=load('qa_users');
+let syllabus=load('qa_syllabus');       // {id,scheduleId,week,topic,desc}
+let sessionLogs=load('qa_session_logs'); // {id,scheduleId,week,date,topic,coverage,notes,lecturerId}
 
-function load(k){
-return JSON.parse(localStorage.getItem(k)||"[]")
+// Always guarantee default QA accounts
+const DEFAULT_QA=[
+  {id:'qa-admin-001',username:'admin',password:'admin123',name:'Admin QA Officer'},
+  {id:'qa-staff-001',username:'qa1',password:'qa1234',name:'QA Officer Nalwanga'},
+  {id:'qa-staff-002',username:'qa2',password:'qa1234',name:'QA Officer Kato'},
+];
+DEFAULT_QA.forEach(def=>{if(!qaUsers.find(u=>u.username===def.username))qaUsers.push(def);});
+save('qa_users',qaUsers);
+
+if(!lecturers.length){
+  lecturers=[
+    {id:uid(),name:'Dr. Amara Osei',dept:'Computer Science',phone:'+256 701 111 001',empId:'KIU/CS/001',pin:'1234'},
+    {id:uid(),name:'Prof. Fatima Nkosi',dept:'Business Administration',phone:'+256 701 111 002',empId:'KIU/BA/001',pin:'1234'},
+    {id:uid(),name:'Mr. John Ssemakula',dept:'Engineering',phone:'+256 701 111 003',empId:'KIU/EN/001',pin:'1234'},
+    {id:uid(),name:'Dr. Irene Mutesi',dept:'Nursing',phone:'+256 701 111 004',empId:'KIU/NU/001',pin:'1234'},
+    {id:uid(),name:'Ms. Lydia Chege',dept:'Law',phone:'+256 701 111 005',empId:'KIU/LW/001',pin:'1234'},
+    {id:uid(),name:'Dr. Emmanuel Bello',dept:'Pharmacy',phone:'+256 701 111 006',empId:'KIU/PH/001',pin:'1234'},
+  ];
+  save('qa_lecturers',lecturers);
+}
+if(!schedules.length){
+  const ids=lecturers.map(l=>l.id),td=todayDay();
+  function sc(l,c,r,d,s,e){return{id:uid(),lecturerId:l,course:c,room:r,day:d,start:s,end:e,approval:'approved',weeks:17,semester:'Sem 1 2025'};}
+  schedules=[
+    sc(ids[0],'Database Systems','LT-1',td,'08:00','10:00'),
+    sc(ids[1],'Business Ethics','LT-2',td,'08:00','10:00'),
+    sc(ids[2],'Thermodynamics','ENG-3',td,'10:00','12:00'),
+    sc(ids[3],'Clinical Nursing','NUR-1',td,'10:00','12:00'),
+    sc(ids[4],'Constitutional Law','LT-4',td,'13:00','15:00'),
+    sc(ids[5],'Pharmacology I','PHM-2',td,'13:00','15:00'),
+    sc(ids[0],'Software Engineering','LT-1','Tuesday','08:00','10:00'),
+    sc(ids[1],'Marketing Management','LT-2','Wednesday','10:00','12:00'),
+  ];
+  save('qa_schedules',schedules);
 }
 
-function save(k,v){
-localStorage.setItem(k,JSON.stringify(v))
+// Seed sample syllabus for first schedule
+if(!syllabus.length&&schedules.length){
+  const sid=schedules[0].id;
+  const topics=['Introduction & Course Overview','Data Models & ER Diagrams','Relational Model & Algebra','SQL Basics – DDL & DML','SQL Advanced – Joins & Subqueries','Normalization (1NF, 2NF, 3NF)','Transaction Management','Concurrency Control','Storage & Indexing','Query Optimization','NoSQL Databases','Database Security','Distributed Databases','Data Warehousing','Big Data Concepts','Project Presentations','Revision & Exam Prep'];
+  topics.forEach((t,i)=>{
+    syllabus.push({id:uid(),scheduleId:sid,week:i+1,topic:t,desc:''});
+  });
+  // Seed 3 session logs for it
+  sessionLogs.push({id:uid(),scheduleId:sid,week:1,date:'2025-01-20',topic:'Introduction & Course Overview',coverage:'covered',notes:'Good session, students engaged.',lecturerId:schedules[0].lecturerId});
+  sessionLogs.push({id:uid(),scheduleId:sid,week:2,date:'2025-01-27',topic:'Data Models & ER Diagrams',coverage:'covered',notes:'',lecturerId:schedules[0].lecturerId});
+  sessionLogs.push({id:uid(),scheduleId:sid,week:3,date:'2025-02-03',topic:'Relational Model',coverage:'partial',notes:'Did not finish relational algebra. Will continue week 4.',lecturerId:schedules[0].lecturerId});
+  save('qa_syllabus',syllabus);
+  save('qa_session_logs',sessionLogs);
 }
 
-/* Navigation */
+function getLec(id){return lecturers.find(x=>x.id===id);}
+function getLecName(id){const l=getLec(id);return l?l.name:'Unknown';}
+function getSched(id){return schedules.find(x=>x.id===id);}
+function getLog(sid,date){return logs.find(l=>l.scheduleId===sid&&l.date===date);}
+function getSelfLog(sid,date){return selfLogs.find(l=>l.scheduleId===sid&&l.date===date);}
+function getSyllabus(sid){return syllabus.filter(x=>x.scheduleId===sid).sort((a,b)=>a.week-b.week);}
+function getSessionLogs(sid){return sessionLogs.filter(x=>x.scheduleId===sid).sort((a,b)=>a.week-b.week||a.date.localeCompare(b.date));}
 
-function showTab(id,btn){
+/* ══ AUTH ══ */
+let session=loadObj('qa_session',null);
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
 
-document.querySelectorAll(".container > div")
-.forEach(d=>d.style.display="none")
+let loginRole='qa';
+function switchRole(r){loginRole=r;document.getElementById('rbtn-qa').classList.toggle('active',r==='qa');document.getElementById('rbtn-lec').classList.toggle('active',r==='lec');document.getElementById('form-qa').style.display=r==='qa'?'block':'none';document.getElementById('form-lec').style.display=r==='lec'?'block':'none';}
 
-document.getElementById(id).style.display="block"
-
-document.querySelectorAll("nav button")
-.forEach(b=>b.classList.remove("active"))
-
-btn.classList.add("active")
-
-render()
-
+function loginQA(){
+  qaUsers=load('qa_users');DEFAULT_QA.forEach(def=>{if(!qaUsers.find(u=>u.username===def.username))qaUsers.push(def);});save('qa_users',qaUsers);
+  const u=document.getElementById('qa-user').value.trim().toLowerCase();
+  const p=document.getElementById('qa-pass').value;
+  const err=document.getElementById('err-qa');
+  if(!u||!p){err.textContent='Enter username and password.';err.classList.add('show');return;}
+  const user=qaUsers.find(x=>x.username.toLowerCase()===u&&x.password===p);
+  if(!user){err.textContent='Incorrect credentials. Try admin / admin123';err.classList.add('show');return;}
+  err.classList.remove('show');
+  session={role:'qa',userId:user.id,name:user.name};save('qa_session',session);enterQA();
 }
 
-/* Courses */
-
-function addCourse(){
-
-const courses = load("courses")
-
-courses.push({
-id:Date.now(),
-name:document.getElementById("course-name").value
-})
-
-save("courses",courses)
-
-render()
-
+function loginLecturer(){
+  lecturers=load('qa_lecturers');
+  const u=document.getElementById('lec-user').value.trim();
+  const pin=document.getElementById('lec-pin').value.trim();
+  const err=document.getElementById('err-lec');
+  if(!u||!pin){err.textContent='Enter Employee ID and PIN.';err.classList.add('show');return;}
+  const lec=lecturers.find(l=>(l.empId||'').toLowerCase()===u.toLowerCase()||(l.loginUsername||'').toLowerCase()===u.toLowerCase());
+  if(!lec){err.textContent='Employee ID not found. Please register first.';err.classList.add('show');return;}
+  if((lec.pin||'1234')!==pin){err.textContent='Incorrect PIN.';err.classList.add('show');return;}
+  err.classList.remove('show');
+  session={role:'lec',lecturerId:lec.id,name:lec.name};save('qa_session',session);enterLec();
 }
 
-let selectedCourse=null
-
-function selectCourse(id){
-
-selectedCourse=id
-showTab("tracker",document.querySelectorAll("nav button")[2])
-
+function registerLecturer(){
+  const fname=document.getElementById('reg-fname').value.trim(),lname=document.getElementById('reg-lname').value.trim();
+  const title=document.getElementById('reg-title').value,dept=document.getElementById('reg-dept').value.trim();
+  const empId=document.getElementById('reg-empid').value.trim(),phone=document.getElementById('reg-phone').value.trim();
+  const pin=document.getElementById('reg-pin').value.trim();
+  const err=document.getElementById('err-reg');
+  if(!fname||!lname){err.textContent='First and last name required.';err.classList.add('show');return;}
+  if(!dept){err.textContent='Department required.';err.classList.add('show');return;}
+  if(!empId){err.textContent='Employee ID required.';err.classList.add('show');return;}
+  if(lecturers.find(l=>(l.empId||'').toLowerCase()===empId.toLowerCase())){err.textContent='Account with this Employee ID already exists.';err.classList.add('show');return;}
+  if(!pin||pin.length<4){err.textContent='PIN must be at least 4 digits.';err.classList.add('show');return;}
+  const fullName=(title?title+' ':'')+fname+' '+lname;
+  lecturers.push({id:uid(),name:fullName,dept,phone,empId,pin,loginUsername:empId,createdAt:todayStr()});
+  save('qa_lecturers',lecturers);
+  toast('Account created! Log in with your Employee ID and PIN.','success');
+  ['reg-fname','reg-lname','reg-dept','reg-empid','reg-phone','reg-pin'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('reg-title').value='';
+  setTimeout(()=>showScreen('sc-login'),1800);
 }
 
-/* Add Log */
+function logout(){session=null;save('qa_session',null);showScreen('sc-login');document.getElementById('qa-user').value='';document.getElementById('qa-pass').value='';}
 
-function addLog(){
+/* ══ ENTER PORTALS ══ */
+function enterQA(){
+  document.getElementById('qa-uname').textContent=session.name;
+  showScreen('sc-qa');setQAView('vq-dash');updateNdot();renderDashboard();renderLecturers();renderReports();
+}
+function enterLec(){
+  document.getElementById('lec-uname').textContent=session.name.split(' ').slice(0,2).join(' ');
+  showScreen('sc-lec');
+  const d=new Date();
+  document.getElementById('lec-datechip').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('lec-wname').textContent='Welcome, '+session.name.split(' ').slice(0,2).join(' ');
+  setLecTab('lv-today');renderLecToday();renderMySchedule();renderProfile();renderLecTopicUnits();
+}
+(function(){if(session){if(session.role==='qa')enterQA();else if(session.role==='lec')enterLec();}else showScreen('sc-login');})();
 
-const logs=load("logs")
-
-logs.push({
-course:selectedCourse,
-week:Number(document.getElementById("week").value),
-topic:document.getElementById("topic").value,
-coverage:document.getElementById("coverage").value
-})
-
-save("logs",logs)
-
-render()
-
+/* ══ QA NAV ══ */
+let qaView='vq-dash',markDay=todayDay(),qaSchedDay=todayDay();
+document.querySelectorAll('.ntab').forEach(t=>t.addEventListener('click',()=>setQAView(t.dataset.view)));
+function setQAView(v){
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#sc-qa .view').forEach(vv=>vv.classList.remove('active'));
+  const tab=document.querySelector(`.ntab[data-view="${v}"]`);if(tab)tab.classList.add('active');
+  const el=document.getElementById('view-'+v);if(el)el.classList.add('active');
+  qaView=v;
+  if(v==='vq-dash')renderDashboard();
+  if(v==='vq-verify'){markDay=todayDay();renderVerifyView();}
+  if(v==='vq-coverage')renderQACoverage();
+  if(v==='vq-sched'){qaSchedDay=todayDay();renderQASchedView();}
+  if(v==='vq-rpt')renderReports();
 }
 
-/* Chip */
-
-function chip(t){
-
-const map={
-covered:"chip green",
-partial:"chip orange",
-skipped:"chip red"
+/* ══ LEC NAV ══ */
+document.querySelectorAll('.ltab').forEach(t=>t.addEventListener('click',()=>setLecTab(t.dataset.ltab)));
+function setLecTab(v){
+  document.querySelectorAll('.ltab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#sc-lec .view').forEach(vv=>vv.classList.remove('active'));
+  const tab=document.querySelector(`.ltab[data-ltab="${v}"]`);if(tab)tab.classList.add('active');
+  const el=document.getElementById('view-'+v);if(el)el.classList.add('active');
+  if(v==='lv-today')renderLecToday();
+  if(v==='lv-schedule')renderMySchedule();
+  if(v==='lv-topics')renderLecTopicUnits();
+  if(v==='lv-profile')renderProfile();
 }
 
-return `<span class="${map[t]||"chip gray"}">${t||"pending"}</span>`
-
-}
-
-/* Dashboard */
-
+/* ══ QA DASHBOARD ══ */
 function renderDashboard(){
-
-const courses=load("courses")
-const logs=load("logs")
-
-document.getElementById("dashboard").innerHTML=`
-
-<div class="card">
-<h3>Dashboard Overview</h3>
-
-Total Courses: ${courses.length}<br>
-Total Sessions Logged: ${logs.length}
-
-</div>
-
-`
-
+  const td=todayDay(),ds=todayStr();
+  document.getElementById('q-date').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const ts=schedules.filter(s=>s.day===td&&(s.approval||'approved')==='approved');
+  const present=ts.filter(s=>getLog(s.id,ds)?.status==='present').length;
+  const absent=ts.filter(s=>getLog(s.id,ds)?.status==='absent').length;
+  const late=ts.filter(s=>getLog(s.id,ds)?.status==='late').length;
+  const ci=ts.filter(s=>!getLog(s.id,ds)&&getSelfLog(s.id,ds)).length;
+  document.getElementById('q-stats').innerHTML=`
+    <div class="stat green"><div class="stat-n">${present}</div><div class="stat-l">Verified Present</div></div>
+    <div class="stat teal"><div class="stat-n">${ci}</div><div class="stat-l">Checked In ⚡</div></div>
+    <div class="stat red"><div class="stat-n">${absent}</div><div class="stat-l">Absent</div></div>
+    <div class="stat amber"><div class="stat-n">${ts.length-present-absent-late-ci}</div><div class="stat-l">Pending</div></div>`;
+  document.getElementById('q-alert').innerHTML=ci>0?`<div class="banner alert"><div class="bi">🔔</div><div class="bt"><strong>${ci} lecturer${ci>1?'s':''} self-checked in &mdash; pending physical verification</strong>Go to Verify &amp; Mark to authenticate.</div></div>`:'';
+  document.getElementById('q-count').textContent=`${ts.length} sessions today`;
+  if(!ts.length){document.getElementById('q-sessions').innerHTML=`<div class="empty"><div class="ei">📭</div><div class="et">No sessions today</div></div>`;return;}
+  document.getElementById('q-sessions').innerHTML=ts.map(s=>{
+    const lg=getLog(s.id,ds),sl=getSelfLog(s.id,ds),isCI=!lg&&sl;
+    const status=lg?lg.status:sl?'checked_in':'pending';
+    return `<div class="srow${isCI?' row-ci':''}"><div><div class="sn">${getLecName(s.lecturerId)}</div><div class="sm">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div><div class="sc">${s.course}</div>
+    ${isCI?`<div style="font-size:11px;color:var(--teal);margin-top:2px;font-weight:600;">📍 Checked in at ${fmtTime(sl.time)}</div>`:''}
+    ${lg?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">✔ Verified by ${lg.officer}</div>`:''}
+    </div><div>${chip(status)}</div></div>`;
+  }).join('');
+  const wl=logs.filter(l=>{const d=new Date(l.date+'T12:00'),n=new Date(),ws=new Date(n);ws.setDate(n.getDate()-n.getDay()+1);return d>=ws;});
+  const wP=wl.filter(l=>l.status==='present').length,wT=wl.length,rate=wT?Math.round(wP/wT*100):0;
+  document.getElementById('q-weekly').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <div style="font-family:'Playfair Display',serif;font-size:30px;color:var(--navy);">${rate}%</div>
+      <div><div style="font-weight:600;font-size:13px;">Verified Rate This Week</div>
+      <div style="font-size:11px;color:var(--muted);">${wT} records · ${wP} present · ${wl.filter(l=>l.status==='late').length} late · ${wl.filter(l=>l.status==='absent').length} absent</div></div>
+    </div>
+    <div class="prog-wrap"><div class="prog" style="width:${rate}%;background:${rate>=80?'var(--green)':rate>=60?'var(--amber)':'var(--red)'}"></div></div>`;
 }
 
-/* Courses */
-
-function renderCourses(){
-
-const courses=load("courses")
-
-document.getElementById("courses").innerHTML=`
-
-<div class="card">
-<h3>Add Course</h3>
-
-<input id="course-name" placeholder="Course Name">
-<button onclick="addCourse()">Add</button>
-
-</div>
-
-<div class="card">
-
-<h3>Course List</h3>
-
-${courses.map(c=>
-
-`<div class="course" onclick="selectCourse(${c.id})">
-${c.name}
-</div>`
-
-).join("")}
-
-</div>
-
-`
-
+/* ══ VERIFY & MARK ══ */
+function renderVerifyView(){
+  document.getElementById('vmark-pills').innerHTML=DAYS.map(d=>`<div class="day-pill ${d===markDay?'active':''}" onclick="setMarkDay('${d}')">${d.slice(0,3)}</div>`).join('');
+  renderVerifySessions();
+}
+function setMarkDay(d){markDay=d;renderVerifyView();}
+function renderVerifySessions(){
+  const isToday=markDay===todayDay(),ds=todayStr();
+  const daySched=schedules.filter(s=>s.day===markDay&&(s.approval||'approved')==='approved');
+  const cont=document.getElementById('vmark-sessions');
+  if(!daySched.length){cont.innerHTML=`<div class="empty"><div class="ei">🗓️</div><div class="et">No approved sessions on ${markDay}</div></div>`;return;}
+  const sorted=[...daySched].sort((a,b)=>{
+    function p(s){if(isToday){const sl=getSelfLog(s.id,ds),lg=getLog(s.id,ds);if(sl&&!lg)return 0;if(!lg)return 1;}return 2;}return p(a)-p(b);
+  });
+  cont.innerHTML=sorted.map(s=>{
+    const lg=isToday?getLog(s.id,ds):null,sl=isToday?getSelfLog(s.id,ds):null,isCI=sl&&!lg;
+    const status=lg?lg.status:sl?'checked_in':'pending';
+    return `<div class="card" style="margin-bottom:8px;${isCI?'border:2px solid var(--teal);':''}">
+      <div class="srow" style="padding:11px 14px;">
+        <div><div class="sn">${getLecName(s.lecturerId)}</div><div class="sm">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div><div class="sc">${s.course}</div>
+        ${isCI?`<div style="font-size:11px;color:var(--teal);font-weight:600;margin-top:3px;">📍 Self check-in at ${fmtTime(sl.time)} — go verify physically</div>`:''}
+        ${lg?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">Verified by ${lg.officer}${lg.notes?' · '+lg.notes:''}</div>`:''}
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">${chip(status)}
+        ${isToday?`<button class="btn ${isCI?'btn-teal':'btn-outline'} btn-sm" onclick="openMarkModal('${s.id}')">${isCI?'🔍 Verify':lg?'Edit':'Mark'}</button>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function updateNdot(){
+  const n=schedules.filter(s=>s.day===todayDay()&&(s.approval||'approved')==='approved'&&getSelfLog(s.id,todayStr())&&!getLog(s.id,todayStr())).length;
+  const dot=document.getElementById('ndot');if(n>0){dot.textContent=n;dot.style.display='inline-flex';}else dot.style.display='none';
+}
+let activeSchedId=null;
+function openMarkModal(sid){
+  const s=getSched(sid);if(!s)return;activeSchedId=sid;
+  const ds=todayStr(),ex=getLog(sid,ds),sl=getSelfLog(sid,ds);
+  document.getElementById('m-lname').textContent=getLecName(s.lecturerId);
+  document.getElementById('m-sinfo').textContent=`${s.course} · ${s.room} · ${fmtTime(s.start)}–${fmtTime(s.end)}`;
+  const cin=document.getElementById('m-ci-note');
+  if(sl){cin.style.display='block';document.getElementById('m-ci-time').textContent=`at ${fmtTime(sl.time)}`;}else cin.style.display='none';
+  document.getElementById('m-status').value=ex?ex.status:'';
+  document.getElementById('m-officer').value=ex?ex.officer:(session?.name||'');
+  document.getElementById('m-notes').value=ex?ex.notes||'':'';
+  hlSt(ex?ex.status:'');openMo('mark-modal');
+}
+function selSt(s){document.getElementById('m-status').value=s;hlSt(s);}
+function hlSt(s){document.querySelectorAll('#mark-modal .mbg .btn').forEach(b=>b.style.opacity='.4');const i={present:0,late:1,absent:2}[s];if(i!==undefined)document.querySelectorAll('#mark-modal .mbg .btn')[i].style.opacity='1';}
+function saveVerification(){
+  const status=document.getElementById('m-status').value,officer=document.getElementById('m-officer').value.trim(),notes=document.getElementById('m-notes').value.trim();
+  if(!status){toast('Please select a status','error');return;}
+  if(!officer){toast('Enter QA officer name','error');return;}
+  const s=getSched(activeSchedId),ds=todayStr();
+  const entry={id:uid(),scheduleId:activeSchedId,lecturerId:s.lecturerId,course:s.course,room:s.room,date:ds,time:nowTime(),status,officer,notes};
+  const ei=logs.findIndex(l=>l.scheduleId===activeSchedId&&l.date===ds);
+  if(ei>=0)logs[ei]={...logs[ei],...entry};else logs.push(entry);
+  save('qa_logs',logs);closeMo('mark-modal');
+  toast(`✔ ${getLecName(s.lecturerId)} verified as ${status}`,'success');
+  updateNdot();renderVerifySessions();if(qaView==='vq-dash')renderDashboard();
 }
 
-/* Tracker */
+/* ══════════════════════════════════
+   CURRICULUM COVERAGE (QA)
+══════════════════════════════════ */
+function renderQACoverage(){
+  syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
+  const approvedScheds=schedules.filter(s=>(s.approval||'approved')==='approved');
+  const cont=document.getElementById('qa-coverage-list');
+  const alerts=document.getElementById('qa-coverage-alerts');
 
-function renderTracker(){
+  if(!approvedScheds.length){cont.innerHTML=`<div class="empty"><div class="ei">📚</div><div class="et">No approved course units yet</div></div>`;return;}
 
-if(!selectedCourse){
-document.getElementById("tracker").innerHTML=
-`<div class="card">Select Course First</div>`
-return
+  // Alert: units with no syllabus plan
+  const noplan=approvedScheds.filter(s=>getSyllabus(s.id).length===0);
+  const withGaps=approvedScheds.filter(s=>{
+    const sl=getSyllabus(s.id),logs2=getSessionLogs(s.id);
+    const skipped=logs2.filter(l=>l.coverage==='skipped').length;
+    return skipped>0;
+  });
+  let alertHTML='';
+  if(noplan.length) alertHTML+=`<div class="banner warn"><div class="bi">⚠️</div><div class="bt"><strong>${noplan.length} course unit${noplan.length>1?'s have':' has'} no syllabus plan</strong>Ask the assigned lecturers to add their weekly topic plan.</div></div>`;
+  if(withGaps.length) alertHTML+=`<div class="banner warn"><div class="bi">🔴</div><div class="bt"><strong>${withGaps.length} unit${withGaps.length>1?'s have':' has'} skipped topics</strong>Review coverage details and follow up with the lecturer.</div></div>`;
+  alerts.innerHTML=alertHTML;
+
+  cont.innerHTML=approvedScheds.map(s=>{
+    const lec=getLec(s.lecturerId);
+    const planned=getSyllabus(s.id);
+    const taught=getSessionLogs(s.id);
+    const totalWeeks=s.weeks||17;
+    const coveredCount=taught.filter(l=>l.coverage==='covered').length;
+    const partialCount=taught.filter(l=>l.coverage==='partial').length;
+    const skippedCount=taught.filter(l=>l.coverage==='skipped').length;
+    const loggedWeeks=new Set(taught.map(l=>l.week)).size;
+    const planCount=planned.length;
+    const coveragePct=planCount>0?Math.round((coveredCount+partialCount*0.5)/planCount*100):loggedWeeks>0?Math.round(loggedWeeks/totalWeeks*100):0;
+    const barColor=skippedCount>0?'var(--red)':coveragePct>=80?'var(--green)':coveragePct>=50?'var(--amber)':'var(--muted)';
+
+    return `<div class="cov-card">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+        <div>
+          <div class="cov-title">${s.course}</div>
+          <div class="cov-sub">${lec?lec.name:'Unknown'} · ${s.day} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span> · ${s.room}</div>
+          ${s.semester?`<div style="font-size:11px;color:var(--muted);margin-top:2px;">${s.semester}</div>`:''}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Playfair Display',serif;font-size:26px;color:${barColor};">${coveragePct}%</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;">Coverage</div>
+        </div>
+      </div>
+      <div style="margin:9px 0 6px;">
+        <div class="prog-wrap"><div class="prog" style="width:${coveragePct}%;background:${barColor}"></div></div>
+      </div>
+      <div class="cov-stats">
+        <div class="cov-stat"><div class="val">${planCount}</div><div class="lbl">Planned</div></div>
+        <div class="cov-stat"><div class="val" style="color:var(--green);">${coveredCount}</div><div class="lbl">Covered</div></div>
+        <div class="cov-stat"><div class="val" style="color:var(--amber);">${partialCount}</div><div class="lbl">Partial</div></div>
+        <div class="cov-stat"><div class="val" style="color:var(--red);">${skippedCount}</div><div class="lbl">Skipped</div></div>
+        <div class="cov-stat"><div class="val">${totalWeeks-loggedWeeks>0?totalWeeks-loggedWeeks:0}</div><div class="lbl">Not Yet Logged</div></div>
+      </div>
+      <div class="cov-actions">
+        <button class="btn btn-purple btn-sm" onclick="openQATopicDetail('${s.id}')">📋 View Week-by-Week</button>
+        ${skippedCount>0?`<span class="chip absent">⚠ ${skippedCount} Topics Skipped</span>`:''}
+        ${planCount===0?`<span class="chip pending">No Syllabus Plan</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
 }
 
-const logs=load("logs")
-.filter(l=>l.course===selectedCourse)
+/* ── QA Topic Detail ── */
+let qaTopicSchedId=null;
+let prevQAScreen='sc-qa';
+function openQATopicDetail(sid){
+  qaTopicSchedId=sid;prevQAScreen='sc-qa';
+  const s=getSched(sid),lec=getLec(s?.lecturerId);
+  if(!s)return;
+  document.getElementById('qa-topic-sub').textContent=`${s.course} — ${lec?lec.name:''}`;
+  renderQATopicBody(sid);
+  showScreen('sc-qa-topic');
+}
+function exitQATopic(){showScreen(prevQAScreen);if(prevQAScreen==='sc-qa')setQAView('vq-coverage');}
 
-const weeks=Array.from({length:17},(_,i)=>i+1)
+function renderQATopicBody(sid){
+  syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
+  const s=getSched(sid);if(!s)return;
+  const planned=getSyllabus(sid);
+  const taught=getSessionLogs(sid);
+  const totalWeeks=s.weeks||17;
+  const weeks=Array.from({length:totalWeeks},(_,i)=>i+1);
+  const body=document.getElementById('qa-topic-body');
 
-document.getElementById("tracker").innerHTML=`
-
-<div class="card">
-
-<h3>Add Session</h3>
-
-<input id="week" placeholder="Week">
-<input id="topic" placeholder="Topic">
-
-<select id="coverage">
-<option value="covered">Covered</option>
-<option value="partial">Partial</option>
-<option value="skipped">Skipped</option>
-</select>
-
-<button onclick="addLog()">Add</button>
-
-</div>
-
-<div class="card">
-
-<h3>Week Tracker</h3>
-
-${weeks.map(w=>{
-
-const last=logs.filter(l=>l.week===w).pop()
-
-let badge="week-badge"
-
-if(last){
-if(last.coverage==="covered") badge+=" done"
-if(last.coverage==="skipped") badge+=" skipped"
+  body.innerHTML=`
+    <div class="card">
+      <div class="card-head"><div class="card-title">Week-by-Week Syllabus vs. Teaching Log</div></div>
+      <div>
+        ${weeks.map(w=>{
+          const plan=planned.find(p=>p.week===w);
+          const logs2=taught.filter(l=>l.week===w);
+          const lastLog=logs2[logs2.length-1];
+          const isCurrent=w===getCurrentWeek();
+          let badgeCls='week-badge';
+          if(lastLog){if(lastLog.coverage==='covered')badgeCls+=' done';else if(lastLog.coverage==='skipped')badgeCls+=' skipped';else badgeCls+=' current';}
+          else if(isCurrent)badgeCls+=' current';
+          return `<div class="week-row">
+            <div class="${badgeCls}"><div class="wk">Wk</div><div class="wn">${w}</div></div>
+            <div>
+              <div class="topic-title">${plan?plan.topic:`Week ${w}`}</div>
+              ${plan&&plan.desc?`<div class="topic-plan">📋 ${plan.desc}</div>`:''}
+              ${lastLog?`<div class="topic-taught">✍️ Taught: ${lastLog.topic}</div>
+              <div class="topic-note">${lastLog.coverage==='covered'?'✔ Fully Covered':lastLog.coverage==='partial'?'⚡ Partially Covered':'✗ Skipped'}${lastLog.notes?' · '+lastLog.notes:''}</div>`
+              :'<div class="topic-note" style="color:var(--muted);">No session log yet</div>'}
+            </div>
+            <div>${lastLog?chip(lastLog.coverage==='covered'?'covered':lastLog.coverage==='skipped'?'skipped':'pending'):chip('not-covered')}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
 }
 
-return `
-
-<div class="week-row">
-
-<div class="${badge}">
-Week ${w}
-</div>
-
-<div>
-${last?last.topic:"No Log"}
-</div>
-
-<div>
-${chip(last?.coverage)}
-</div>
-
-</div>
-
-`
-
-}).join("")}
-
-</div>
-
-`
-
+function getCurrentWeek(){
+  // rough semester week calculation — week 1 = first Monday of semester
+  const now=new Date(),jan=new Date(now.getFullYear(),0,1);
+  return Math.ceil(((now-jan)/86400000+jan.getDay()+1)/7);
 }
 
-/* Render */
+/* ══ QA SCHEDULES ══ */
+function renderQASchedView(){
+  document.getElementById('sched-pills').innerHTML=DAYS.map(d=>`<div class="day-pill ${d===qaSchedDay?'active':''}" onclick="setQASchedDay('${d}')">${d.slice(0,3)}</div>`).join('');
+  const ds=schedules.filter(s=>s.day===qaSchedDay);
+  const cont=document.getElementById('sched-list');
+  if(!ds.length){cont.innerHTML=`<div class="empty"><div class="ei">🗓️</div><div class="et">No sessions on ${qaSchedDay}</div></div>`;return;}
+  cont.innerHTML=ds.map(s=>{
+    const ap=s.approval||'approved';
+    return `<div class="sched-card ${ap}" style="margin-bottom:9px;">
+      <div style="padding:12px 14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;">
+        <div><div style="font-weight:700;font-size:13px;color:var(--navy);">${getLecName(s.lecturerId)}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:1px;">${s.course}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span>${s.semester?' · '+s.semester:''}</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+          ${chip(ap==='approved'?'approved':'pending-approval')}
+          <div style="display:flex;gap:5px;">
+            ${ap!=='approved'?`<button class="btn btn-green btn-sm" onclick="approveSchedule('${s.id}')">✔ Approve</button>`:''}
+            <button class="btn btn-outline btn-sm" onclick="openQASchedModal('${s.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="delSched('${s.id}')">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function setQASchedDay(d){qaSchedDay=d;renderQASchedView();}
+function approveSchedule(id){const i=schedules.findIndex(x=>x.id===id);if(i<0)return;schedules[i].approval='approved';save('qa_schedules',schedules);toast('Session approved!','success');renderQASchedView();}
+function openQASchedModal(id){
+  const s=id?getSched(id):null;
+  document.getElementById('qsm-title').textContent=s?'Edit Session':'Add Session';
+  document.getElementById('qsm-id').value=s?s.id:'';
+  document.getElementById('qsm-lec').innerHTML=lecturers.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');
+  if(s){document.getElementById('qsm-lec').value=s.lecturerId;document.getElementById('qsm-course').value=s.course;document.getElementById('qsm-room').value=s.room;document.getElementById('qsm-day').value=s.day;document.getElementById('qsm-start').value=s.start;document.getElementById('qsm-end').value=s.end;document.getElementById('qsm-approval').value=s.approval||'approved';}
+  else{['qsm-course','qsm-room'].forEach(id=>document.getElementById(id).value='');document.getElementById('qsm-day').value=qaSchedDay;document.getElementById('qsm-start').value='';document.getElementById('qsm-end').value='';document.getElementById('qsm-approval').value='approved';}
+  openMo('qa-sched-modal');
+}
+function saveQASched(){
+  const id=document.getElementById('qsm-id').value,lecId=document.getElementById('qsm-lec').value,course=document.getElementById('qsm-course').value.trim(),room=document.getElementById('qsm-room').value.trim(),day=document.getElementById('qsm-day').value,start=document.getElementById('qsm-start').value,end=document.getElementById('qsm-end').value,approval=document.getElementById('qsm-approval').value;
+  if(!course||!room||!start||!end){toast('Fill all fields','error');return;}
+  const entry={id:id||uid(),lecturerId:lecId,course,room,day,start,end,approval,weeks:17,semester:'Sem 1 2025'};
+  if(id){const i=schedules.findIndex(x=>x.id===id);schedules[i]=entry;}else schedules.push(entry);
+  save('qa_schedules',schedules);closeMo('qa-sched-modal');toast(id?'Updated':'Added','success');renderQASchedView();
+}
+function delSched(id){if(!confirm('Delete this session?'))return;schedules=schedules.filter(s=>s.id!==id);save('qa_schedules',schedules);renderQASchedView();toast('Deleted');}
 
-function render(){
+/* ══ LECTURERS CRUD ══ */
+function renderLecturers(){
+  const q=(document.getElementById('lec-search')?.value||'').toLowerCase();
+  const f=lecturers.filter(l=>l.name.toLowerCase().includes(q)||l.dept.toLowerCase().includes(q)||(l.empId||'').toLowerCase().includes(q));
+  document.getElementById('lec-count').textContent=`${lecturers.length} registered`;
+  const tbody=document.getElementById('lec-tbody');
+  if(!f.length){tbody.innerHTML=`<tr><td colspan="5" style="text-align:center;padding:22px;color:var(--muted);">No results</td></tr>`;return;}
+  tbody.innerHTML=f.map(l=>`<tr><td><strong>${l.name}</strong></td><td>${l.dept}</td><td><code style="font-size:11px;">${l.empId||'—'}</code></td><td>${l.phone||'—'}</td>
+  <td><div style="display:flex;gap:5px;"><button class="btn btn-outline btn-sm" onclick="openLecModal('${l.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="delLec('${l.id}')">Del</button></div></td></tr>`).join('');
+}
+function openLecModal(id){const l=id?getLec(id):null;document.getElementById('lm-title').textContent=l?'Edit Lecturer':'Add Lecturer';document.getElementById('lm-id').value=l?l.id:'';document.getElementById('lm-name').value=l?l.name:'';document.getElementById('lm-dept').value=l?l.dept:'';document.getElementById('lm-empid').value=l?l.empId||'':'';document.getElementById('lm-phone').value=l?l.phone||'':'';document.getElementById('lm-pin').value=l?l.pin||'1234':'1234';openMo('lec-modal');}
+function saveLecturer(){const id=document.getElementById('lm-id').value,name=document.getElementById('lm-name').value.trim(),dept=document.getElementById('lm-dept').value.trim();if(!name||!dept){toast('Name and dept required','error');return;}const entry={id:id||uid(),name,dept,phone:document.getElementById('lm-phone').value.trim(),empId:document.getElementById('lm-empid').value.trim(),pin:document.getElementById('lm-pin').value.trim()||'1234'};if(id){const i=lecturers.findIndex(x=>x.id===id);lecturers[i]=entry;}else lecturers.push(entry);save('qa_lecturers',lecturers);closeMo('lec-modal');toast(id?'Updated':'Added','success');renderLecturers();}
+function delLec(id){if(!confirm('Delete?'))return;lecturers=lecturers.filter(l=>l.id!==id);save('qa_lecturers',lecturers);renderLecturers();toast('Deleted');}
 
-renderDashboard()
-renderCourses()
-renderTracker()
-
+/* ══ LECTURER PORTAL — TODAY ══ */
+function renderLecToday(){
+  if(!session||session.role!=='lec')return;
+  const lid=session.lecturerId,td=todayDay(),ds=todayStr();
+  const mySched=schedules.filter(s=>s.lecturerId===lid&&s.day===td&&(s.approval||'approved')==='approved');
+  const list=document.getElementById('lec-sesh-list'),noEl=document.getElementById('lec-no-sesh');
+  if(!mySched.length){noEl.style.display='block';list.innerHTML='';return;}
+  noEl.style.display='none';
+  list.innerHTML=mySched.map(s=>{
+    const lg=getLog(s.id,ds),sl=getSelfLog(s.id,ds);
+    const status=lg?lg.status:sl?'checked_in':'pending';
+    let cls='ci-card st-'+status;
+    let rb='';
+    if(lg){
+      if(lg.status==='present')rb=`<div class="rbanner vp"><div class="ri2">✅</div><div class="rbt"><strong>QA Confirmed: You are Present</strong><span>By ${lg.officer} at ${fmtTime(lg.time)}${lg.notes?' · '+lg.notes:''}</span></div></div>`;
+      if(lg.status==='late')   rb=`<div class="rbanner vl"><div class="ri2">⏱️</div><div class="rbt"><strong>Marked Late by QA</strong><span>By ${lg.officer}${lg.notes?' · '+lg.notes:''}</span></div></div>`;
+      if(lg.status==='absent') rb=`<div class="rbanner va"><div class="ri2">❌</div><div class="rbt"><strong>Marked Absent by QA</strong><span>Contact your QA officer if incorrect.</span></div></div>`;
+    }else if(sl){
+      rb=`<div class="rbanner vw"><div class="ri2">⏳</div><div class="rbt"><strong>Checked in at ${fmtTime(sl.time)}</strong><span>Awaiting QA physical verification.</span></div></div>`;
+    }
+    let btn=!sl&&!lg?`<button class="btn btn-teal btn-lg" onclick="lecCheckin('${s.id}')" style="width:100%;justify-content:center;margin-top:10px;">📍 I'm In Class — Check In</button>`:
+      sl&&!lg?`<button class="btn" disabled style="width:100%;justify-content:center;margin-top:10px;background:var(--cream-dark);color:var(--muted);cursor:not-allowed;border-radius:11px;padding:12px;">⏳ Awaiting QA Verification…</button>`:
+      `<div style="margin-top:9px;display:flex;gap:7px;"><button class="btn btn-outline-teal btn-sm" onclick="openLogModal('${s.id}')">✍️ Log Today's Topic</button></div>`;
+    return `<div class="${cls}"><div class="ci-top"><div><div style="font-weight:700;font-size:14px;color:var(--navy);">${s.course}</div><div style="font-size:11px;color:var(--muted);margin-top:1px;">${s.room} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div></div>${chip(status)}</div><div class="ci-body">${rb}${btn}</div></div>`;
+  }).join('');
 }
 
-render()
+function lecCheckin(sid){
+  const s=getSched(sid);if(!s)return;const ds=todayStr();
+  if(getSelfLog(sid,ds)){toast('Already checked in!','error');return;}
+  selfLogs.push({id:uid(),scheduleId:sid,lecturerId:s.lecturerId,date:ds,time:nowTime()});
+  save('qa_self_logs',selfLogs);toast('✔ Checked in! QA will visit to verify.','success');renderLecToday();updateNdot();
+}
 
+/* ══ MY SCHEDULE ══ */
+function renderMySchedule(){
+  if(!session||session.role!=='lec')return;
+  const lid=session.lecturerId;
+  const mySched=schedules.filter(s=>s.lecturerId===lid).sort((a,b)=>DAYS.indexOf(a.day)-DAYS.indexOf(b.day)||a.start.localeCompare(b.start));
+  const cont=document.getElementById('my-sched-list');
+  if(!mySched.length){cont.innerHTML=`<div class="empty"><div class="ei">📅</div><div class="et">No course units yet</div><p style="font-size:12px;">Tap <strong>+ Add Unit</strong> to register your teaching time.</p></div>`;return;}
+  cont.innerHTML=mySched.map(s=>{
+    const ap=s.approval||'approved';
+    return `<div class="sched-card ${ap}">
+      <div style="padding:12px 14px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;">
+        <div><div style="font-weight:700;font-size:13px;color:var(--navy);">${s.course}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${s.day} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:1px;">${s.room}${s.semester?' · '+s.semester:''} · ${s.weeks||17} weeks</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+          ${chip(ap==='approved'?'approved':'pending-approval')}
+          <div style="display:flex;gap:5px;">
+            <button class="btn btn-outline btn-sm" onclick="openMySchedModal('${s.id}')">Edit</button>
+            <button class="btn btn-danger btn-sm" onclick="delMyUnit('${s.id}')">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openMySchedModal(id){
+  const s=id?getSched(id):null;
+  document.getElementById('msm-title').textContent=s?'Edit Course Unit':'Register Course Unit';
+  document.getElementById('msm-id').value=s?s.id:'';
+  document.getElementById('msm-course').value=s?s.course:'';
+  document.getElementById('msm-room').value=s?s.room:'';
+  document.getElementById('msm-day').value=s?s.day:'Monday';
+  document.getElementById('msm-start').value=s?s.start:'';
+  document.getElementById('msm-end').value=s?s.end:'';
+  document.getElementById('msm-weeks').value=s?s.weeks||17:17;
+  document.getElementById('msm-semester').value=s?s.semester||'':'';
+  openMo('my-sched-modal');
+}
+function saveMySchedule(){
+  const id=document.getElementById('msm-id').value,course=document.getElementById('msm-course').value.trim(),room=document.getElementById('msm-room').value.trim(),day=document.getElementById('msm-day').value,start=document.getElementById('msm-start').value,end=document.getElementById('msm-end').value;
+  const weeks=parseInt(document.getElementById('msm-weeks').value)||17,semester=document.getElementById('msm-semester').value.trim();
+  if(!course||!room||!start||!end){toast('Fill all fields','error');return;}
+  if(start>=end){toast('End time must be after start','error');return;}
+  const entry={id:id||uid(),lecturerId:session.lecturerId,course,room,day,start,end,approval:'pending-approval',weeks,semester};
+  if(id){const i=schedules.findIndex(x=>x.id===id);schedules[i]={...schedules[i],...entry,approval:schedules[i].approval};}else schedules.push(entry);
+  save('qa_schedules',schedules);closeMo('my-sched-modal');toast('Unit submitted! Awaiting QA approval.','success');renderMySchedule();
+}
+function delMyUnit(id){if(!confirm('Remove?'))return;schedules=schedules.filter(s=>s.id!==id);save('qa_schedules',schedules);renderMySchedule();toast('Removed');}
+
+/* ══════════════════════════════════
+   TOPIC TRACKER — LECTURER
+══════════════════════════════════ */
+function renderLecTopicUnits(){
+  if(!session||session.role!=='lec')return;
+  const lid=session.lecturerId;
+  const mySched=schedules.filter(s=>s.lecturerId===lid&&(s.approval||'approved')==='approved');
+  const cont=document.getElementById('lec-topic-units');
+  if(!mySched.length){cont.innerHTML=`<div class="empty"><div class="ei">📚</div><div class="et">No approved course units</div><p style="font-size:12px;">Approved units appear here for topic tracking.</p></div>`;return;}
+  cont.innerHTML=mySched.map(s=>{
+    const planned=getSyllabus(s.id),taught=getSessionLogs(s.id);
+    const covered=taught.filter(l=>l.coverage==='covered').length;
+    const partial=taught.filter(l=>l.coverage==='partial').length;
+    const skipped=taught.filter(l=>l.coverage==='skipped').length;
+    const pct=planned.length>0?Math.round((covered+partial*0.5)/planned.length*100):0;
+    return `<div class="card" style="margin-bottom:11px;">
+      <div style="padding:13px 15px;display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;">
+        <div>
+          <div style="font-weight:700;font-size:14px;color:var(--navy);">${s.course}</div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${s.day} · <span class="tb">${fmtTime(s.start)}–${fmtTime(s.end)}</span> · ${s.room}</div>
+          <div style="margin-top:7px;"><div class="prog-wrap"><div class="prog" style="width:${pct}%;background:${skipped?'var(--red)':pct>=80?'var(--green)':pct>=40?'var(--amber)':'var(--muted)'}"></div></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">${planned.length} planned · ${covered} covered · ${partial} partial · ${skipped} skipped · <strong style="color:var(--purple);">${pct}%</strong></div>
+        </div>
+        <button class="btn btn-purple btn-sm" onclick="openLecTopicDetail('${s.id}')">📚 Manage Topics</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ── Lecturer Topic Detail Screen ── */
+let activeLecTopicSchedId=null;
+let activeSubtab='plan';
+function openLecTopicDetail(sid){
+  activeLecTopicSchedId=sid;
+  const s=getSched(sid);if(!s)return;
+  document.getElementById('ltu-title').textContent=s.course;
+  document.getElementById('ltu-sub').textContent=`${s.day} · ${fmtTime(s.start)}–${fmtTime(s.end)}`;
+  switchSubtab('plan');
+  showScreen('sc-lec-topic');
+}
+function exitLecTopic(){showScreen('sc-lec');setLecTab('lv-topics');renderLecTopicUnits();}
+
+function switchSubtab(tab){
+  activeSubtab=tab;
+  ['plan','log','progress'].forEach(t=>{
+    document.getElementById('stab-'+t).classList.toggle('active',t===tab);
+    document.getElementById('subtab-'+t+'-content').style.display=t===tab?'block':'none';
+  });
+  if(tab==='plan')renderPlanContent();
+  if(tab==='log')renderLogContent();
+  if(tab==='progress')renderProgressContent();
+}
+
+/* SYLLABUS PLAN */
+function renderPlanContent(){
+  syllabus=load('qa_syllabus');
+  const s=getSched(activeLecTopicSchedId);if(!s)return;
+  const planned=getSyllabus(activeLecTopicSchedId);
+  const totalWeeks=s.weeks||17;
+  let html=`<div class="sh"><div><div style="font-size:13px;font-weight:600;color:var(--navy);">Planned Topics (${planned.length}/${totalWeeks} weeks)</div></div><button class="btn btn-teal btn-sm" onclick="openPlanModal()">+ Add Topic</button></div>`;
+  if(!planned.length){html+=`<div class="empty"><div class="ei">📋</div><div class="et">No topics planned yet</div><p style="font-size:12px;">Add your weekly syllabus so QA can monitor coverage.</p></div>`;}
+  else{
+    html+=`<div class="card"><div>`;
+    html+=planned.map(p=>`<div class="week-row">
+      <div class="week-badge ${getSyllabus(activeLecTopicSchedId).length>0?'':''}"><div class="wk">Wk</div><div class="wn">${p.week}</div></div>
+      <div><div class="topic-title">${p.topic}</div>${p.desc?`<div class="topic-plan">${p.desc}</div>`:''}</div>
+      <div style="display:flex;gap:5px;flex-shrink:0;"><button class="btn btn-outline btn-sm" onclick="openPlanModal('${p.id}')">Edit</button><button class="btn btn-danger btn-sm" onclick="delPlanTopic('${p.id}')">✕</button></div>
+    </div>`).join('');
+    html+=`</div></div>`;
+  }
+  document.getElementById('subtab-plan-content').innerHTML=html;
+}
+
+function openPlanModal(id){
+  const p=id?syllabus.find(x=>x.id===id):null;
+  document.getElementById('pm-title').textContent=p?'Edit Topic':'Add Planned Topic';
+  document.getElementById('pm-id').value=p?p.id:'';
+  document.getElementById('pm-week').value=p?p.week:'';
+  document.getElementById('pm-topic').value=p?p.topic:'';
+  document.getElementById('pm-desc').value=p?p.desc||'':'';
+  openMo('plan-modal');
+}
+function savePlanTopic(){
+  const sid=activeLecTopicSchedId;
+  const id=document.getElementById('pm-id').value;
+  const week=parseInt(document.getElementById('pm-week').value);
+  const topic=document.getElementById('pm-topic').value.trim();
+  const desc=document.getElementById('pm-desc').value.trim();
+  if(!week||!topic){toast('Week and topic required','error');return;}
+  const s=getSched(sid);const maxW=s?s.weeks||17:17;
+  if(week<1||week>maxW){toast(`Week must be 1–${maxW}`,'error');return;}
+  // Check duplicate week
+  if(!id&&syllabus.find(x=>x.scheduleId===sid&&x.week===week)){toast('A topic for this week already exists. Edit it instead.','error');return;}
+  const entry={id:id||uid(),scheduleId:sid,week,topic,desc};
+  if(id){const i=syllabus.findIndex(x=>x.id===id);syllabus[i]=entry;}else syllabus.push(entry);
+  save('qa_syllabus',syllabus);closeMo('plan-modal');toast('Topic saved','success');renderPlanContent();
+}
+function delPlanTopic(id){if(!confirm('Remove this planned topic?'))return;syllabus=syllabus.filter(x=>x.id!==id);save('qa_syllabus',syllabus);renderPlanContent();toast('Removed');}
+
+/* SESSION LOGS */
+function renderLogContent(){
+  sessionLogs=load('qa_session_logs');
+  const taught=getSessionLogs(activeLecTopicSchedId);
+  let html=`<div class="sh"><div style="font-size:13px;font-weight:600;color:var(--navy);">Session Logs (${taught.length})</div><button class="btn btn-purple btn-sm" onclick="openLogModal('${activeLecTopicSchedId}')">+ Log Session</button></div>`;
+  if(!taught.length){html+=`<div class="empty"><div class="ei">✍️</div><div class="et">No session logs yet</div><p style="font-size:12px;">After each class, log what topic you covered.</p></div>`;}
+  else{
+    html+=`<div class="card"><div>`;
+    html+=[...taught].reverse().map(l=>{
+      const cov=l.coverage==='covered'?'✔ Covered':l.coverage==='partial'?'⚡ Partial':'✗ Skipped';
+      const color=l.coverage==='covered'?'var(--green)':l.coverage==='partial'?'var(--amber)':'var(--red)';
+      return `<div class="week-row">
+        <div class="week-badge ${l.coverage==='covered'?'done':l.coverage==='skipped'?'skipped':'current'}"><div class="wk">Wk</div><div class="wn">${l.week}</div></div>
+        <div>
+          <div class="topic-title">${l.topic}</div>
+          <div class="topic-note">${fmtDate(l.date)} · <span style="color:${color};font-weight:600;">${cov}</span></div>
+          ${l.notes?`<div class="topic-note">${l.notes}</div>`:''}
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0;">
+          <button class="btn btn-outline btn-sm" onclick="openLogModal2('${l.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="delSessionLog('${l.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+    html+=`</div></div>`;
+  }
+  document.getElementById('subtab-log-content').innerHTML=html;
+}
+
+/* LOG MODAL — from Today tab */
+let logSchedId=null;
+function openLogModal(sid){
+  logSchedId=sid;
+  document.getElementById('lm2-title').textContent='Log Teaching Session';
+  document.getElementById('log-id').value='';
+  document.getElementById('log-week').value='';
+  document.getElementById('log-date').value=todayStr();
+  document.getElementById('log-topic').value='';
+  document.getElementById('log-coverage').value='covered';
+  document.getElementById('log-notes').value='';
+  // pre-fill week from syllabus
+  const taught=getSessionLogs(sid);
+  const nextWeek=taught.length?Math.max(...taught.map(l=>l.week))+1:1;
+  document.getElementById('log-week').value=nextWeek;
+  // pre-fill topic from plan
+  const plan=syllabus.find(x=>x.scheduleId===sid&&x.week===nextWeek);
+  if(plan)document.getElementById('log-topic').value=plan.topic;
+  openMo('log-modal');
+}
+function openLogModal2(id){
+  const l=sessionLogs.find(x=>x.id===id);if(!l)return;
+  logSchedId=l.scheduleId;
+  document.getElementById('lm2-title').textContent='Edit Session Log';
+  document.getElementById('log-id').value=l.id;
+  document.getElementById('log-week').value=l.week;
+  document.getElementById('log-date').value=l.date;
+  document.getElementById('log-topic').value=l.topic;
+  document.getElementById('log-coverage').value=l.coverage;
+  document.getElementById('log-notes').value=l.notes||'';
+  openMo('log-modal');
+}
+function saveSessionLog(){
+  const id=document.getElementById('log-id').value;
+  const week=parseInt(document.getElementById('log-week').value);
+  const date=document.getElementById('log-date').value;
+  const topic=document.getElementById('log-topic').value.trim();
+  const coverage=document.getElementById('log-coverage').value;
+  const notes=document.getElementById('log-notes').value.trim();
+  if(!week||!date||!topic){toast('Week, date and topic required','error');return;}
+  const entry={id:id||uid(),scheduleId:logSchedId,lecturerId:session.lecturerId,week,date,topic,coverage,notes};
+  if(id){const i=sessionLogs.findIndex(x=>x.id===id);sessionLogs[i]=entry;}else sessionLogs.push(entry);
+  save('qa_session_logs',sessionLogs);closeMo('log-modal');toast('Session log saved!','success');
+  if(activeSubtab==='log')renderLogContent();
+  if(activeSubtab==='progress')renderProgressContent();
+  renderLecTopicUnits();renderLecToday();
+}
+function delSessionLog(id){if(!confirm('Delete this log?'))return;sessionLogs=sessionLogs.filter(x=>x.id!==id);save('qa_session_logs',sessionLogs);renderLogContent();toast('Deleted');}
+
+/* PROGRESS VIEW */
+function renderProgressContent(){
+  syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
+  const sid=activeLecTopicSchedId,s=getSched(sid);if(!s)return;
+  const planned=getSyllabus(sid),taught=getSessionLogs(sid);
+  const totalWeeks=s.weeks||17;
+  const covered=taught.filter(l=>l.coverage==='covered').length;
+  const partial=taught.filter(l=>l.coverage==='partial').length;
+  const skipped=taught.filter(l=>l.coverage==='skipped').length;
+  const loggedWeeks=new Set(taught.map(l=>l.week)).size;
+  const pct=planned.length>0?Math.round((covered+partial*0.5)/planned.length*100):0;
+
+  let html=`
+    <div class="card"><div class="card-body">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;margin-bottom:12px;">
+        <div><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--purple);">${pct}%</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Coverage</div></div>
+        <div><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--green);">${covered}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Fully Covered</div></div>
+        <div><div style="font-family:'Playfair Display',serif;font-size:28px;color:var(--red);">${skipped}</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Skipped</div></div>
+      </div>
+      <div class="prog-wrap" style="height:10px;"><div class="prog" style="height:10px;width:${pct}%;background:${skipped?'var(--red)':pct>=80?'var(--green)':pct>=50?'var(--amber)':'var(--muted)'}"></div></div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:6px;">${loggedWeeks} of ${totalWeeks} weeks logged · ${planned.length} topics in syllabus</div>
+    </div></div>
+    <div class="card"><div class="card-head"><div class="card-title">Week-by-Week Progress</div></div><div>`;
+
+  const weeks=Array.from({length:totalWeeks},(_,i)=>i+1);
+  html+=weeks.map(w=>{
+    const plan=planned.find(p=>p.week===w);
+    const log2=taught.filter(l=>l.week===w);
+    const lastLog=log2[log2.length-1];
+    let badgeCls='week-badge',statusChipH='';
+    if(lastLog){if(lastLog.coverage==='covered'){badgeCls+=' done';statusChipH=chip('covered');}else if(lastLog.coverage==='skipped'){badgeCls+=' skipped';statusChipH=chip('skipped');}else{badgeCls+=' current';statusChipH=chip('pending');}}
+    else statusChipH=chip('not-covered');
+    return `<div class="week-row">
+      <div class="${badgeCls}"><div class="wk">Wk</div><div class="wn">${w}</div></div>
+      <div>
+        <div class="topic-title">${plan?plan.topic:'(No topic planned)'}</div>
+        ${lastLog?`<div class="topic-taught">✍️ ${lastLog.topic}</div><div class="topic-note">${lastLog.coverage==='covered'?'✔ Fully Covered':lastLog.coverage==='partial'?'⚡ Partial':'✗ Skipped'}${lastLog.notes?' · '+lastLog.notes:''}</div>`:'<div class="topic-note" style="color:var(--muted);">Not yet logged</div>'}
+      </div>
+      <div>${statusChipH}</div>
+    </div>`;
+  }).join('');
+  html+=`</div></div>`;
+  document.getElementById('subtab-progress-content').innerHTML=html;
+}
+
+/* ══ PROFILE ══ */
+function renderProfile(){
+  if(!session||session.role!=='lec')return;
+  const lec=getLec(session.lecturerId);if(!lec)return;
+  document.getElementById('lec-profile-body').innerHTML=`<div style="display:grid;gap:10px;">
+    <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Full Name</div><div style="font-weight:600;margin-top:2px;">${lec.name}</div></div>
+    <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Department</div><div style="font-weight:600;margin-top:2px;">${lec.dept}</div></div>
+    <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Employee ID</div><div style="font-weight:600;margin-top:2px;font-family:'DM Mono',monospace;">${lec.empId||'—'}</div></div>
+    <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;">Phone</div><div style="font-weight:600;margin-top:2px;">${lec.phone||'—'}</div></div>
+  </div>`;
+}
+function changePin(){
+  const old=document.getElementById('pin-old').value.trim(),n=document.getElementById('pin-new').value.trim(),n2=document.getElementById('pin-new2').value.trim();
+  const lec=getLec(session.lecturerId);if(!lec)return;
+  if(old!==(lec.pin||'1234')){toast('Current PIN incorrect','error');return;}
+  if(!n||n.length<4){toast('New PIN ≥ 4 digits','error');return;}
+  if(n!==n2){toast('PINs do not match','error');return;}
+  const i=lecturers.findIndex(x=>x.id===lec.id);lecturers[i].pin=n;save('qa_lecturers',lecturers);
+  ['pin-old','pin-new','pin-new2'].forEach(id=>document.getElementById(id).value='');
+  toast('PIN updated!','success');
+}
+
+/* ══ REPORTS ══ */
+function renderReports(){
+  const sel=document.getElementById('rpt-lec');const cur=sel.value;
+  sel.innerHTML='<option value="">All Lecturers</option>'+lecturers.map(l=>`<option value="${l.id}">${l.name}</option>`).join('');sel.value=cur;
+  const df=document.getElementById('rpt-date').value,lf=document.getElementById('rpt-lec').value,sf=document.getElementById('rpt-status').value;
+  let all=[...logs];
+  selfLogs.forEach(sl=>{if(!getLog(sl.scheduleId,sl.date)){const s=getSched(sl.scheduleId)||{};all.push({...sl,course:s.course,room:s.room,status:'checked_in',officer:'—',notes:'Self check-in'});}});
+  all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+  if(df)all=all.filter(r=>r.date===df);if(lf)all=all.filter(r=>r.lecturerId===lf);if(sf)all=all.filter(r=>r.status===sf);
+  const tbody=document.getElementById('rpt-tbody');
+  if(!all.length){tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:22px;color:var(--muted);">No records</td></tr>`;return;}
+  tbody.innerHTML=all.map(r=>`<tr>
+    <td><span class="tb">${fmtDate(r.date)}</span></td><td><span class="tb">${fmtTime(r.time)||r.time}</span></td>
+    <td>${getLecName(r.lecturerId)}</td><td>${r.course||'—'}</td><td>${r.room||'—'}</td>
+    <td>${chip(r.status)}</td><td style="font-size:11.5px;">${r.officer||'—'}</td>
+    <td style="font-size:11.5px;color:var(--muted);">${r.notes||'—'}</td>
+  </tr>`).join('');
+}
+function clearFilters(){document.getElementById('rpt-date').value='';document.getElementById('rpt-lec').value='';document.getElementById('rpt-status').value='';renderReports();}
+function exportCSV(){
+  const all=[...logs];selfLogs.forEach(sl=>{if(!getLog(sl.scheduleId,sl.date)){const s=getSched(sl.scheduleId)||{};all.push({...sl,course:s.course,room:s.room,status:'checked_in',officer:'—',notes:'Self check-in'});}});
+  if(!all.length){toast('No records','error');return;}
+  const hdr=['Date','Time','Lecturer','Dept','Course','Room','Status','Verified By','Notes'];
+  const rows=all.map(r=>{const l=getLec(r.lecturerId)||{};return[r.date,r.time||'',l.name||'',l.dept||'',r.course||'',r.room||'',r.status,r.officer||'',r.notes||''];});
+  const csv=[hdr,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=`QA_Attendance_${todayStr()}.csv`;a.click();
+  toast('Exported!','success');
+}
+
+/* ══ SHARED UTILS ══ */
+function chip(s){
+  const m={present:'✔ Present',absent:'✗ Absent',late:'⏱ Late',pending:'⬜ Pending',checked_in:'📍 Checked In',approved:'✔ Approved','pending-approval':'⏳ Pending Approval',covered:'✔ Covered','not-covered':'⬜ Not Logged',skipped:'✗ Skipped',purple:'📚'};
+  return `<span class="chip ${s}">${m[s]||s}</span>`;
+}
+function openMo(id){document.getElementById(id).classList.add('open');}
+function closeMo(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.mo').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
+let toastT;
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className=type?`show ${type}`:'show';clearTimeout(toastT);toastT=setTimeout(()=>t.className='',2800);}
+
+document.getElementById('qa-pass').addEventListener('keydown',e=>{if(e.key==='Enter')loginQA();});
+document.getElementById('lec-pin').addEventListener('keydown',e=>{if(e.key==='Enter')loginLecturer();});
+
+setInterval(()=>{
+  lecturers=load('qa_lecturers');schedules=load('qa_schedules');logs=load('qa_logs');selfLogs=load('qa_self_logs');syllabus=load('qa_syllabus');sessionLogs=load('qa_session_logs');
+  if(session?.role==='lec'){renderLecToday();}
+  if(session?.role==='qa'){updateNdot();if(qaView==='vq-dash')renderDashboard();if(qaView==='vq-verify')renderVerifySessions();if(qaView==='vq-coverage')renderQACoverage();}
+},20000);
 </script>
-
 </body>
 </html>
-```
